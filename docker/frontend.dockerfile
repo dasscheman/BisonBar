@@ -6,7 +6,6 @@ WORKDIR /var/www
 # copy webapp files
 COPY .. /var/www
 RUN npm install
-RUN npm run dev
 
 # entrypoint
 COPY ./docker/frontend-entrypoint.sh /entrypoint.sh

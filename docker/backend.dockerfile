@@ -51,7 +51,7 @@ RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 ##RUN composer install --no-dev --no-scripts
 
 # install self signed certifcates to thrust other local dev environments
-COPY ./docker/certificates/docker.dev.crt /usr/local/share/ca-certificates
+COPY ./docker/certificates/apache/docker.dev.crt /usr/local/share/ca-certificates
 RUN cd /usr/local/share/ca-certificates && update-ca-certificates
 
 COPY ./docker/docker.env /var/www/.env
