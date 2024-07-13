@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+
+.mt-custom {
+    margin-top: -26rem !important;
+}
