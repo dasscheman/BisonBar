@@ -12,9 +12,7 @@
         </div>
         <div class="card-body p-3 pb-0">
             <ul class="list-group">
-                @foreach($user->invoices as $invoice)
-                    <livewire:components.invoices :invoice="$invoice"/>
-                @endforeach
+                @include('components.invoices-list', $invoices)
             </ul>
         </div>
 

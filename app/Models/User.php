@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +12,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Notifications\Notifiable;
-
 
 class User extends Authenticatable
 {
@@ -49,31 +50,61 @@ class User extends Authenticatable
 
     public function expenses(): HasMany
     {
-        return $this->hasMany(Expenses::class);
+        return $this->hasMany(Expenses::class, 'user_id');
     }
 
-    public function paymentsAdd(): HasMany
+    public function expensesNotInvoiced()
     {
-        return $this->hasMany(Payment::class)
-            ->where('add_subtract', 2);
+        return $this->expenses()
+            ->whereNull('invoice_id');
     }
 
-    public function paymentsSubtract(): HasMany
+
+    public function paymentsAddNotInvoiced($type)
     {
-        return $this->hasMany(Payment::class)
-            ->where('add_subtract', 1);
+        return $this->paymentsAdd($type)
+            ->whereNull('invoice_id');
+    }
+
+    public function paymentsAdd($type): HasMany
+    {
+        return $this->hasMany(Payment::class, 'user_id')
+            ->where('type_id', $type)
+            ->where('add_subtract', Payment::ADDSUBTRACT_ADD);
+    }
+
+
+    public function paymentsSubtractNotInvoiced($type)
+    {
+        return $this->paymentsSubtract($type)
+            ->whereNull('invoice_id');
+    }
+
+
+    public function paymentsSubtract($type): HasMany
+    {
+        return $this->hasMany(Payment::class, 'user_id')
+            ->where('type_id', $type)
+            ->where('add_subtract', Payment::ADDSUBTRACT_SUBTRACT);
+    }
+
+    public function talliesNotInvoiced(): HasMany
+    {
+        return $this->tallies()
+            ->whereNull('invoice_id');
     }
 
     public function tallies(): HasMany
     {
-        return $this->hasMany(Tally::class);
+        return $this->hasMany(Tally::class, 'user_id');
     }
 
-    public function total()
+    public function payments(): HasMany
     {
-        return $this->expenses->sum('price')
-            + $this->paymentsAdd->sum('price')
-            - $this->paymentsSubtract->sum('price')
-            - $this->tallies->sum('price');
+        return $this->hasMany(Payment::class, 'user_id');
+    }
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoices::class, 'user_id');
     }
 }

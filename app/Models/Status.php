@@ -23,7 +23,7 @@ class Status extends Model
      * Retrieves a list of statussen
      * @return array an array of available statussen.
      */
-    public function getStatusOptions()
+    static public function getStatusOptions()
     {
         return [
             self::STATUS_ingevoerd => 'Ingevoerd',
@@ -50,5 +50,60 @@ class Status extends Model
             return $statusOptions[$this->status];
         }
         return "Onbekende status ({$this->status})";
+    }
+
+
+
+
+
+    private function saveStatussen(&$model, $paymentStatus)
+    {
+        switch ($paymentStatus) {
+            case 'open':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_open;
+                $model->status = Transacties::STATUS_ingevoerd;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'canceled':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_cancelled;
+                $model->status = Transacties::STATUS_geannuleerd;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'expired':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_expired;
+                $model->status = Transacties::STATUS_ongeldig;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'failed':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_failed;
+                $model->status = Transacties::STATUS_ongeldig;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'pending':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_pending;
+                $model->status = Transacties::STATUS_ingevoerd;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'paid':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_paid;
+                $model->status = Transacties::STATUS_gecontroleerd;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+            case 'refunded':
+                $model->mollie_status = Transacties::MOLLIE_STATUS_refunded;
+                $model->status = Transacties::STATUS_teruggestord;
+                $model->factuur_id = null;
+                $model->deleted_at = null;
+                break;
+        }
+        if (!$model->save()) {
+            $model->sendErrorReport();
+        }
     }
 }

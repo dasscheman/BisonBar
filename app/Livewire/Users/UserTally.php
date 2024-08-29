@@ -11,7 +11,6 @@ class UserTally extends Component
 {
     use WithPagination;
     public User $user;
-//    public $tallies;
 
     public function mount(User $user) {
         $this->user = $user;
@@ -19,7 +18,7 @@ class UserTally extends Component
 
     public function render()
     {
-        $tallies = $this->user->tallies()->paginate(10);
+        $tallies = $this->user->tallies()->orderBy('created_at', 'DESC')->simplePaginate(10);
 
         return view('livewire.users.user-tally', compact('tallies'));
     }

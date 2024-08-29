@@ -15,6 +15,8 @@ class UserInvoices extends Component
 
     public function render()
     {
-        return view('livewire.users.user-invoices');
+        $invoices = $this->user->invoices()->orderBy('created_at', 'DESC')->simplePaginate(10);
+
+        return view('livewire.users.user-invoices', compact('invoices'));
     }
 }

@@ -23,4 +23,22 @@ class Expenses extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function status()
+    {
+        $status = new Status;
+        return $status->getStatusOptions()[$this->status_id];
+    }
+
+    public function getStatusOptions()
+    {
+        $status = new Status;
+        return $status->getStatusOptions();
+    }
+
 }

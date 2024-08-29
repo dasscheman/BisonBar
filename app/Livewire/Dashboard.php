@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Models\UserCalculations;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -16,7 +17,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->users = User::orderBy('updated_at', 'DESC')->take($this->showNumber)->get();
+        $this->users = UserCalculations::orderBy('updated_at', 'DESC')->take($this->showNumber)->get();
     }
 
     public function render()
@@ -26,7 +27,7 @@ class Dashboard extends Component
             $showNumber = null;
         }
 
-        $this->users = User::orderBy('updated_at', 'DESC')->take($showNumber)->get();
+        $this->users = UserCalculations::orderBy('updated_at', 'DESC')->take($showNumber)->get();
         return view('livewire.dashboard');
     }
 

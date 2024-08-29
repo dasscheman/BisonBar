@@ -34,12 +34,33 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('user-profile')" wire:navigate>
+                        <x-dropdown-link :href="route('user-tab')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
+                            {{ __('admin-dashboard') }}
+                        </x-responsive-nav-link>
                         <x-dropdown-link :href="route('users')" wire:navigate>
-                            {{ __('Users') }}
+                            {{ __('users') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('assortments')" wire:navigate>
+                            {{ __('assortments') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('expenses')" wire:navigate>
+                            {{ __('expenses') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('invoices')" wire:navigate>
+                            {{ __('invoices') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('payments')" wire:navigate>
+                            {{ __('payments') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('tallies')" wire:navigate>
+                            {{ __('tallies') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('tally-lists')" wire:navigate>
+                            {{ __('tally-lists') }}
                         </x-dropdown-link>
                         <!-- Authentication -->
                         <button wire:click="logout" class="w-full text-start">
@@ -79,9 +100,34 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('user-profile')" wire:navigate>
+                <x-responsive-nav-link :href="route('user-tab')" wire:navigate>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
+                    {{ __('admin-dashboard') }}
+                </x-responsive-nav-link>
+                <x-dropdown-link :href="route('users')" wire:navigate>
+                    {{ __('users') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('assortments')" wire:navigate>
+                    {{ __('assortments') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('expenses')" wire:navigate>
+                    {{ __('expenses') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('invoices')" wire:navigate>
+                    {{ __('invoices') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('payments')" wire:navigate>
+                    {{ __('payments') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('tallies')" wire:navigate>
+                    {{ __('tallies') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('tally-lists')" wire:navigate>
+                    {{ __('tally-lists') }}
+                </x-dropdown-link>
 
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">

@@ -8,7 +8,7 @@
                             <a wire:click=setTab('profile') class="nav-link mb-0 px-0 py-1 {{$tab=='profile'?"active":''}}"
                                data-bs-toggle="tab" href="javascript:;" role="tab"
                                aria-controls="overview" aria-selected="true">
-                                <span class="ms-1">{{ __('Profiel') }} {{$tab}}</span>
+                                <span class="ms-1">{{ __('Profiel') }}</span>
 
                             </a>
                         </li>
@@ -17,6 +17,13 @@
                                data-bs-toggle="tab" href="javascript:;" role="tab"
                                 aria-controls="teams" aria-selected="false">
                                 <span class="ms-1">{{ __('Tally') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a wire:click="setTab('payments')" class="nav-link mb-0 px-0 py-1 {{$tab=='payments'?"active":''}}"
+                               data-bs-toggle="tab" href="javascript:;" role="tab"
+                               aria-controls="teams" aria-selected="false">
+                                <span class="ms-1">{{ __('Payments') }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -52,6 +59,9 @@
                     @endif
                     @if($tab == 'tally')
                         <livewire:Users.user-tally :user="$user"/>
+                    @endif
+                    @if($tab == 'payments')
+                        <livewire:Users.user-payments :user="$user"/>
                     @endif
                     @if($tab == 'invoices')
                         <livewire:Users.user-invoices :user="$user"/>

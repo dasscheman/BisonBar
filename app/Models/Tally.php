@@ -38,5 +38,11 @@ class Tally extends Model
         return $this->belongsTo(Assortment::class);
     }
 
+    public function tallyList(): BelongsTo
+    {
+        return $this->belongsTo(TallyList::class);
+    }
+
+
 
 }

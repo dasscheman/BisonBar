@@ -5,12 +5,12 @@ use App\Models\User;
 
 use Livewire\Component;
 
-class UserProfile extends Component
+class UserTab extends Component
 {
     public User $user;
 
     public $title = 'Profile';
-    public $tab = 'profile'; //profile, tally, invoices
+    public $tab = 'profile'; //profile, tally, payments, invoices
     public $showSuccesNotification  = false;
 
     public function mount($user = null)
@@ -29,6 +29,6 @@ class UserProfile extends Component
 
     public function render()
     {
-        return view('livewire.users.user-profile');
+        return view('livewire.users.user-tab');
     }
 }
