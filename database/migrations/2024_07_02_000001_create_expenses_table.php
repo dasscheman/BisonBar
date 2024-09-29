@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreateExpensesTable extends Migration
 {
@@ -20,20 +20,19 @@ class CreateExpensesTable extends Migration
             $table->integer('receipt_id')->nullable();
             $table->integer('invoice_id')->nullable();
             $table->string('description')->nullable();
-            $table->decimal('price')->default(0);
+            $table->decimal('price', 5, 2)->default(0);
             $table->integer('status_id')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
 
-
         $transacties = DB::table('transacties')->where('type_id', 5)->get();
         foreach ($transacties as $transactie) {
             $relatedjoin = DB::table('related_transacties')->where('child_transacties_id', $transactie->transacties_id)->first();
-            if($relatedjoin) {
+            if ($relatedjoin) {
                 $related = DB::table('transacties')->where('transacties_id', $relatedjoin->parent_transacties_id)->first();
-                if($related->bedrag == $transactie->bedrag) {
-                    dump('skip transactie: ' . $transactie->transacties_id);
+                if ($related->bedrag == $transactie->bedrag) {
+                    dump('skip transactie: '.$transactie->transacties_id);
                 }
             }
             $data = [

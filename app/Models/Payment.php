@@ -13,6 +13,7 @@ class Payment extends Model
     protected $table = 'la_payments';
 
     const ADDSUBTRACT_SUBTRACT = 1;
+
     const ADDSUBTRACT_ADD = 2;
 
     protected $fillable = [
@@ -24,14 +25,14 @@ class Payment extends Model
         'description',
         'price',
         'add_subtract',
-        'type_id' ,
-        'status_id' ,
+        'type_id',
+        'status_id',
         'mollie_status',
         'mollie_id',
         'transaction_key',
         'transaction_cost',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     public function user()
@@ -48,5 +49,4 @@ class Payment extends Model
     {
         return PaymentType::getTypeOptions()[$this->type_id];
     }
-
 }

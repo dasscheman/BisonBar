@@ -16,6 +16,7 @@ class AssortmentTable extends Component
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Assortment';
+
     //DataTable props
     public ?string $query = null;
 
@@ -33,8 +34,10 @@ class AssortmentTable extends Component
     public ?int $category_id = null;
 
     public ?int $status_id = null;
+
     public ?string $description = null;
-    public ?float $price = null;
+
+    public $price = null;
 
     public ?DateTime $created_at = null;
 
@@ -87,8 +90,7 @@ class AssortmentTable extends Component
         $this->name = $assortment->name;
         $this->category_id = $assortment->category_id;
         $this->status_id = $assortment->status_id;
-        $this->price = $assortment->price;
-
+        $this->price = number_format($assortment->price, 2);
     }
 
     public function update()
@@ -119,7 +121,7 @@ class AssortmentTable extends Component
 
     public function mount()
     {
-        $this->assortment = new Assortment();
+        $this->assortment = new Assortment;
     }
 
     public function hydrate()
@@ -143,7 +145,7 @@ class AssortmentTable extends Component
      **/
     public function search($query)
     {
-        $assortment = new Assortment();
+        $assortment = new Assortment;
 
         return empty($query) ? $assortment :
             $assortment->where(function ($q) use ($query) {

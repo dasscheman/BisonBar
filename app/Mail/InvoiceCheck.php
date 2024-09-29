@@ -2,13 +2,14 @@
 
 namespace App\Mail;
 
+use App\Models\Invoices;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceCheck extends Mailable
 {
@@ -18,9 +19,7 @@ class InvoiceCheck extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public $invoices)
-    {
-    }
+        public Invoices $invoice) {}
 
     /**
      * Get the message envelope.
@@ -49,13 +48,14 @@ class InvoiceCheck extends Mailable
      */
     public function attachments(): array
     {
-        $selection = $this->invoices->get(3);
         $attachments = [];
-        foreach($selection as $invoice) {
-            $attachments[] = Attachment::fromPath('/path/to/file')
-                ->as($invoice->filename)
+        if (Storage::disk('local')->exists('/invoices/'.$this->invoice->file_name)) {
+            $filePath = storage_path('/app/invoices/'.$this->hasAttachment()->file_name);
+            $attachments[] = Attachment::fromPath($filePath)
+                ->as($this->invoice->filename)
                 ->withMime('application/pdf');
         }
+
         return $attachments;
     }
 }

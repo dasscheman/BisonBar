@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\InvoiceCheck;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\InvoiceCheck;
 
 class InvoiceCheckCommand extends Command
 {
@@ -29,9 +29,10 @@ class InvoiceCheckCommand extends Command
     public function handle()
     {
         $users = User::all();
+
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new InvoiceCheck($user->invoices()));
-            break;
+            $invoice = $user->invoices()->orderBy('send_at', 'DESC')->first();
+            Mail::to($user->email)->send(new InvoiceCheck($invoice));
         }
     }
 }

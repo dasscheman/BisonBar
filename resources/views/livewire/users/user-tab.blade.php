@@ -5,32 +5,18 @@
                 <div class="nav-wrapper position-relative end-0">
                     <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                         <li class="nav-item">
+                            <a wire:click="setTab('overzicht')" class="nav-link mb-0 px-0 py-1 {{$tab=='overzicht'?"active":''}}"
+                               data-bs-toggle="tab" href="javascript:;" role="tab"
+                                aria-controls="teams" aria-selected="false">
+                                <span class="ms-1">{{ __('Overzicht') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a wire:click=setTab('profile') class="nav-link mb-0 px-0 py-1 {{$tab=='profile'?"active":''}}"
                                data-bs-toggle="tab" href="javascript:;" role="tab"
                                aria-controls="overview" aria-selected="true">
                                 <span class="ms-1">{{ __('Profiel') }}</span>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a wire:click="setTab('tally')" class="nav-link mb-0 px-0 py-1 {{$tab=='tally'?"active":''}}"
-                               data-bs-toggle="tab" href="javascript:;" role="tab"
-                                aria-controls="teams" aria-selected="false">
-                                <span class="ms-1">{{ __('Tally') }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a wire:click="setTab('payments')" class="nav-link mb-0 px-0 py-1 {{$tab=='payments'?"active":''}}"
-                               data-bs-toggle="tab" href="javascript:;" role="tab"
-                               aria-controls="teams" aria-selected="false">
-                                <span class="ms-1">{{ __('Payments') }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a wire:click="setTab('invoices')" class="nav-link mb-0 px-0 py-1 {{$tab=='invoices'?"active":''}}"
-                               data-bs-toggle="tab" href="javascript:;" role="tab"
-                                aria-controls="dashboard" aria-selected="false">
-                                <span class="ms-1">{{ __('Invoices') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -40,9 +26,6 @@
 
         <div class="container-fluid py-4">
             <div class="card">
-                <div class="card-header pb-0 px-3">
-                    <h6 class="mb-0">{{ __('Profile Information') }}</h6>
-                </div>
                 <div class="card-body pt-4 p-3">
                     @if ($showSuccesNotification)
                         <div wire:model.live="showSuccesNotification"
@@ -54,17 +37,35 @@
                             </button>
                         </div>
                     @endif
+
                     @if($tab == 'profile')
+                            <div class="card-header pb-0 px-3">
+                                <h6 class="mb-0">{{ __('Profile Information') }}</h6>
+                            </div>
                         <livewire:Users.user-edit :user="$user"/>
                     @endif
-                    @if($tab == 'tally')
-                        <livewire:Users.user-tally :user="$user"/>
-                    @endif
-                    @if($tab == 'payments')
-                        <livewire:Users.user-payments :user="$user"/>
-                    @endif
-                    @if($tab == 'invoices')
-                        <livewire:Users.user-invoices :user="$user"/>
+                    @if($tab == 'overzicht')
+                        <div class="row">
+                            <div class="row my-4">
+                                <livewire:components.year-totals :user="$user" />
+                                @include('components.expenses-list', compact('expenses'))
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mt-4">
+                                    @include('components.payments-list', compact('payments'))
+                                </div>
+                                <div class="col-md-4 mt-4">
+                                    @include('components.tally-list', compact('tallies'))
+                                </div>
+
+                                <div class="col-md-4 mt-4">
+                                    @include('components.invoices-list', compact('invoices'))
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>

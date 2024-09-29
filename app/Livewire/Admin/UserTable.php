@@ -15,6 +15,7 @@ class UserTable extends Component
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Users';
+
     //DataTable props
     public ?string $query = null;
 
@@ -47,8 +48,6 @@ class UserTable extends Component
 
     public ?User $user = null;
 
-
-
     //Update & Store Rules
     protected array $rules =
         [
@@ -71,7 +70,6 @@ class UserTable extends Component
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedUsers->count().' '.Str::plural('user', $paginatedUsers->count()).' found';
-
 
         return view('livewire.admin.users.table', compact('paginatedUsers'));
     }
@@ -126,10 +124,7 @@ class UserTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount()
-    {
-
-    }
+    public function mount() {}
 
     public function hydrate()
     {

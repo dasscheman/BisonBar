@@ -15,6 +15,7 @@ class TallyTable extends Component
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Tallys';
+
     //DataTable props
     public ?string $query = null;
 
@@ -29,13 +30,21 @@ class TallyTable extends Component
     //Create, Edit, Delete, View Tally props
 
     public ?int $tally_list_id = null;
+
     public ?int $assortment_id = null;
+
     public ?int $user_id = null;
+
     public ?int $count = null;
+
     public ?float $price = null;
+
     public ?int $type_id = null;
+
     public ?int $status_id = null;
+
     public ?int $invoice_id = null;
+
     public ?int $payment_id = null;
 
     public ?DateTime $created_at = null;
@@ -45,9 +54,6 @@ class TallyTable extends Component
     public ?int $tally_id = null;
 
     public ?Tally $tally = null;
-
-
-
 
     //Update & Store Rules
     protected array $rules =
@@ -76,7 +82,6 @@ class TallyTable extends Component
         $this->resultCount = empty($this->query) ? null :
             $paginatedTallys->count().' '.Str::plural('tally', $paginatedTallys->count()).' found';
 
-
         return view('livewire.admin.tallys.table', compact('paginatedTallys'));
     }
 
@@ -95,7 +100,6 @@ class TallyTable extends Component
         // assign values to public props
         $this->tally = $tally;
         $this->tally_id = $tally->id;
-
 
         $this->tally_list_id = $tally->tally_list_id;
         $this->assortment_id = $tally->assortment_id;
@@ -137,10 +141,7 @@ class TallyTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount()
-    {
-
-    }
+    public function mount() {}
 
     public function hydrate()
     {
@@ -170,7 +171,7 @@ class TallyTable extends Component
      **/
     public function search($query)
     {
-        $tally = new Tally();
+        $tally = new Tally;
 
         return empty($query) ? $tally :
             $tally->where(function ($q) use ($query) {

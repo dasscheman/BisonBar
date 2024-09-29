@@ -3,21 +3,23 @@
 namespace App\Livewire;
 
 use App\Models\User;
-use App\Models\UserCalculations;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
     public $users;
+
     public $showAll = false;
-    public $title = "Dashboard";
+
+    public $title = 'Turflijst';
+
     public $showNumber = 15;
 
-    public $showSuccesNotification  = false;
+    public $showSuccesNotification = false;
 
     public function mount()
     {
-        $this->users = UserCalculations::orderBy('updated_at', 'DESC')->take($this->showNumber)->get();
+        $this->users = User::orderBy('updated_at', 'DESC')->take($this->showNumber)->get();
     }
 
     public function render()
@@ -27,12 +29,13 @@ class Dashboard extends Component
             $showNumber = null;
         }
 
-        $this->users = UserCalculations::orderBy('updated_at', 'DESC')->take($showNumber)->get();
+        $this->users = User::orderBy('updated_at', 'DESC')->take($showNumber)->get();
+
         return view('livewire.dashboard');
     }
 
     public function toggleShowAll()
     {
-        $this->showAll = !$this->showAll;
+        $this->showAll = ! $this->showAll;
     }
 }

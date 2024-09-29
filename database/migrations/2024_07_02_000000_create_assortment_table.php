@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAssortmentTable extends Migration
 {
@@ -18,13 +18,12 @@ class CreateAssortmentTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->decimal('price')->default(0);
+            $table->decimal('price', 5, 2)->default(0);
             $table->integer('category_id')->default(1);
             $table->integer('status_id')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
-
 
         $prices = DB::table('prijslijst')->get();
         foreach ($prices as $price) {

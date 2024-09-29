@@ -11,11 +11,12 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class   TallyListTable extends Component
+class TallyListTable extends Component
 {
     use AuthorizesRequests, WithPagination;
 
     public $title = 'TallyLists';
+
     //DataTable props
     public ?string $query = null;
 
@@ -32,6 +33,7 @@ class   TallyListTable extends Component
     public ?string $serial_number = null;
 
     public ?Date $start_date = null;
+
     public ?Date $end_date = null;
 
     public ?DateTime $created_at = null;
@@ -63,8 +65,7 @@ class   TallyListTable extends Component
         $this->resultCount = empty($this->query) ? null :
             $paginatedTallyLists->count().' '.Str::plural('tallylist', $paginatedTallyLists->count()).' found';
 
-
-        return view('livewire.admin.tallylists.table', compact('paginatedTallyLists'));
+        return view('livewire.admin.tally-lists.table', compact('paginatedTallyLists'));
     }
 
     public function store()
@@ -115,10 +116,7 @@ class   TallyListTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount()
-    {
-
-    }
+    public function mount() {}
 
     public function hydrate()
     {
@@ -142,7 +140,7 @@ class   TallyListTable extends Component
      **/
     public function search($query)
     {
-        $tallylist = new TallyList();
+        $tallylist = new TallyList;
 
         return empty($query) ? $tallylist :
             $tallylist->where(function ($q) use ($query) {

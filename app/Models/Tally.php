@@ -12,8 +12,11 @@ class Tally extends Model
     use HasFactory, SoftDeletes;
 
     const TYPE_tally_list = 1;
+
     const TYPE_tally = 2;
+
     const TYPE_round = 3;
+
     const TYPE_direct_payment = 4;
 
     protected $table = 'la_tally';
@@ -42,7 +45,4 @@ class Tally extends Model
     {
         return $this->belongsTo(TallyList::class);
     }
-
-
-
 }

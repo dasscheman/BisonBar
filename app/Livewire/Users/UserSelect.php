@@ -1,24 +1,27 @@
 <?php
 
 namespace App\Livewire\Users;
+
 use App\Models\Assortment;
 use App\Models\Status;
 use App\Models\Tally;
 use App\Models\User;
-
 use Livewire\Component;
-use Masmerise\Toaster\Toaster;
 
 class UserSelect extends Component
 {
     public User $user;
+
     public $assortments;
+
     public $selection;
-    public $title = "Turven";
 
-    public $showSuccesNotification  = false;
+    public $title = 'Turven';
 
-    public function mount($user) {
+    public $showSuccesNotification = false;
+
+    public function mount($user)
+    {
         $this->user = $user;
         $this->assortments = Assortment::all();
     }
@@ -38,7 +41,7 @@ class UserSelect extends Component
                 'count' => $count,
                 'price' => $assortment->price * $count,
                 'type_id' => Tally::TYPE_tally,
-                'status_id' => Status::STATUS_ingevoerd
+                'status_id' => Status::STATUS_ingevoerd,
             ];
 
             Tally::create($data);
@@ -52,8 +55,9 @@ class UserSelect extends Component
 
     public function select($assortment)
     {
-        if(isset($this->selection[$assortment])){
+        if (isset($this->selection[$assortment])) {
             $this->selection[$assortment]++;
+
             return;
         }
         $this->selection[$assortment] = 1;
@@ -61,14 +65,16 @@ class UserSelect extends Component
 
     public function deSelect($assortment)
     {
-        if(isset($this->selection[$assortment])){
+        if (isset($this->selection[$assortment])) {
             $this->selection[$assortment]--;
             if ($this->selection[$assortment] <= 0) {
                 unset($this->selection[$assortment]);
             }
         }
     }
-    public function toggleSuccesNotification(){
-        $this->showSuccesNotification = !$this->showSuccesNotification;
+
+    public function toggleSuccesNotification()
+    {
+        $this->showSuccesNotification = ! $this->showSuccesNotification;
     }
 }

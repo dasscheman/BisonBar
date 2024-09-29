@@ -1,11 +1,7 @@
 <x-mail::message>
-# Introduction
+# Ontvangen betaling
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+We hebben een betaling ontvangen en deze is correct verwerkt.
 
 Thanks,<br>
 {{ config('app.name') }}

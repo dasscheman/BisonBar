@@ -16,6 +16,7 @@ class ExpenseTable extends Component
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Expense';
+
     //DataTable props
     public ?string $query = null;
 
@@ -31,8 +32,11 @@ class ExpenseTable extends Component
     public ?string $description = null;
 
     public ?int $user_id = null;
+
     public ?int $receipt_id = null;
+
     public ?int $invoice_id = null;
+
     public ?int $status_id = null;
 
     public ?float $price = null;
@@ -49,16 +53,14 @@ class ExpenseTable extends Component
 
     public ?Expenses $expense = null;
 
-
-
     //Update & Store Rules
     protected array $rules =
         [
             'user_id' => 'int',
-            'receipt_id'  => 'int',
+            'receipt_id' => 'int',
             'invoice_id' => 'nullable|int',
             'description' => 'string',
-            'status_id'  => 'int',
+            'status_id' => 'int',
             'price' => 'decimal:2',
         ];
 
@@ -75,7 +77,6 @@ class ExpenseTable extends Component
         $this->resultCount = empty($this->query) ? null :
             $paginatedExpenses->count().' '.Str::plural('user', $paginatedExpenses->count()).' found';
 
-
         return view('livewire.admin.expenses.table', compact('paginatedExpenses'));
     }
 
@@ -84,7 +85,6 @@ class ExpenseTable extends Component
         $validatedData = $this->validate();
 
         DB::transaction(function () use ($validatedData) {
-
 
             Expenses::create($validatedData);
         });
@@ -133,7 +133,7 @@ class ExpenseTable extends Component
 
     public function mount()
     {
-        $this->expense = new Expenses();
+        $this->expense = new Expenses;
     }
 
     public function hydrate()
@@ -161,7 +161,7 @@ class ExpenseTable extends Component
      **/
     public function search($query)
     {
-        $expense = new Expenses();
+        $expense = new Expenses;
 
         return empty($query) ? $expense :
             $expense->where(function ($q) use ($query) {

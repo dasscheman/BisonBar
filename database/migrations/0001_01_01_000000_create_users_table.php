@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('pay_key')->nullable();
             $table->smallInteger('automatic_payment')->default(0);
             $table->string('mollie_customer_id')->nullable();
-            $table->decimal('mollie_amount')->nullable();
+            $table->decimal('mollie_amount', 5, 2)->nullable();
             $table->decimal('hard_limit')->default(-20);
             $table->decimal('rise_limit')->default(0);
             $table->timestamp('email_verified_at')->nullable();
@@ -31,7 +31,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-
 
         $users = DB::table('user')->get();
         foreach ($users as $user) {

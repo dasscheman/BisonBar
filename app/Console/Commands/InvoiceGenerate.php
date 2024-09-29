@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Calculations;
 use App\Models\User;
-use App\Models\UserCalculations;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-
 
 class InvoiceGenerate extends Command
 {
@@ -29,16 +27,19 @@ class InvoiceGenerate extends Command
      */
     public function handle()
     {
-       $users = UserCalculations::whereNull('blocked_at')->get();
-       foreach ($users as $user) {
-           $this->info('Check user ' . $user->name);
-           if(!$user->checkForNewInvoice()) {
-               continue;
-           }
+        $users = User::whereNull('blocked_at')->get();
+        $calculations = new Calculations();
 
-            if($user->generateNewInvoice()) {
-                $this->info('Generated invoice for user ' . $user->name);
+        foreach ($users as $user) {
+            $calculations->user_id = $user->id;
+            $this->info('Check user '.$user->name);
+            if (! $calculations->checkForNewInvoice()) {
+                continue;
             }
-       }
+
+            if ($user->generateNewInvoice()) {
+                $this->info('Generated invoice for user '.$user->name);
+            }
+        }
     }
 }

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePaymentsTable extends Migration
 {
@@ -21,7 +21,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('invoice_id')->nullable();
             $table->string('name')->nullable();
             $table->string('description')->nullable();
-            $table->decimal('price')->default(0);
+            $table->decimal('price', 5, 2)->default(0);
             $table->boolean('add_subtract');
             $table->integer('type_id');
             $table->integer('status_id')->default(1);
@@ -33,8 +33,7 @@ class CreatePaymentsTable extends Migration
             $table->timestamps();
         });
 
-
-        $transacties = DB::table('transacties')->whereIn('type_id', [1,2,3,8,9,17])->get();
+        $transacties = DB::table('transacties')->whereIn('type_id', [1, 2, 3, 8, 9, 17])->get();
         foreach ($transacties as $transactie) {
             $type = DB::table('betaling_type')->where('type_id', $transactie->type_id)->first();
             $data = [

@@ -16,6 +16,7 @@ class PaymentTable extends Component
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Payment';
+
     //DataTable props
     public ?string $query = null;
 
@@ -33,28 +34,34 @@ class PaymentTable extends Component
     public ?int $user_id = null;
 
     public ?int $receipt_id = null;
+
     public ?int $invoice_id = null;
+
     public ?string $description = null;
+
     public ?float $price = null;
+
     public ?bool $add_subtract = null;
+
     public ?int $type_id = null;
+
     public ?int $status_id = null;
+
     public ?string $mollie_status = null;
+
     public ?string $mollie_id = null;
+
     public ?string $transaction_key = null;
+
     public ?float $transaction_cost = null;
 
     public ?DateTime $created_at = null;
 
     public ?DateTime $updated_at = null;
 
-
     public ?int $payment_id = null;
 
     public ?Payment $payment = null;
-
-
-
 
     //Update & Store Rules
     protected array $rules =
@@ -66,8 +73,8 @@ class PaymentTable extends Component
             'description' => 'string',
             'price' => 'decimal',
             'add_subtract' => 'boolean',
-            'type_id' => 'int' ,
-            'status_id' => 'int' ,
+            'type_id' => 'int',
+            'status_id' => 'int',
             'mollie_status' => 'int',
             'mollie_id' => 'string',
             'transaction_key' => 'string',
@@ -146,10 +153,7 @@ class PaymentTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount()
-    {
-
-    }
+    public function mount() {}
 
     public function hydrate()
     {
@@ -167,14 +171,14 @@ class PaymentTable extends Component
             'description',
             'price',
             'add_subtract',
-            'type_id' ,
-            'status_id' ,
+            'type_id',
+            'status_id',
             'mollie_status',
             'mollie_id',
             'transaction_key',
             'transaction_cost',
             'created_at',
-            'updated_at'
+            'updated_at',
         ]);
     }
 
@@ -183,7 +187,7 @@ class PaymentTable extends Component
      **/
     public function search($query)
     {
-        $payment = new Payment();
+        $payment = new Payment;
 
         return empty($query) ? $payment :
             $payment->where(function ($q) use ($query) {

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTallyTable extends Migration
 {
@@ -42,7 +42,7 @@ class CreateTallyTable extends Migration
             $table->integer('assortment_id', 0);
             $table->integer('user_id', 0);
             $table->integer('count', 0);
-            $table->decimal('price')->default(0);
+            $table->decimal('price', 5, 2)->default(0);
             $table->integer('type_id');
             $table->integer('status_id')->default(1);
             $table->integer('invoice_id', 0)->nullable();
@@ -50,7 +50,6 @@ class CreateTallyTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-
 
         $turven = DB::table('turven')->get();
         foreach ($turven as $turf) {
@@ -68,8 +67,8 @@ class CreateTallyTable extends Migration
                 'created_at' => $turf->created_at,
                 'updated_at' => $turf->updated_at,
             ];
-        \App\Models\Tally::create($data);
-    }
+            \App\Models\Tally::create($data);
+        }
 
     }
 

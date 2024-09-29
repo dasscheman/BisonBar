@@ -2,12 +2,14 @@
 
 namespace App\Mail;
 
+use App\Models\Invoices;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceSend extends Mailable
 {
@@ -16,7 +18,7 @@ class InvoiceSend extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public Invoices $invoice)
     {
         //
     }
@@ -38,6 +40,10 @@ class InvoiceSend extends Mailable
     {
         return new Content(
             markdown: 'mail.invoice.send',
+            with: [
+                'urlPayment' => url('mollie/payment', ['pay_key' => $this->invoice->user->pay_key]),
+                'urlAutoPayment' => url('mollie/autoPayment', ['pay_key' => $this->invoice->user->pay_key]),
+            ],
         );
     }
 
@@ -48,6 +54,14 @@ class InvoiceSend extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        if(Storage::disk('local')->exists('/invoices/' . $this->invoice->file_name )) {
+            $filePath = storage_path('/app/invoices/' . $this->hasAttachment()->file_name);
+            $attachments[] = Attachment::fromPath($filePath)
+                ->as($this->invoice->filename)
+                ->withMime('application/pdf');
+        }
+        return $attachments;
     }
 }

@@ -9,7 +9,9 @@ use Livewire\Component;
 class AssortmentSelected extends Component
 {
     public $user;
+
     public $assortment;
+
     public $assortmentSelected = false;
 
     public function mount(User $user, Assortment $assortment)

@@ -2,13 +2,10 @@
 
 namespace App\Livewire\Components;
 
-use App\Models\Assortment;
 use App\Models\Expenses;
 use App\Models\Payment;
 use App\Models\PaymentType;
 use App\Models\Tally;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class HeaderTotals extends Component

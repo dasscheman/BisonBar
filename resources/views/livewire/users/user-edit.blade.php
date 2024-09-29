@@ -6,7 +6,7 @@
                 <label for="name" class="form-control-label">{{ __('Full Name') }}</label>
                 <div class="@error('name')border border-danger rounded-3 @enderror">
                     <input wire:model="name" class="form-control" type="text" placeholder="Name"
-                            name="user.namee"
+                            name="user.name"
 {{--                           id="site_name"--}}
                            id="name">
                 </div>

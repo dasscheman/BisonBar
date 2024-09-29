@@ -32,13 +32,14 @@ class Expenses extends Model
     public function status()
     {
         $status = new Status;
+
         return $status->getStatusOptions()[$this->status_id];
     }
 
     public function getStatusOptions()
     {
         $status = new Status;
+
         return $status->getStatusOptions();
     }
-
 }

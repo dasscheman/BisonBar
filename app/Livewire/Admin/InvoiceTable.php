@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Mollie\Api\Resources\Invoice;
 
 class InvoiceTable extends Component
 {
     use AuthorizesRequests, WithPagination;
 
     public $title = 'Invoices';
+
     //DataTable props
     public ?string $query = null;
 
@@ -31,12 +31,12 @@ class InvoiceTable extends Component
 
     //Create, Edit, Delete, View User props
     public ?string $name = null;
+
     public ?string $file_name = null;
 
-
-
     public ?int $user_id = null;
-    public ?DateTime $send_at= null;
+
+    public ?DateTime $send_at = null;
 
     public ?DateTime $created_at = null;
 
@@ -45,8 +45,6 @@ class InvoiceTable extends Component
     public ?int $invoice_id = null;
 
     public ?Invoices $invoice = null;
-
-
 
     //Update & Store Rules
     protected array $rules =
@@ -66,7 +64,7 @@ class InvoiceTable extends Component
 
     public function render()
     {
-        $paginatedInvoice = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->paginate($this->perPage);
+        $paginatedInvoice = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->simplePaginate($this->perPage);
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedInvoice->count().' '.Str::plural('invoice', $paginatedInvoice->count()).' found';
@@ -122,7 +120,7 @@ class InvoiceTable extends Component
 
     public function mount()
     {
-        $this->invoice = new Invoices();
+        $this->invoice = new Invoices;
     }
 
     public function hydrate()
@@ -148,7 +146,7 @@ class InvoiceTable extends Component
      **/
     public function search($query)
     {
-        $invoice = new Invoices();
+        $invoice = new Invoices;
 
         return empty($query) ? $invoice :
             $invoice->where(function ($q) use ($query) {
@@ -163,11 +161,15 @@ class InvoiceTable extends Component
 
     public function download(Invoices $invoice)
     {
-        if(!Storage::disk('local')->exists('/invoices/' . $invoice->file_name )) {
+        if (! Storage::disk('local')->exists('/invoices/'.$invoice->file_name)) {
             session()->flash('message', 'Could not find file!');
             return;
+
+//            session()->flash('message', 'Could not find file!');
+//            return redirect()->to('/admin-dashboard');
         }
-        $filePath = storage_path('/app/invoices/' . $invoice->file_name);
+        $filePath = storage_path('/app/invoices/'.$invoice->file_name);
+
         return response()->download($filePath);
     }
 }

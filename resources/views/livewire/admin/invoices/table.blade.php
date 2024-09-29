@@ -42,8 +42,6 @@
                 </select>
             </div>
         </div>
-
-
     </div>
     <div class="card card-body shadow-blur mx-6 mt-1 opacity-9">
         @include('components.alert')
@@ -53,9 +51,9 @@
                     <thead>
                     <tr>
                         <th>id</th>
-                        <th>Name</th>
                         <th>User</th>
                         <th>File Name</th>
+                        <th>Ammount</th>
                         <th>Send at</th>
                         <th>Actions</th>
                     </tr>
@@ -64,9 +62,9 @@
                     @forelse($paginatedInvoice as $model)
                         <tr>
                             <td>{{$model->id}}</td>
-                            <td>{{$model->name}}</td>
                             <td>{{$model->user->name}}</td>
                             <td>{{$model->file_name}}</td>
+                            <td>@currency($model->totalOnDate()) €</td>
                             <td>{{$model->send_at}}</td>
                             <td>
                                 <button data-bs-toggle="modal" data-bs-target="#viewModal"

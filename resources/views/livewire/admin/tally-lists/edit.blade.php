@@ -19,18 +19,6 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label for="role_id">Role role_id:</label>
-                <select  class="form-select" aria-label="Default select example" wire:model.live="role_id" id="role_id">
-                    <option value="">-- Select --</option>
-{{--                    @foreach( App\Models\Role::all()->pluck("name", "id") as $key=>$option)--}}
-{{--                        <option value="{{$key}}" >{{$option}}</option>--}}
-{{--                    @endforeach--}}
-                </select>
-                @error("role_id")
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
-            </div>
-            <div class="form-group">
                 <label for="email">User email:</label>
                 <input wire:model="email" type="text" class="form-control" name="email"
                        id="email"

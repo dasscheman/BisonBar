@@ -1,12 +1,12 @@
 <x-body-layout :title="$title">
     <!-- Edit Modal -->
-    @include('livewire.admin.users.edit')
+    @include('livewire.admin.tally-lists.edit')
     <!-- Create Modal -->
-    @include('livewire.admin.users.create')
+    @include('livewire.admin.tally-lists.create')
     <!-- Delete Confirmation Modal -->
-    @include('livewire.admin.users.delete')
+    @include('livewire.admin.tally-lists.delete')
     <!-- View Modal -->
-    @include('livewire.admin.users.view')
+    @include('livewire.admin.tally-lists.view')
 
     <div class="card card-header shadow-blur mx-6 mt-custom opacity-9">
         <div class="row">
@@ -25,13 +25,8 @@
                 <select wire:model.live="orderBy" id="orderBy" class="form-select">
                     <option value="user_id">User_id</option>
                     <option value="name">Name</option>
-                    <option value="role_id">Role_id</option>
-                    <option value="email">Email</option>
-                    <option value="email_verified_at">Email_verified_at</option>
                     <option value="created_at">Created_at</option>
                     <option value="updated_at">Updated_at</option>
-                    <option value="solis_id">Solis_id</option>
-                    <option value="allowed_attributes">Allowed_attributes</option>
                 </select>
             </div>
 
@@ -63,26 +58,21 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>name</th>
-                        <th>Role</th>
-                        <th>email</th>
-                        <th>Openstaan</th>
+                        <th>id</th>
+                        <th>Serial number</th>
+                        <th>Start date</th>
+                        <th>End date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($paginatedUsers as $model)
+                    @forelse($paginatedTallyLists as $model)
                         <tr>
-                            <td>{{$model->name}}</td>
-                            <td>{{$model->role_id}}</td>
-                            <td>{{$model->email}}</td>
-                            <td>@currency($model->total())</td>
+                            <td>{{$model->id}}</td>
+                            <td>{{$model->serial_number}}</td>
+                            <td>{{date('d-m-Y', strtotime($model->start_date))}}</td>
+                            <td>{{date('d-m-Y', strtotime($model->end_date))}}</td>
                             <td>
-                                <a class="btn btn-outline-info btn-sm"
-                                   href="#"
-                                   wire:click.stop.prevent="redirectToDetail('user-tab', {{ $model->id }})">
-                                    Details
-                                </a>
                                 <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                         wire:click="initData({{ $model }})"
                                         class="btn btn-outline-info btn-sm">View
@@ -104,7 +94,7 @@
                     @endforelse
                     </tbody>
                 </table>
-                {{$paginatedUsers->links()}}
+                {{$paginatedTallyLists->links()}}
             </div>
         </div>
     </div>
