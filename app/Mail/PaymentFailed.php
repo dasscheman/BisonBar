@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -15,7 +16,7 @@ class PaymentFailed extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public Payment $payment)
     {
         //
     }
@@ -26,6 +27,7 @@ class PaymentFailed extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            cc: config('mail.admin_email'),
             subject: 'Payment Failed',
         );
     }

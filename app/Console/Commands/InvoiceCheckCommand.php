@@ -21,7 +21,7 @@ class InvoiceCheckCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Dit commando is voor de eerste keer nodig bij in gebruikname van de nieuwe versie.';
 
     /**
      * Execute the console command.

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('role_id')->default(1);
             $table->string('pay_key')->nullable();
             $table->smallInteger('automatic_payment')->default(0);
+            $table->timestamp('auto_payment_notice_at', 0)->nullable();
             $table->string('mollie_customer_id')->nullable();
             $table->decimal('mollie_amount', 5, 2)->nullable();
             $table->decimal('hard_limit')->default(-20);

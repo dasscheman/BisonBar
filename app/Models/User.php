@@ -6,14 +6,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
     protected $table = 'la_users';
+    protected $key = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -42,7 +45,35 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
         'deleted_at' => 'datetime',
         'blocked_at' => 'datetime',
+        'auto_payment_notice_at' => 'datetime',
     ];
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+//        dd($field, $value);
+//        // If no field was given, use the primary key
+//        if ($field === null) {
+//            $field = $this->getKey();
+//        }
+//dd($value, $field ,  $this->getKey()    );
+        // Apply where clause
+        $query = $this->where('id', $value);
+
+        // Conditionally remove the softdelete scope to allow seeing soft-deleted records
+    //        if (Auth::check() && Auth::user->role()) {
+                $query->withoutGlobalScope(SoftDeletingScope::class);
+//        }
+
+        // Find the first record, or abort
+        return $query->firstOrFail();
+    }
 
     public function expenses(): HasMany
     {

@@ -14,6 +14,8 @@
                         <tr>
                             <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Year</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Tallies</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Ideal</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Bank</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Payments</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Expenses</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">Nett</th>
@@ -32,6 +34,16 @@
                                 <td>
                                     <div class="avatar-group mt-2">
                                         <h6 class="align-items-center text-end">@currency($value['tally-total'])</h6>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group mt-2">
+                                        <h6 class="align-items-center text-end">@currency($value['payment-ideal'])</h6>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group mt-2">
+                                        <h6 class="align-items-center text-end">@currency($value['payment-bank'])</h6>
                                     </div>
                                 </td>
                                 <td>

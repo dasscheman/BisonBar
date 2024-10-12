@@ -24,16 +24,23 @@ class Mollie extends Model
         $this->user = $user;
     }
 
-    public function payment()
+    public function startPayment()
     {
         $payment = new Payment;
         $payment->type_id = PaymentType::TYPE_ideal;
         $payment->status_id = Status::STATUS_ingevoerd;
         $payment->user_id = $this->user->id;
         $payment->add_subtract = Payment::ADDSUBTRACT_ADD;
-        $payment->price = number_format((float) $this->amount, 2);
-        $payment->save();
+        $payment->price = number_format((float)$this->amount, 2);
+        if($payment->save() ){
+            return $payment;
+        }
+        return false;
+    }
 
+
+    public function payment(Payment $payment)
+    {
         $parameters = [
             'amount' => [
                 'currency' => 'EUR',

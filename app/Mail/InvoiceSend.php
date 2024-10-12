@@ -43,6 +43,7 @@ class InvoiceSend extends Mailable
             with: [
                 'urlPayment' => url('mollie/payment', ['pay_key' => $this->invoice->user->pay_key]),
                 'urlAutoPayment' => url('mollie/autoPayment', ['pay_key' => $this->invoice->user->pay_key]),
+                'urlEditAutoPayment' => url('mollie/editAutoPayment', ['pay_key' => $this->invoice->user->pay_key]),
             ],
         );
     }

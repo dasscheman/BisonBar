@@ -29,30 +29,21 @@ Je kunt je account pas weer gebruiken wanneer je betaald hebt.
     Automatisch ophogen instellen
 </x-mail::button>
 
+Als je vragen hebt kun je mailen naar bar@debison.nl
 
+    Thanks,<br>
+    {{ config('app.name') }}
 
-{{--<x-mail::button :url="{{ route('mollie.autopayment', ['pay_key' => $invoice->user->pay_key]) }}">--}}
-{{--Stel een automatische betaling in--}}
-{{--</x-mail::button>--}}
-{{--Als de knop niet werk, kopieer dan de volgende link en plak hem in je browser:--}}
-{{--{{url(['/mollie/payment', 'pay_key' => $invoice->user->pay_key])}}--}}
+    De factuur wordt elke 4 weken automatisch aangemaakt en verzonden.
 
-{{--Als je vragen hebt kun je mailen naar bar@debison.nl--}}
-
-{{--Met vriendelijke groet,--}}
-
-{{--{{ config('app.name') }}--}}
-
-{{--De factuur wordt elke 4 weken automatisch aangemaakt en verzonden.--}}
-
-{{--@if ($invoice->user->automatic_payment)--}}
-{{--    Je maakt gebruik van automatisch ophogen, je tegoed wordt automatisch opgehoogd met @currency($user->mollie_amount) €--}}
-{{--<br>--}}
-{{--Hier kun je automatisch ophogen stop zetten of de hoogte van het bedrag wijzigen:--}}
-{{--<x-mail::button :url="{{url(['/mollie/automatisch-betaling-update', 'pay_key' => $invoice->user->pay_key])}}">--}}
-{{--    Automatisch ophogen wijzigen--}}
-{{--</x-mail::button>--}}
-{{--@else--}}
-{{--    Je maakt geen gebruik van automatisch ophogen.--}}
-{{--@endif--}}
+    @if ($invoice->user->automatic_payment)
+        Je maakt gebruik van automatisch ophogen, je tegoed wordt automatisch opgehoogd met @currency($user->mollie_amount)
+        <br>
+        Hier kun je automatisch ophogen stop zetten of de hoogte van het bedrag wijzigen:
+        <x-mail::button :url="$urlEditAutoPayment">
+            Automatisch ophogen instellen
+        </x-mail::button>
+    @else
+        Je maakt geen gebruik van automatisch ophogen.
+    @endif
 </x-mail::message>

@@ -46,6 +46,10 @@ class YearTotals extends Component
         }
 
         $total['tally-total'] = $calculations->tallies()->sum('price');
+        $total['payment-ideal'] = $calculations->paymentsAddWhereIn([
+            PaymentType::TYPE_ideal])->sum('price');
+        $total['payment-bank'] = $calculations->paymentsAddWhereIn([
+            PaymentType::TYPE_bank_add])->sum('price');
         $total['payment-total'] = $calculations->paymentsAddWhereIn([
             PaymentType::TYPE_bank_add,
             PaymentType::TYPE_ideal,
@@ -57,6 +61,10 @@ class YearTotals extends Component
 
         foreach ($this->years as $year) {
             $years[$year]['tally-total'] = $calculations->tallies()->whereYear('created_at', $year)->sum('price');
+            $years[$year]['payment-ideal'] = $calculations->paymentsAddWhereIn([
+                PaymentType::TYPE_ideal])->whereYear('created_at', $year)->sum('price');
+            $years[$year]['payment-bank'] = $calculations->paymentsAddWhereIn([
+                PaymentType::TYPE_bank_add])->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-total'] = $calculations->paymentsAddWhereIn([
                 PaymentType::TYPE_bank_add,
                 PaymentType::TYPE_ideal,

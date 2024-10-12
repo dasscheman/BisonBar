@@ -7,6 +7,7 @@ use App\Models\Invoices;
 use App\Models\Payment;
 use App\Models\Tally;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -22,6 +23,14 @@ class UserTab extends Component
 
     public $showSuccesNotification = false;
 
+
+    /**
+     * Retrieve the model for a bound value.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function mount($user = null)
     {
         if ($user != null) {

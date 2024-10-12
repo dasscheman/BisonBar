@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-
 class DBImport extends Command
 {
     /**
@@ -27,6 +26,6 @@ class DBImport extends Command
      */
     public function handle()
     {
-       DB::unprepared(file_get_contents(database_path('old_data.sql')));
+        DB::unprepared(file_get_contents(database_path('old_data.sql')));
     }
 }

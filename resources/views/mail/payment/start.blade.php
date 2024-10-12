@@ -1,11 +1,11 @@
 <x-mail::message>
-# Introduction
+#Hi,
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+    Er is een automatische betaling opgestart voor {{$user->name}}
+    Gegevens mollie betaling:
+    ID: {{$payment->id}}
+    Omschrijving: {{$payment->description}}
+    Bedrag:  @curency($payment->price)
 
 Thanks,<br>
 {{ config('app.name') }}

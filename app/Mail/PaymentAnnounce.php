@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -15,7 +16,7 @@ class PaymentAnnounce extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public User $user)
     {
         //
     }
@@ -26,7 +27,7 @@ class PaymentAnnounce extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Announce',
+            subject: 'Aankondiging automatisch ophogen',
         );
     }
 
@@ -36,7 +37,10 @@ class PaymentAnnounce extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.payment.announce',
+            markdown: 'payment.announcement',
+            with: [
+                'urlEditAutoPayment' => url('mollie/editAutoPayment', ['pay_key' => $this->user->pay_key]),
+            ],
         );
     }
 

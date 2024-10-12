@@ -2,8 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\Mollie;
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -16,7 +18,9 @@ class StartRecuring extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(
+        public Payment $payment,
+        public User $user)
     {
         //
     }
@@ -27,6 +31,7 @@ class StartRecuring extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            to: config('mail.admin_email'),
             subject: 'Start Recuring',
         );
     }
@@ -38,10 +43,6 @@ class StartRecuring extends Mailable
     {
         return new Content(
             markdown: 'payment.startrecuring',
-            with: [
-                'urlPayment' => url('mollie/payment', ['pay_key' => $this->invoice->user->pay_key]),
-                'urlAutoPayment' => url('mollie/autoPayment', ['pay_key' => $this->invoice->user->pay_key]),
-            ],
         );
     }
 

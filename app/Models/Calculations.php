@@ -68,7 +68,8 @@ class Calculations
     public function paymentsAdd($type)
     {
         $payments = Payment::where('type_id', $type)
-            ->where('add_subtract', Payment::ADDSUBTRACT_ADD);
+            ->where('add_subtract', Payment::ADDSUBTRACT_ADD)
+            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
 
         if($this->date) {
             $payments = $payments->whereDate('created_at', '<=', $this->date);
@@ -83,7 +84,8 @@ class Calculations
     public function paymentsAddWhereIn($types)
     {
         $payments = Payment::whereIn('type_id', $types)
-            ->where('add_subtract', Payment::ADDSUBTRACT_ADD);
+            ->where('add_subtract', Payment::ADDSUBTRACT_ADD)
+            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
 
         if($this->date) {
             $payments = $payments->whereDate('created_at', '<=', $this->date);
@@ -98,13 +100,15 @@ class Calculations
     public function paymentsSubtractNotInvoiced($type)
     {
         return $this->paymentsSubtract($type)
-            ->whereNull('invoice_id');
+            ->whereNull('invoice_id')
+            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
     }
 
     public function paymentsSubtract($type)
     {
         $payments = Payment::where('type_id', $type)
-            ->where('add_subtract', Payment::ADDSUBTRACT_SUBTRACT);
+            ->where('add_subtract', Payment::ADDSUBTRACT_SUBTRACT)
+            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
 
         if($this->date) {
             $payments = $payments->whereDate('created_at', '<=', $this->date);
@@ -147,6 +151,7 @@ class Calculations
     public function payments()
     {
         $payments = new Payment();
+//        $payments = $payments->whereIn('status', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);;
 
         if($this->date) {
             $payments = $payments->whereDate('created_at', '<=', $this->date);
