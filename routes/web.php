@@ -18,18 +18,19 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/user-tab/{user?}', UserTab::class)->name('user-tab');
     Route::get('/user-select/{user}', UserSelect::class)->name('user-select');
-    Route::get('/users', UserTable::class)->name('users');
 
     Route::middleware('can:admin')->group(function () {
-
-    Route::get('/assortments', \App\Livewire\Admin\AssortmentTable::class)->name('assortments');
-    Route::get('/expenses', \App\Livewire\Admin\ExpenseTable::class)->name('expenses');
-    Route::get('/invoices', \App\Livewire\Admin\InvoiceTable::class)->name('invoices');
-    Route::get('/payments', \App\Livewire\Admin\PaymentTable::class)->name('payments');
-    Route::get('/tallies', \App\Livewire\Admin\TallyTable::class)->name('tallies');
-    Route::get('/tally-lists', \App\Livewire\Admin\TallyListTable::class)->name('tally-lists');
+        Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');
+        Route::get('/users', UserTable::class)->name('users');
 
         Route::get('/user-tab/{user}/invoice', [UserController::class, 'newInvoice'])->name('new-invoice');
+
+        Route::get('/assortments', \App\Livewire\Admin\AssortmentTable::class)->name('assortments');
+        Route::get('/expenses', \App\Livewire\Admin\ExpenseTable::class)->name('expenses');
+        Route::get('/invoices', \App\Livewire\Admin\InvoiceTable::class)->name('invoices');
+        Route::get('/payments', \App\Livewire\Admin\PaymentTable::class)->name('payments');
+        Route::get('/tallies', \App\Livewire\Admin\TallyTable::class)->name('tallies');
+        Route::get('/tally-lists', \App\Livewire\Admin\TallyListTable::class)->name('tally-lists');
     });
 });
 
