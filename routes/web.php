@@ -2,19 +2,25 @@
 
 use App\Http\Controllers\MolliePayment;
 use App\Http\Controllers\MollieWebhook;
+use App\Http\Controllers\UserController;
 use App\Livewire\Admin\UserTable;
 use App\Livewire\Dashboard;
 use App\Livewire\Users\UserSelect;
 use App\Livewire\Users\UserTab;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__.'/auth.php';
+
 Route::middleware('auth')->group(function () {
-    Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');
+    Route::impersonate();
+
     Route::get('/', Dashboard::class)->name('dashboard');
 
     Route::get('/user-tab/{user?}', UserTab::class)->name('user-tab');
     Route::get('/user-select/{user}', UserSelect::class)->name('user-select');
     Route::get('/users', UserTable::class)->name('users');
+
+    Route::middleware('can:admin')->group(function () {
 
     Route::get('/assortments', \App\Livewire\Admin\AssortmentTable::class)->name('assortments');
     Route::get('/expenses', \App\Livewire\Admin\ExpenseTable::class)->name('expenses');
@@ -23,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tallies', \App\Livewire\Admin\TallyTable::class)->name('tallies');
     Route::get('/tally-lists', \App\Livewire\Admin\TallyListTable::class)->name('tally-lists');
 
+        Route::get('/user-tab/{user}/invoice', [UserController::class, 'newInvoice'])->name('new-invoice');
+    });
 });
 
 Route::get('mollie/payment/{payment_key}', [MolliePayment::class, 'paymentForm'])->name('mollie.payment');
@@ -34,5 +42,3 @@ Route::post('mollie/prepareAutoPayment', [MolliePayment::class, 'prepareAutoPaym
 
 Route::get('mollie/returnPayment', [MollieWebhook::class, 'returnPayment'])->name('return.payment');
 Route::post('mollie/webhook', [MollieWebhook::class, 'webhook'])->name('webhook.mollie');
-
-require __DIR__.'/auth.php';
