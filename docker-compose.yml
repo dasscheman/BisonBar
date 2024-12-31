@@ -1,16 +1,4 @@
 services:
-    #  nginx-proxy:
-    #    container_name: hts-appteam-nginx-proxy
-    #    image: nginxproxy/nginx-proxy
-    #    restart: always
-    #    ports:
-    #      - "443:443"
-    #    volumes:
-    #      - ./docker/certificates/wildcard/:/etc/nginx/certs
-    #      - /var/run/docker.sock:/tmp/docker.sock:ro
-    #    networks:
-    #      - default
-    #      - hts-appteam-local-dev
     backend:
         container_name: bisonbar_backend
         hostname: bisonbar.docker.dev
@@ -25,7 +13,7 @@ services:
             - VIRTUAL_PORT=443
         networks:
             - default
-            - hts-appteam-local-dev
+            - local-dev
         ports:
             - "9060:9060"
     frontend:
@@ -40,6 +28,7 @@ services:
             - "7060:7060"
         networks:
             - default
+            - local-dev
     mariadb:
         hostname: bisonbar_mariadb.docker.dev
         container_name: bisonbar_mariadb
@@ -53,13 +42,13 @@ services:
             MYSQL_PASSWORD: "secret"
         networks:
             - default
-            - hts-appteam-local-dev
+            - local-dev
     mariadbtest:
         hostname: bisonbar_mariadb.docker.test
         container_name: bisonbar_mariadb_test
         image: "mariadb:latest"
         ports:
-            - "8071:3306"
+            - "8170:3306"
         environment:
             MYSQL_ROOT_PASSWORD: "secret"
             MYSQL_DATABASE: "test"
@@ -67,22 +56,7 @@ services:
             MYSQL_PASSWORD: "secret"
         networks:
             - default
-            - hts-appteam-local-dev
-#  mail.docker.dev:
-#    hostname: mail.docker.dev
-#    container_name: hts-appteam-dev-mail
-#    image: mailhog/mailhog:latest
-#    restart: always
-#    environment:
-#      - MH_HOSTNAME=mail.docker.dev
-#      - VIRTUAL_HOST=mail.docker.dev
-#      - VIRTUAL_PROTO=http
-#      - VIRTUAL_PORT=8025
-#    ports:
-#      - 1025:1025
-#    networks:
-#      - default
-#      - hts-appteam-local-dev
+            - local-dev
 networks:
-    hts-appteam-local-dev:
+    local-dev:
         external: true
