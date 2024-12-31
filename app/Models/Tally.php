@@ -41,8 +41,44 @@ class Tally extends Model
         return $this->belongsTo(Assortment::class);
     }
 
+    public function invoice()
+    {
+        return $this->belongsTo(Invoices::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
+    public function status()
+    {
+        return Status::getStatusOptions()[$this->status_id];
+    }
+
     public function tallyList(): BelongsTo
     {
         return $this->belongsTo(TallyList::class);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getTypeOptions()
+    {
+        return [
+            self::TYPE_tally_list => __('TYPE_tally_list'),
+            self::TYPE_tally => __('TYPE_tally'),
+            self::TYPE_round => __('TYPE_round'),
+            self::TYPE_direct_payment => __('TYPE_direct_payment'),
+        ];
+    }
+
+    public function type()
+    {
+        return $this->getTypeOptions()[$this->type_id];
     }
 }

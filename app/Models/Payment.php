@@ -40,9 +40,19 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function invoice()
+    {
+        return $this->belongsTo(Invoices::class);
+    }
+
     public function status()
     {
         return Status::getStatusOptions()[$this->status_id];
+    }
+
+    public function mollieStatus()
+    {
+        return PaymentType::getMollieStatusOptions()[$this->mollie_status];
     }
 
     public function type()

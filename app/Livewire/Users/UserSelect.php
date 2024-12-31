@@ -49,7 +49,7 @@ class UserSelect extends Component
 
             session()->flash('status', 'Turven toegevoegd.');
 
-            $this->redirect('/dashboard');
+            $this->redirect('/');
         }
     }
 

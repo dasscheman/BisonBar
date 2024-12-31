@@ -38,37 +38,41 @@
                             <x-dropdown-link :href="route('user-tab')" wire:navigate>
                                 {{ __('Profile') }}
                             </x-dropdown-link>
-
-                            <x-dropdown-link :href="route('admin-dashboard')" wire:navigate>
-                                {{ __('Admin Dashboard') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('users')" wire:navigate>
-                                {{ __('Users') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('assortments')" wire:navigate>
-                                {{ __('Assortments') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('expenses')" wire:navigate>
-                                {{ __('Expenses') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('invoices')" wire:navigate>
-                                {{ __('Invoices') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('payments')" wire:navigate>
-                                {{ __('Payments') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('tallies')" wire:navigate>
-                                {{ __('Tallies') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('tally-lists')" wire:navigate>
-                                {{ __('Tally-lists') }}
-                            </x-dropdown-link>
-                            <!-- Authentication -->
-                            <button wire:click="logout" class="w-full text-start">
-                                <x-dropdown-link>
-                                    {{ __('Log Out') }}
+                            @can('admin')
+                                <x-dropdown-link :href="route('admin-dashboard')" wire:navigate>
+                                    {{ __('Admin Dashboard') }}
                                 </x-dropdown-link>
-                            </button>
+                                <x-dropdown-link :href="route('users')" wire:navigate>
+                                    {{ __('Users') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('assortments')" wire:navigate>
+                                    {{ __('Assortments') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('expenses')" wire:navigate>
+                                    {{ __('Expenses') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('invoices')" wire:navigate>
+                                    {{ __('Invoices') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('payments')" wire:navigate>
+                                    {{ __('Payments') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('tallies')" wire:navigate>
+                                    {{ __('Tallies') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('tally-lists')" wire:navigate>
+                                    {{ __('Tally-lists') }}
+                                </x-dropdown-link>
+                                <!-- Authentication -->
+                                <button wire:click="logout" class="w-full text-start">
+                                    <x-dropdown-link>
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </button>
+                            @endcan
+                            @impersonating($guard = null)
+                                <a href="{{ route('impersonate.leave') }}">Leave impersonation</a>
+                            @endImpersonating
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -106,37 +110,42 @@
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
-                        {{ __('admin-dashboard') }}
-                    </x-responsive-nav-link>
-                    <x-dropdown-link :href="route('users')" wire:navigate>
-                        {{ __('users') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('assortments')" wire:navigate>
-                        {{ __('assortments') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('expenses')" wire:navigate>
-                        {{ __('expenses') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('invoices')" wire:navigate>
-                        {{ __('invoices') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('payments')" wire:navigate>
-                        {{ __('payments') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('tallies')" wire:navigate>
-                        {{ __('tallies') }}
-                    </x-dropdown-link>
-                    <x-dropdown-link :href="route('tally-lists')" wire:navigate>
-                        {{ __('tally-lists') }}
-                    </x-dropdown-link>
-
-                    <!-- Authentication -->
-                    <button wire:click="logout" class="w-full text-start">
-                        <x-responsive-nav-link>
-                            {{ __('Log Out') }}
+                    @can('admin')
+                        <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
+                            {{ __('admin-dashboard') }}
                         </x-responsive-nav-link>
-                    </button>
+                        <x-dropdown-link :href="route('users')" wire:navigate>
+                            {{ __('users') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('assortments')" wire:navigate>
+                            {{ __('assortments') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('expenses')" wire:navigate>
+                            {{ __('expenses') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('invoices')" wire:navigate>
+                            {{ __('invoices') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('payments')" wire:navigate>
+                            {{ __('payments') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('tallies')" wire:navigate>
+                            {{ __('tallies') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('tally-lists')" wire:navigate>
+                            {{ __('tally-lists') }}
+                        </x-dropdown-link>
+
+                        <!-- Authentication -->
+                        <button wire:click="logout" class="w-full text-start">
+                            <x-responsive-nav-link>
+                                {{ __('Log Out') }}
+                            </x-responsive-nav-link>
+                        </button>
+                    @endcan
+                    @impersonating($guard = null)
+                        <a href="{{ route('impersonate.leave') }}">Leave impersonation</a>
+                    @endImpersonating
                 </div>
             </div>
         </div>

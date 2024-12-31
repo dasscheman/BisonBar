@@ -32,7 +32,7 @@
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="perPage">Items Per Page: </label>
                 <select wire:model.live="perPage" id="perPage" class="form-select">
                     <option value="5">5</option>
@@ -41,6 +41,15 @@
                     <option value="20">20</option>
                 </select>
             </div>
+
+            @can('admin')
+                <div class="col-md-1">
+                    <label for="showAll">Showall</label>
+                    <div class="custom-control">
+                        <input wire:model.live="showAll"  id="showAll" type="checkbox" class="custom-control-input">
+                    </div>
+                </div>
+            @endcan
         </div>
     </div>
     <div class="card card-body shadow-blur mx-6 mt-1 opacity-9">
@@ -62,7 +71,7 @@
                     @forelse($paginatedInvoice as $model)
                         <tr>
                             <td>{{$model->id}}</td>
-                            <td>{{$model->user->name}}</td>
+                            <td><a href="{{route('user-tab', $model->user->id)}}">{{$model->user->name}}</a></td>
                             <td>{{$model->file_name}}</td>
                             <td>@currency($model->totalOnDate()) €</td>
                             <td>{{$model->send_at}}</td>

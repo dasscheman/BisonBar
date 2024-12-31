@@ -5,7 +5,7 @@
                 <h6 class="mb-0">Invoices</h6>
             </div>
             <div class="col-md-6 text-right">
-                <button class="btn btn-outline-primary btn-sm mb-0">View All</button>
+                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('invoices')}}">View All</a>
             </div>
         </div>
     </div>
@@ -25,7 +25,6 @@
                     </div>
                 </li>
             @endforeach
-            {{$invoices->links()}}
         </ul>
     </div>
 </div>

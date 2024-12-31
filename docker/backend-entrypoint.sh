@@ -12,6 +12,7 @@ echo "⭐️ Set folder access Laravel";
 chown www-data /var/www/storage -R
 chmod a+w -R /var/www/storage
 chmod a+w -R /var/www/vendor
+chmod a+w -R /var/www/bootstrap/cache
 
 php artisan key:generate
 php artisan optimize

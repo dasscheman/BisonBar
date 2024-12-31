@@ -19,32 +19,13 @@ class Calculations
         $this->date = $date;
     }
 
-    public function total()
-    {
-        return $this->expenses()->sum('price')
-            + $this->paymentsAdd(PaymentType::TYPE_previous_credit)->sum('price')
-            + $this->paymentsAdd(PaymentType::TYPE_ideal)->sum('price')
-            + $this->paymentsAdd(PaymentType::TYPE_bank_add)->sum('price')
-            + $this->paymentsSubtract(PaymentType::TYPE_direct_payment)->sum('price')
-            - $this->paymentsSubtract(PaymentType::TYPE_previous_debt)->sum('price')
-            - $this->tallies()->sum('price');
-    }
-
-    public function totalNotInvoiced()
-    {
-        return $this->expensesNotInvoiced()->sum('price')
-            + $this->paymentsAddNotInvoiced(PaymentType::TYPE_ideal)->sum('price')
-            + $this->paymentsAddNotInvoiced(PaymentType::TYPE_bank_add)->sum('price')
-            + $this->paymentsAddNotInvoiced(PaymentType::TYPE_direct_payment)->sum('price')
-            - $this->talliesNotInvoiced()->sum('price');
-    }
 
     public function expenses()
     {
         $expenses = new Expenses();
 
         if($this->date) {
-            $expenses = $expenses->whereDate('created_at', '<=', $this->date);
+            $expenses = $expenses->whereDate('created_at', '<', $this->date);
         }
 
         if($this->user !== null) {
@@ -55,91 +36,14 @@ class Calculations
 
     public function expensesNotInvoiced()
     {
-        return $this->expenses()
-            ->whereNull('invoice_id');
-    }
-
-    public function paymentsAddNotInvoiced($type)
-    {
-        return $this->paymentsAdd($type)
-            ->whereNull('invoice_id');
-    }
-
-    public function paymentsAdd($type)
-    {
-        $payments = Payment::where('type_id', $type)
-            ->where('add_subtract', Payment::ADDSUBTRACT_ADD)
-            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
-
-        if($this->date) {
-            $payments = $payments->whereDate('created_at', '<=', $this->date);
-        }
-
-        if($this->user !== null) {
-            $payments = $payments->where('user_id', $this->user->id);
-        }
-        return $payments;
-    }
-
-    public function paymentsAddWhereIn($types)
-    {
-        $payments = Payment::whereIn('type_id', $types)
-            ->where('add_subtract', Payment::ADDSUBTRACT_ADD)
-            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
-
-        if($this->date) {
-            $payments = $payments->whereDate('created_at', '<=', $this->date);
-        }
-
-        if($this->user !== null) {
-            $payments = $payments->where('user_id', $this->user->id);
-        }
-        return $payments;
-    }
-
-    public function paymentsSubtractNotInvoiced($type)
-    {
-        return $this->paymentsSubtract($type)
-            ->whereNull('invoice_id')
-            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
-    }
-
-    public function paymentsSubtract($type)
-    {
-        $payments = Payment::where('type_id', $type)
-            ->where('add_subtract', Payment::ADDSUBTRACT_SUBTRACT)
-            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);
-
-        if($this->date) {
-            $payments = $payments->whereDate('created_at', '<=', $this->date);
-        }
-
-        if($this->user !== null) {
-            $payments = $payments->where('user_id', $this->user->id);
-        }
-        return $payments;
-    }
-
-    public function talliesNotInvoiced(): HasMany
-    {
-        $tallies = $this->tallies()
-            ->whereNull('invoice_id');
-
-        if($this->date) {
-            $tallies = $tallies->whereDate('created_at', '<=', $this->date);
-        }
-
-        if($this->user !== null) {
-            $tallies = $tallies->where('user_id', $this->user->id);
-        }
-        return $tallies;
+        return $this->expenses()->whereNull('invoice_id');
     }
 
     public function tallies()
     {
         $tallies = new Tally();
         if($this->date) {
-            $tallies = $tallies->whereDate('created_at', '<=', $this->date);
+            $tallies = $tallies->whereDate('created_at', '<', $this->date);
         }
 
         if($this->user !== null) {
@@ -148,13 +52,48 @@ class Calculations
         return $tallies;
     }
 
-    public function payments()
+    public function talliesNotInvoiced()
     {
-        $payments = new Payment();
-//        $payments = $payments->whereIn('status', [Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd, Status::STATUS_factuur_gegenereerd, Status::STATUS_factuur_verzonden]);;
+        return $this->tallies()
+            ->whereNull('invoice_id');
+    }
+
+    public function payments($addSubstract = Payment::ADDSUBTRACT_ADD,
+                             Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment],
+                             Array $status =[Status::STATUS_factuur_verzonden, Status::STATUS_factuur_gegenereerd])
+    {
+        $payments = Payment::whereIn('type_id', $types)
+                ->where('add_subtract', $addSubstract)
+                ->whereIn('status_id', $status);
 
         if($this->date) {
-            $payments = $payments->whereDate('created_at', '<=', $this->date);
+            $payments = $payments->whereDate('created_at', '<', $this->date);
+        }
+        if($this->user !== null) {
+            $payments = $payments->where('user_id', $this->user->id);
+        }
+        return $payments;
+    }
+
+    public function paymentsNotInvoiced($addSubstract = Payment::ADDSUBTRACT_ADD,
+                                        Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment])
+    {
+        return $this->payments($addSubstract, $types)->whereNull('invoice_id');
+    }
+
+    public function paymentsInvalid()
+    {
+        $status = [
+            Status::STATUS_tercontrole,
+            Status::STATUS_teruggestord,
+            Status::STATUS_geannuleerd,
+            Status::STATUS_ongeldig
+        ];
+        $payments = Payment::whereIn('status_id', $status);
+
+
+        if($this->date) {
+            $payments = $payments->whereDate('created_at', '<', $this->date);
         }
 
         if($this->user !== null) {
@@ -163,17 +102,47 @@ class Calculations
         return $payments;
     }
 
-
     public function pendingPaymentsExists()
     {
-        $payments = Payment::where('mollie_status', PaymentType::MOLLIE_STATUS_pending)
-            ->whereIsNull('deleted_at')
-            ->exists();
-
-        if($this->user !== null) {
-            $payments = $payments->where('user_id', $this->user->id);
+        if ($this->user === null) {
+            return abort(403);
         }
-        return $payments;
+
+        return Payment::where('mollie_status', PaymentType::MOLLIE_STATUS_pending)
+            ->where('user_id', $this->user->id)
+            ->exists();
+    }
+
+    public function total()
+    {
+        return $this->expenses()->sum('price')
+            + $this->payments(
+                Payment::ADDSUBTRACT_ADD,
+                [
+                    PaymentType::TYPE_previous_credit,
+                    PaymentType::TYPE_ideal,
+                    PaymentType::TYPE_bank_add,
+                    PaymentType::TYPE_direct_payment])->sum('price')
+            - $this->payments(Payment::ADDSUBTRACT_SUBTRACT, [
+                PaymentType::TYPE_previous_debt])->sum('price')
+            + $this->payments(Payment::ADDSUBTRACT_ADD, [
+                PaymentType::TYPE_previous_credit])->sum('price')
+            - $this->tallies()->sum('price');
+    }
+
+    public function totalNotInvoiced()
+    {
+        return $this->expensesNotInvoiced()->sum('price')
+            + $this->paymentsNotInvoiced(
+                Payment::ADDSUBTRACT_ADD,
+                [
+                    PaymentType::TYPE_previous_credit,
+                    PaymentType::TYPE_ideal,
+                    PaymentType::TYPE_bank_add,
+                    PaymentType::TYPE_direct_payment])->sum('price')
+            - $this->paymentsNotInvoiced(Payment::ADDSUBTRACT_SUBTRACT, [
+                PaymentType::TYPE_previous_debt])->sum('price')
+            - $this->talliesNotInvoiced()->sum('price');
     }
 
     public function invoices()
@@ -181,7 +150,7 @@ class Calculations
         $invoices = new Invoices();
 
         if($this->date) {
-            $invoices = $invoices->whereDate('created_at', '<=', $this->date);
+            $invoices = $invoices->whereDate('created_at', '<', $this->date);
         }
 
         if($this->user !== null) {
@@ -192,62 +161,23 @@ class Calculations
 
     public function checkNewTalliesForNewInvoice()
     {
-        return $this->getNewTalliesForNewInvoice()
+        return $this->talliesNotInvoiced()
             ->whereDate('created_at', '<=', now()->subWeeks(4))
             ->exists();
     }
 
-    public function getNewTalliesForNewInvoice()
+    public function checkNewPaymentsForNewInvoice(Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment])
     {
-        $tally = $this->tallies()
-            ->where('status_id', Status::STATUS_ingevoerd);
-
-        return $tally;
-    }
-
-    public function checkNewPaymentsForNewInvoice($type)
-    {
-        return $this->getNewPaymentsForNewInvoice($type)
+         return $this->paymentsNotInvoiced($types)
             ->whereDate('created_at', '<=', now()->subWeeks(4))
             ->exists();
-    }
-
-    public function getNewPaymentsForNewInvoice($type)
-    {
-        $tally = $this->paymentsAdd($type)
-            ->whereIn('status_id', [Status::STATUS_ingevoerd, Status::STATUS_herberekend]);
-
-        return $tally;
-    }
-
-    public function checkNewInvalidPaymentsForNewInvoice($type)
-    {
-        return $this->getNewInvalidPaymentsForNewInvoice($type)
-            ->whereDate('created_at', '<=', now()->subWeeks(4))
-            ->exists();
-    }
-
-    public function getNewInvalidPaymentsForNewInvoice($type)
-    {
-        $tally = $this->paymentsAdd($type)
-            ->whereIn('status_id', [Status::STATUS_ongeldig, Status::STATUS_tercontrole]);
-
-        return $tally;
     }
 
     public function checkNewExpensesForNewInvoice()
     {
-        return $this->getNewExpensesForNewInvoice()
+        return $this->expensesNotInvoiced()
             ->whereDate('created_at', '<=', now()->subWeeks(4))
             ->exists();
-    }
-
-    public function getNewExpensesForNewInvoice()
-    {
-        $tally = $this->expenses()
-            ->where('status_id', Status::STATUS_ingevoerd);
-
-        return $tally;
     }
 
     public function checkForNewInvoice()
@@ -256,15 +186,15 @@ class Calculations
             return true;
         }
 
-        if ($this->checkNewPaymentsForNewInvoice(PaymentType::TYPE_ideal)) {
+        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_ideal])) {
             return true;
         }
 
-        if ($this->checkNewPaymentsForNewInvoice(PaymentType::TYPE_bank_add)) {
+        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_bank_add])) {
             return true;
         }
 
-        if ($this->checkNewPaymentsForNewInvoice(PaymentType::TYPE_direct_payment)) {
+        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_direct_payment])) {
             return true;
         }
 

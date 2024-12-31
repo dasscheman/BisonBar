@@ -9,11 +9,13 @@
     @include('livewire.admin.payments.view')
 
     <div class="card card-header shadow-blur mx-6 mt-custom opacity-9">
-        <div class="row">
-            <button data-bs-toggle="modal" data-bs-target="#createModal"
-                    class="btn btn-outline-success btn-outline-md mb-2 col-md-3 mx-5">Create New User
-            </button>
-        </div>
+        @can('admin')
+            <div class="row">
+                <button data-bs-toggle="modal" data-bs-target="#createModal"
+                        class="btn btn-outline-success btn-outline-md mb-2 col-md-3 mx-5">Add payment
+                </button>
+            </div>
+        @endcan
         <div class="row">
             <div class="col-md-3">
                 <label for="search">Search: </label>
@@ -43,7 +45,7 @@
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="perPage">Items Per Page: </label>
                 <select wire:model.live="perPage" id="perPage" class="form-select">
                     <option value="5">5</option>
@@ -52,6 +54,14 @@
                     <option value="20">20</option>
                 </select>
             </div>
+            @can('admin')
+                <div class="col-md-1">
+                    <label for="showAll">Showall</label>
+                    <div class="custom-control">
+                        <input wire:model.live="showAll"  id="showAll" type="checkbox" class="custom-control-input">
+                    </div>
+                </div>
+            @endcan
         </div>
 
 

@@ -3,9 +3,9 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Invoices;
-use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -115,6 +115,7 @@ class InvoiceTable extends Component
     {
         if (! empty($this->invoice)) {
             DB::transaction(function () {
+                $this->invoice->recalculate();
                 $this->invoice->delete();
             });
         }

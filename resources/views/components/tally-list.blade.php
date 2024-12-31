@@ -1,8 +1,11 @@
 <div class="card h-100 mb-4">
-    <div class="card-header pb-0 px-3">
+    <div class="card-header pb-0 p-3">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex align-items-center">
                 <h6 class="mb-0">Turven overzicht</h6>
+            </div>
+            <div class="col-md-6 text-right">
+                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('tallies')}}">View All</a>
             </div>
         </div>
     </div>
@@ -20,13 +23,17 @@
                             <span class="text-xs">{{$tally->created_at}}</span>
                         </div>
                     </div>
-                    <div
-                        class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
-                        @currency($tally->price)
+                    <div class="d-flex flex-column">
+                        <div
+                            class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
+                            @currency($tally->price)
+                        </div>
+                        <span class="mb-2 text-xs">{{$tally->status()}}<span
+                                class="text-dark font-weight-bold ms-2">{{$tally->invoice?$tally->invoice->name:''}}</span></span>
+{{--                        <span class="text-xs">{{$tally->created_at}}</span>--}}
                     </div>
                 </li>
             @endforeach
         </ul>
-        {{$tallies->links()}}
     </div>
 </div>

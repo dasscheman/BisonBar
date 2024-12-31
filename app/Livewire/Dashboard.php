@@ -11,7 +11,7 @@ class Dashboard extends Component
 
     public $showAll = false;
 
-    public $title = 'Turflijst';
+    public $title = '';
 
     public $showNumber = 15;
 

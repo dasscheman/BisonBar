@@ -62,13 +62,13 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
-                    <tr>
-                        <th>name</th>
-                        <th>Role</th>
-                        <th>email</th>
-                        <th>Openstaan</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>name</th>
+                            <th>Role</th>
+                            <th>email</th>
+                            <th>Openstaan</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @forelse($paginatedUsers as $model)
@@ -95,6 +95,10 @@
                                         wire:click="initData({{ $model }})"
                                         class="btn btn-outline-danger btn-sm">Delete
                                 </button>
+                                @canImpersonate($guard = null)
+                                    <a href="{{ route('impersonate', $model->id) }}"
+                                       class="btn btn-outline-danger btn-sm">Impersonate</a>
+                                @endCanImpersonate
                             </td>
                         </tr>
                     @empty

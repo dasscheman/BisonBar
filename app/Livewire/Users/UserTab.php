@@ -15,7 +15,7 @@ class UserTab extends Component
 {
     public User $user;
 
-    public $title = 'Profile';
+    public $title = '';
 
     public $tab = 'overzicht'; //profile, overzicht
 

@@ -45,23 +45,20 @@ class PaymentType extends Model
      *
      * @return array an array of available statussen.
      */
-    //    public function getStatusOptions()
-    //    {
-    //
-    //        return [
-    //            self::TYPE_ingevoerd => 'Ingevoerd',
-    //            self::TYPE_gecontroleerd => 'Gecontroleerd',
-    //            self::TYPE_tercontrole => 'Tercontrole',
-    //            self::TYPE_factuur_gegenereerd => 'Factuur gegenereerd',
-    //            self::TYPE_factuur_verzonden => 'Factuur verzonden',
-    //            self::TYPE_herberekend => 'Herberekend',
-    //            self::TYPE_betaling_gestart => 'QR code gescand',
-    //            self::TYPE_wacht_op_betaling => 'Betaling gestart',
-    //            self::TYPE_teruggestord => 'Betaling teruggestord',
-    //            self::TYPE_geannuleerd => 'Geannuleerd',
-    //            self::TYPE_ongeldig => 'Ongeldige transactie',
-    //        ];
-    //    }
+    public static function getMollieStatusOptions()
+    {
+
+        return [
+            self::MOLLIE_STATUS_open => __('Ingevoerd'),
+            self::MOLLIE_STATUS_cancelled => __( 'Gecontroleerd'),
+            self::MOLLIE_STATUS_expired => __( 'Tercontrole'),
+            self::MOLLIE_STATUS_failed => __( 'Factuur gegenereerd'),
+            self::MOLLIE_STATUS_paid => __( 'Factuur verzonden'),
+            self::MOLLIE_STATUS_refunded => __( 'Herberekend'),
+            self::MOLLIE_STATUS_pending => __( 'QR code gescand'),
+            self::MOLLIE_STATUS_paidout => __( 'Betaling gestart'),
+        ];
+    }
 
     public static function getTypeOptions()
     {
