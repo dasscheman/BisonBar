@@ -28,9 +28,9 @@ class InvoiceGenerate extends Command
     public function handle()
     {
         $users = User::whereNull('blocked_at')->get();
-        $calculations = new Calculations();
 
         foreach ($users as $user) {
+            $calculations = new Calculations($user);
 
             // Wanneer een user een autopayment heeft lopen even wachten tot deze is afgerond.
             if($user->auto_payment_notice_at != NULL) {
@@ -39,12 +39,11 @@ class InvoiceGenerate extends Command
             }
 
             // Wanneer een user een pending transactie heeft,  even wachten tot deze is afgerond.
-            if($user->pendingPaymentsExists()) {
+            if($calculations->pendingPaymentsExists()) {
                 ## "--Er loopt al een nog niet afgeronde incasso."
                 continue;
             }
 
-            $calculations->user_id = $user->id;
             $this->info('Check user '.$user->name);
             if (! $calculations->checkForNewInvoice()) {
                 continue;

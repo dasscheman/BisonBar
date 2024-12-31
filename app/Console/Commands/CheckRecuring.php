@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\InvoiceSend;
 use App\Mail\PaymentAnnounce;
-use app\models\BetalingType;
-use App\Models\Invoices;
+use App\Models\Calculations;
 use app\models\Mollie;
 use app\models\User;
 use Illuminate\Console\Command;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class CheckRecuring extends Command
@@ -45,6 +42,7 @@ class CheckRecuring extends Command
         echo 'volgende automatisch ophogen controleren:';
         foreach ($users as $user) {
             $mollie = new Mollie($user);
+            $calculations = new Calculations($user);
 
             if ($user->total() > $user->rise_limit ) {
                 ## "Balans is okey";
@@ -56,7 +54,7 @@ class CheckRecuring extends Command
             }
             // Wanneer een user een pending transactie heeft, dan gaan we niet
             // een nieuwe transactie opstarten.
-            if($user->pendingPaymentsExists()) {
+            if($calculations->pendingPaymentsExists()) {
                 ## "--Er loopt al een nog niet afgeronde incasso."
                 continue;
             }

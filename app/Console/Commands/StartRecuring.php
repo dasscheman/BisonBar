@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\InvoiceSend;
 use app\models\BetalingType;
-use App\Models\Invoices;
+use App\Models\Calculations;
 use app\models\Mollie;
 use app\models\User;
 use Illuminate\Console\Command;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class StartRecuring extends Command
@@ -36,7 +34,7 @@ class StartRecuring extends Command
             ->whereIsNull('blocked_at')
             ->where('automatic_payment', TRUE)
             ->whereNotNull('mollie_customer_id')
-            ->whereDate('created_at', '<', now()->subDays(5))
+            ->whereDate('auto_payment_notice_at', '<', now()->subDays(5))
             ->get();
 
         $count = 0;
@@ -44,6 +42,7 @@ class StartRecuring extends Command
         echo 'volgende automatisch ophogen controleren:';
         foreach ($users as $user) {
             $mollie = new Mollie($user);
+            $calculations = new Calculations($user);
 
             if ($user->total() > $user->rise_limit ) {
                 ## "Balans is okey";
@@ -55,11 +54,10 @@ class StartRecuring extends Command
             }
             // Wanneer een user een pending transactie heeft, dan gaan we niet
             // een nieuwe transactie opstarten.
-            if($user->pendingPaymentsExists()) {
+            if($calculations->pendingPaymentsExists()) {
                 ## "--Er loopt al een nog niet afgeronde incasso."
                 continue;
             }
-
 
             $mollie = new \App\Models\Mollie($user);
             $mollie->amount = $user->mollie_amount;
