@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Tally;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -18,6 +19,8 @@ class TallyTable extends Component
 
     //DataTable props
     public ?string $query = null;
+
+    public bool $showAll = false;
 
     public ?string $resultCount;
 
@@ -77,12 +80,22 @@ class TallyTable extends Component
 
     public function render()
     {
-        $paginatedTallys = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->paginate($this->perPage);
+        $tallies = $this->search($this->query)
+            ->where('user_id', Auth::user()->id)
+            ->orderBy($this->orderBy, $this->orderAsc);
+
+        if (Auth::user()->can('admin') && $this->showAll) {
+            $tallies = $this->search($this->query)
+                ->orderBy($this->orderBy, $this->orderAsc);
+        }
+
+        $paginatedTallys = $tallies->paginate($this->perPage);
+
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedTallys->count().' '.Str::plural('tally', $paginatedTallys->count()).' found';
 
-        return view('livewire.admin.tallys.table', compact('paginatedTallys'));
+        return view('livewire.admin.tallies.table', compact('paginatedTallys'));
     }
 
     public function store()
@@ -179,8 +192,4 @@ class TallyTable extends Component
             });
     }
 
-    public function redirectToDetail(string $name, $id)
-    {
-        return redirect()->route($name, $id);
-    }
 }

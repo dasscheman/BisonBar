@@ -21,6 +21,8 @@ class InvoiceTable extends Component
     //DataTable props
     public ?string $query = null;
 
+    public bool $showAll = false;
+
     public ?string $resultCount;
 
     public string $orderBy = 'created_at';
@@ -64,7 +66,17 @@ class InvoiceTable extends Component
 
     public function render()
     {
-        $paginatedInvoice = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->simplePaginate($this->perPage);
+        $invoice = $this->search($this->query)
+            ->where('user_id', Auth::user()->id)
+            ->orderBy($this->orderBy, $this->orderAsc);
+
+        if (Auth::user()->can('admin') && $this->showAll) {
+            $invoice = $this->search($this->query)
+                ->orderBy($this->orderBy, $this->orderAsc);
+        }
+
+        $paginatedInvoice = $invoice->paginate($this->perPage);
+
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedInvoice->count().' '.Str::plural('invoice', $paginatedInvoice->count()).' found';

@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -19,6 +20,8 @@ class PaymentTable extends Component
 
     //DataTable props
     public ?string $query = null;
+
+    public bool $showAll = false;
 
     public ?string $resultCount;
 
@@ -89,7 +92,16 @@ class PaymentTable extends Component
 
     public function render()
     {
-        $paginatedPayment = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->paginate($this->perPage);
+        $payment = $this->search($this->query)
+            ->where('user_id', Auth::user()->id)
+            ->orderBy($this->orderBy, $this->orderAsc);
+
+        if (Auth::user()->can('admin') && $this->showAll) {
+            $payment = $this->search($this->query)
+                ->orderBy($this->orderBy, $this->orderAsc);
+        }
+
+        $paginatedPayment = $payment->paginate($this->perPage);
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedPayment->count().' '.Str::plural('Payment', $paginatedPayment->count()).' found';
