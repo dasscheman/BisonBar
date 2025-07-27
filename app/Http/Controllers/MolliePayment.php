@@ -82,6 +82,7 @@ class MolliePayment extends Controller
         $mollie = new \App\Models\Mollie($user);
         $mollie->amount = $request->get('amount');
         $mollie->description = 'Ideal betaling';
+        $mollie->name = 'Ideal betaling van: ' . $user->name;;
         $paymentModel = $mollie->startPayment();
         $payment = $mollie->payment($paymentModel);
 

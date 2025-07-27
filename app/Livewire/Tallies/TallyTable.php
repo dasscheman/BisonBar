@@ -108,7 +108,7 @@ class TallyTable extends Component
         if ($this->showAll) {
             $tallies = $tallies->withTrashed();
         }
-        $paginatedTallies = $tallies->paginate($this->perPage);
+        $paginatedTallies = $tallies->simplePaginate($this->perPage);
 
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :

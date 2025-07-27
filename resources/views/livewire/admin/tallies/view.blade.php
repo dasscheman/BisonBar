@@ -8,10 +8,10 @@
             </div>
             <div class="modal-body">
                 <h6 class="text-decoration-underline">Assortment</h6>
-                    <p class="text-muted">{{$tally?$tally->assortment->name:''}}</p>
+                    <p class="text-muted">{{$tally->assortment?$tally->assortment->name:''}}</p>
                 <hr>
                 <h6 class="text-decoration-underline">User</h6>
-                    <p class="text-muted">{{$tally?$tally->user->name:''}}</p>
+                    <p class="text-muted">{{$tally->user?$tally->user->name:''}}</p>
                 <hr>
 
                 <h6 class="text-decoration-underline">Count</h6>
@@ -23,11 +23,11 @@
                 <hr>
 
                 <h6 class="text-decoration-underline">Type</h6>
-                    <p class="text-muted">{{$tally?$tally->type():''}}</p>
+                    <p class="text-muted">{{$tally->type_id?$tally->type():''}}</p>
                 <hr>
 
                 <h6 class="text-decoration-underline">Status</h6>
-                    <p class="text-muted">{{$tally?$tally->status():''}}</p>
+                    <p class="text-muted">{{$tally->status_id?$tally->status():''}}</p>
                 <hr>
 
                 <h6 class="text-decoration-underline">Invoice</h6>

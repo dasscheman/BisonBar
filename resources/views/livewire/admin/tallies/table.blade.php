@@ -79,6 +79,7 @@
                         <th>type_id</th>
                         <th>status_id</th>
                         <th>invoice_id</th>
+                        <th>Created at</th>
                         @can('admin')
                             <th>payment_id</th>
                             <th>Deleted at</th>
@@ -100,6 +101,7 @@
                             <td>{{$model->type()}}</td>
                             <td>{{$model->status()}}</td>
                             <td>{{$model->invoice?$model->invoice->name:''}}</td>
+                            <td>{{$model->created_at}}</td>
                             @can('admin')
                                 <td>{{$model->payment?$model->payment->name:''}}</td>
                                 <td>{{$model->deleted_at}}</td>

@@ -29,6 +29,7 @@ class Mollie extends Model
         $payment = new Payment;
         $payment->type_id = PaymentType::TYPE_ideal;
         $payment->status_id = Status::STATUS_ingevoerd;
+        $payment->mollie_status = PaymentType::MOLLIE_STATUS_open;
         $payment->user_id = $this->user->id;
         $payment->add_subtract = Payment::ADDSUBTRACT_ADD;
         $payment->price = number_format((float)$this->amount, 2);
@@ -40,7 +41,6 @@ class Mollie extends Model
         }
         return false;
     }
-
 
     public function payment(Payment $payment)
     {

@@ -29,7 +29,9 @@ class Dashboard extends Component
             $showNumber = null;
         }
 
-        $this->users = User::orderBy('updated_at', 'DESC')->take($showNumber)->get();
+        $this->users = User::with(['tallies' => function ($q) {
+            $q->orderBy('la_tally.created_at', 'DESC');
+        }])->take($showNumber)->get();
 
         return view('livewire.dashboard');
     }

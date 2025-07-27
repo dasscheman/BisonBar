@@ -33,15 +33,14 @@ class MollieWebhook extends Controller
      */
     public function webhook(Request $request)
     {
-        $mollie = new Mollie;
-        if ($request->post('id') === null) {
+        if ($request->post('payment_id') === null) {
             throw ValidationException::withMessages(['Geen geldig betaal token gevonden.']);
         }
 
         /*
          * Retrieve the payment's current state.
          */
-        $payment = $mollie->payments->get($request->post('id'));
+        $payment = Mollie::api()->payments->get($request->post('payment_id'));
         $payment_id = $payment->metadata->payment_id;
 
         $model = Payment::find($payment_id);

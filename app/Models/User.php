@@ -82,21 +82,9 @@ class User extends Authenticatable
      */
     public function resolveRouteBinding($value, $field = null)
     {
-        //TODO
-//        dd($field, $value);
-//        // If no field was given, use the primary key
-//        if ($field === null) {
-//            $field = $this->getKey();
-//        }
-//dd($value, $field ,  $this->getKey()    );
-        // Apply where clause
         $query = $this->where('id', $value);
 
-        // Conditionally remove the softdelete scope to allow seeing soft-deleted records
-    //        if (Auth::check() && Auth::user->role()) {
-                $query->withoutGlobalScope(SoftDeletingScope::class);
-//        }
-
+        $query->withoutGlobalScope(SoftDeletingScope::class);
         // Find the first record, or abort
         return $query->firstOrFail();
     }
