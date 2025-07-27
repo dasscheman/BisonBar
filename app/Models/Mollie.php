@@ -59,7 +59,7 @@ class Mollie extends Model
                 'value' => $payment->price, // You must send the correct number of decimals, thus we enforce the use of strings
             ],
             'description' => $this->description,
-            'redirectUrl' => route('return.payment', ['payment_id' => $payment->id]),
+            'redirectUrl' => route('return.payment', ['transaction_key' => $payment->transaction_key]),
             'webhookUrl' => route('webhook.mollie'),
             'metadata' => [
                 'payment_id' => $payment->id,

@@ -19,7 +19,7 @@ class MollieWebhook extends Controller
     public function returnPayment(Request $request)
     {
         sleep(3);
-        $payment = Payment::find($request->get('payment_id'));
+        $payment = Payment::where('transaction_key', $request->get('transaction_key'))->first();
         if (isset($payment->mollie_status)) {
             session()->flash('message', $payment->name . ' ' . $payment->description . ' is ' . $payment->mollieStatus());
         } else {
@@ -47,8 +47,8 @@ class MollieWebhook extends Controller
         $payment_id = $payment->metadata->payment_id;
 
         Log::info( $payment->id);
-        $model = Payment::find($payment_id);
-        if ($payment->id !== $model->mollie_id) {
+        $model = Payment::where('transaction_key', $request->post('id'))->first();
+        if ($payment->id !== $model->mollie_id && $payment_id !== $model->id) {
             Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);
             throw ValidationException::withMessages(['The requested id does not correspond the database.']);
         }
@@ -58,7 +58,6 @@ class MollieWebhook extends Controller
              */
             Status::saveStatussen($model, $payment->status);
             if ($payment->isPaid() === true) {
-
                 $user = User::find($model->user_id);
                 Mail::to($user->email)->send(new PaymentReceived($model));
             } elseif ($payment->isOpen() === false) {

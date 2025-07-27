@@ -51,14 +51,14 @@ class PaymentType extends Model
     {
 
         return [
-            self::MOLLIE_STATUS_open => __('Ingevoerd'),
-            self::MOLLIE_STATUS_cancelled => __( 'Gecontroleerd'),
-            self::MOLLIE_STATUS_expired => __( 'Tercontrole'),
-            self::MOLLIE_STATUS_failed => __( 'Factuur gegenereerd'),
-            self::MOLLIE_STATUS_paid => __( 'Factuur verzonden'),
-            self::MOLLIE_STATUS_refunded => __( 'Herberekend'),
-            self::MOLLIE_STATUS_pending => __( 'QR code gescand'),
-            self::MOLLIE_STATUS_paidout => __( 'Betaling gestart'),
+            self::MOLLIE_STATUS_open => __('Open'),
+            self::MOLLIE_STATUS_cancelled => __( 'Canceled'),
+            self::MOLLIE_STATUS_expired => __( 'Verlopen'),
+            self::MOLLIE_STATUS_failed => __( 'Mislukt'),
+            self::MOLLIE_STATUS_paid => __( 'Betaling ontvangen'),
+            self::MOLLIE_STATUS_refunded => __( 'Refund'),
+            self::MOLLIE_STATUS_pending => __( 'In process'),
+            self::MOLLIE_STATUS_paidout => __( 'Uitbetaald'),
         ];
     }
 

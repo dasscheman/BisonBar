@@ -14,7 +14,8 @@
         "livewire/volt": "^1.0",
         "mollie/laravel-mollie": "^3.0",
         "spatie/flysystem-dropbox": "*",
-        "spatie/laravel-backup": "^9.3"
+        "spatie/laravel-backup": "^9.3",
+        "ext-zip": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
