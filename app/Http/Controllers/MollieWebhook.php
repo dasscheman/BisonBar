@@ -47,7 +47,7 @@ class MollieWebhook extends Controller
         $payment_id = $payment->metadata->payment_id;
 
         Log::info( $payment->id);
-        $model = Payment::where('mollie_key', $request->post('id'))->first();
+        $model = Payment::where('mollie_id', $request->post('id'))->first();
         if ($payment->id !== $model->mollie_id && $payment_id !== $model->id) {
             Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);
             throw ValidationException::withMessages(['The requested id does not correspond the database.']);
