@@ -6,7 +6,7 @@ use App\Mail\PaymentFailed;
 use App\Mail\PaymentReceived;
 use App\Models\Payment;
 use App\Models\Status;
-use app\models\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
