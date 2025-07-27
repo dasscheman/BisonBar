@@ -36,7 +36,7 @@
                             <div class="row">
                                 <span class="text-info text-sm font-weight-bolder text-start">{{$assortment->description}}
                                 </span>
-                                <span class="text-success text-sm font-weight-bolder text-end">@currency($assortment->price) €</span>
+                                <span class="text-success text-sm font-weight-bolder text-end">{{ currency($assortment->price) }}</span>
                             </div>
                         </div>
                     </div>

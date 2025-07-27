@@ -20,6 +20,7 @@ class Invoices extends Model
         'name',
         'file_name',
         'send_at',
+        'deleted_at',
         'created_at',
         'updated_at',
     ];
@@ -47,9 +48,8 @@ class Invoices extends Model
 
     public function totalOnDate()
     {
-        $user = User::find($this->user_id);
+        $user = User::where('id',  $this->user_id)->withTrashed()->first();
         $calculation = new Calculations($user);
-
         $calculation->setDate($this->created_at);
         return $calculation->total();
     }

@@ -32,8 +32,9 @@ class MolliePayment extends Controller
         if($user->total() < 0 ) {
             $this->paymentAmountOptions[$user->total()] = $user->total() . 'euro';
         }
+        $paymentAmountOptions = $this->paymentAmountOptions;
 
-        return view('livewire.payments.payment', compact('user', $this->paymentAmountOptions));
+        return view('livewire.payments.payment', compact('user', 'paymentAmountOptions'));
     }
 
     public function autoPaymentForm(Request $request, $payKey)
@@ -47,24 +48,31 @@ class MolliePayment extends Controller
     public function editAutoPaymentForm(Request $request, $payKey)
     {
         $user = User::findByPayKey($payKey);
+        if($user->mollie_customer_id == null){
+            abort(404);
+        }
         $paymentAmountOptions = $this->paymentAmountOptions;
 
         return view('livewire.payments.editautopayment', compact('user', 'paymentAmountOptions'));
     }
 
+    public function cancelAutoPayment(Request $request) {
+        $user = User::findByPayKey($request->get('payment_key'));
+        $user->automatic_payment = false;
+        $user->mollie_amount = null;
+        $user->auto_payment_notice_at = null;
+        $user->mollie_customer_id = null;
+        $user->save();
+        $message = 'automatisch ophogen is geannuleerd.';
+        return view('livewire.payments.finished', compact('message'));
+    }
 
-    public function saveAutoPaymentForm(Request $request)
-    {
-        $user = User::findByPayKey($request->get('pay_key'));
-        if($request->get('auto_payment')) {
-            $user->mollie_amount = $request->get('amount');
-        }
-        if(!$request->get('automatic_payment')) {
-            $user->automatic_payment =  false;
-            $user->mollie_amount =  null;
-            $user->mollie_customer_id =  null;
-        }
-        return redirect('/mollie/editAutoPayment/' . $user->payment_key);
+    public function saveEditAutoPayment(Request $request) {
+        $user = User::findByPayKey($request->get('payment_key'));
+        $user->mollie_amount = $request->get('amount');
+        $user->save();
+        $message = 'automatisch ophogen is gewijzigd.';
+        return view('livewire.payments.finished', compact('message'));
     }
 
     public function preparePayment(Request $request)
@@ -74,7 +82,8 @@ class MolliePayment extends Controller
         $mollie = new \App\Models\Mollie($user);
         $mollie->amount = $request->get('amount');
         $mollie->description = 'Ideal betaling';
-        $payment = $mollie->payment();
+        $paymentModel = $mollie->startPayment();
+        $payment = $mollie->payment($paymentModel);
 
         // redirect customer to Mollie checkout page
         return redirect($payment->getCheckoutUrl(), 303);
@@ -98,27 +107,11 @@ class MolliePayment extends Controller
         $mollie->customerId = $user->mollie_customer_id;
         $mollie->sequenceType = 'first';
         $mollie->description = 'Eerste betaling om automatisch ophogen in te stellen.';
-        $payment = $mollie->payment();
+        $paymentModel = $mollie->startPayment();
+        $payment = $mollie->payment($paymentModel);
 
         Mail::to($user->email)->send(new FirstRecuring($mollie));
         // redirect customer to Mollie checkout page
         return redirect($payment->getCheckoutUrl(), 303);
     }
-
-//    public function prepareRecuringPayment(Request $request)
-//    {
-//        $user = User::findByPayKey($request->get('pay_key'));
-//
-//        $mollie = new \App\Models\Mollie($user);
-//        $mollie->amount = $request->get('amount');
-//        $mollie->customerId = $user->mollie_customer_id;
-//        $mollie->sequenceType = 'recurring';
-//        $mollie->description = 'Automatisch ophogen.';
-//        $payment = $mollie->payment();
-//
-//        Mail::to($user->email)->send(new StartRecuring($mollie));
-//
-//        // redirect customer to Mollie checkout page
-//        return redirect($payment->getCheckoutUrl(), 303);
-//    }
 }

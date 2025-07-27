@@ -42,7 +42,7 @@ class StartRecuring extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'payment.startrecuring',
+            markdown: 'mail.payment.startrecuring',
         );
     }
 

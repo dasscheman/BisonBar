@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Mail\PaymentAnnounce;
 use App\Models\Calculations;
-use app\models\Mollie;
-use app\models\User;
+use App\Models\Mollie;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,15 +30,12 @@ class CheckRecuring extends Command
      */
     public function handle()
     {
-        $users = User::find()
-            ->whereIsNull('blocked_at')
+        $users = User::whereNull('blocked_at')
             ->where('automatic_payment', TRUE)
             ->whereNotNull('mollie_customer_id')
             ->get();
 
-
         $count = 0;
-
         echo 'volgende automatisch ophogen controleren:';
         foreach ($users as $user) {
             $mollie = new Mollie($user);
@@ -65,12 +62,11 @@ class CheckRecuring extends Command
                 ## "-Notice is al verstuurd"
                 continue;
             }
-            if($mollie->payment()) {
-                Mail::to($user->email)->send(new PaymentAnnounce($user));
-                $user->auto_payment_notice_at = now();
-                $user->save();
-                $count++;
-            }
+
+            Mail::to($user->email)->send(new PaymentAnnounce($user));
+            $user->auto_payment_notice_at = now();
+            $user->save();
+            $count++;
 
         }
         return $count;

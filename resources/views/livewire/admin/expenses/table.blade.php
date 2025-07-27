@@ -76,7 +76,7 @@
                             <td>{{$model->receipt_id}}</td>
                             <td>{{$model->invoice_id}}</td>
                             <td>{{$model->status()}}</td>
-                            <td>@currency($model->price)</td>
+                            <td>{{ currency($model->price) }}</td>
                             <td>
                                 <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                         wire:click="initData({{ $model }})"

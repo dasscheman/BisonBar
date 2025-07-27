@@ -35,34 +35,34 @@
                                 </td>
                                 <td>
                                     <div class="avatar-group mt-2">
-                                        <h6 class="align-items-center text-end">@currency($value['tally-total'])</h6>
+                                        <h6 class="align-items-center text-end">{{ currency($value['tally-total']) }}</h6>
                                     </div>
                                 </td>
                                 @can('admin')
                                     <td>
                                         <div class="avatar-group mt-2">
-                                            <h6 class="align-items-center text-end">@currency($value['payment-ideal'])</h6>
+                                            <h6 class="align-items-center text-end">{{ currency($value['payment-ideal']) }}</h6>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="avatar-group mt-2">
-                                            <h6 class="align-items-center text-end">@currency($value['payment-bank'])</h6>
+                                            <h6 class="align-items-center text-end">{{ currency($value['payment-bank']) }}</h6>
                                         </div>
                                     </td>
                                 @endcan
                                 <td>
                                     <div class="avatar-group mt-2">
-                                        <h6 class="align-items-center text-end">@currency($value['payment-total'])</h6>
+                                        <h6 class="align-items-center text-end">{{ currency($value['payment-total']) }}</h6>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="avatar-group mt-2">
-                                        <h6 class="align-items-center text-end">@currency($value['expenses-total'])</h6>
+                                        <h6 class="align-items-center text-end">{{ currency($value['expenses-total']) }}</h6>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="avatar-group mt-2">
-                                        <h6 class="align-items-center text-end">@currency($value['nett'])</h6>
+                                        <h6 class="align-items-center text-end">{{ currency($value['nett']) }}</h6>
                                     </div>
                                 </td>
                             </tr>

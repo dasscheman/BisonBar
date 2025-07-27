@@ -8,11 +8,11 @@ use Livewire\Component;
 class PaymentsList extends Component
 {
     public $payments;
+    public $user;
 
     public function mount($payments)
     {
         $this->payments = $payments;
-        //        $this->expenses = Expenses::orderBy('created_at', 'DESC')->take(7)->get();
     }
 
     public function render()

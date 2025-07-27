@@ -9,15 +9,16 @@
                     @include('components.expenses-list', compact('expenses'))
                 </div>
                 <div class="row">
-                    <div class="col-md-4 mt-4">
-                        @include('components.payments-list', compact('payments'))
-                    </div>
-                    <div class="col-md-4 mt-4">
-                        @include('components.tally-list', compact('tallies'))
-                    </div>
-
-                    <div class="col-md-4 mt-4">
-                        @include('components.invoices-list', compact('invoices'))
+                    <div class="row">
+                        <div class="col-md-4 mt-4">
+                            <livewire:components.payments-list :payments="$payments" />
+                        </div>
+                        <div class="col-md-4 mt-4">
+                            <livewire:components.tallies-list :tallies="$tallies" />
+                        </div>
+                        <div class="col-md-4 mt-4">
+                            <livewire:components.invoices-list :invoices="$invoices" />
+                        </div>
                     </div>
                 </div>
                 <div class="row">

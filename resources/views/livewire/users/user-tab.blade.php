@@ -52,14 +52,13 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4 mt-4">
-                                    @include('components.payments-list', compact('payments'))
+                                    <livewire:components.payments-list :payments="$payments" :user="$user" />
                                 </div>
                                 <div class="col-md-4 mt-4">
-                                    @include('components.tally-list', compact('tallies'))
+                                    <livewire:components.tallies-list :tallies="$tallies" :user="$user" />
                                 </div>
-
                                 <div class="col-md-4 mt-4">
-                                    @include('components.invoices-list', compact('invoices'))
+                                    <livewire:components.invoices-list :invoices="$invoices" :user="$user" />
                                 </div>
                             </div>
                             <div class="row">

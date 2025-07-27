@@ -31,13 +31,14 @@ class Payment extends Model
         'mollie_id',
         'transaction_key',
         'transaction_cost',
+        'deleted_at',
         'created_at',
         'updated_at',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function invoice()

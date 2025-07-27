@@ -32,6 +32,7 @@ class CreateInvoicesTable extends Migration
                 'name' => $factuur->naam,
                 'file_name' => $factuur->pdf,
                 'send_at' => $factuur->verzend_datum,
+                'deleted_at' => $factuur->deleted_at,
                 'created_at' => $factuur->created_at,
                 'updated_at' => $factuur->updated_at,
             ];

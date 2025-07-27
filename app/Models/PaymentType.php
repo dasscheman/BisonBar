@@ -22,6 +22,8 @@ class PaymentType extends Model
 
     const TYPE_ideal_refund = 9;
 
+    const TYPE_izettle_pin = 10;
+
     const TYPE_direct_payment = 17;
 
     const MOLLIE_STATUS_open = 1;

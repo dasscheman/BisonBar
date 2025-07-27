@@ -5,7 +5,7 @@
                 <h6 class="mb-0">Invoices</h6>
             </div>
             <div class="col-md-6 text-right">
-                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('invoices')}}">View All</a>
+                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('invoices', ['user' => $user])}}">View All</a>
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
                         <span class="text-xs">{{$invoice->created_at}}</span>
                     </div>
                     <div class="d-flex align-items-center text-sm">
-                        @currency($invoice->totalOnDate()) €
+                        {{ currency($invoice->totalOnDate()) }}
                         <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4" wire:click="download({{$invoice}})"><i
                                 class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
                     </div>

@@ -55,7 +55,7 @@ class YearTotals extends Component
 
         $total['tally-total'] = - $calculations->tallies()->sum('price');
         $total['payment-ideal'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-            PaymentType::TYPE_ideal],
+            PaymentType::TYPE_ideal, PaymentType::TYPE_direct_payment],
             [Status::STATUS_factuur_verzonden])->sum('price');
         $total['payment-bank'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
             PaymentType::TYPE_bank_add],
@@ -77,7 +77,7 @@ class YearTotals extends Component
         foreach ($this->years as $year) {
             $years[$year]['tally-total'] = - $calculations->tallies()->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-ideal'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-                PaymentType::TYPE_ideal])->whereYear('created_at', $year)->sum('price');
+                PaymentType::TYPE_ideal, PaymentType::TYPE_direct_payment])->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-bank'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
                 PaymentType::TYPE_bank_add])->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-total'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [

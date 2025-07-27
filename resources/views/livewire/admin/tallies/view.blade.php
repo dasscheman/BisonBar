@@ -19,7 +19,7 @@
                 <hr>
 
                 <h6 class="text-decoration-underline">Price</h6>
-                    <p class="text-muted">@currency($price)</p>
+                    <p class="text-muted">{{ currency($price) }}</p>
                 <hr>
 
                 <h6 class="text-decoration-underline">Type</h6>

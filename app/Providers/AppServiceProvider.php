@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::directive('currency', function ($money) {
-            return "<?php echo number_format($money, 2); ?>";
+            return currency($money);
         });
 
         Gate::define('admin', function () {

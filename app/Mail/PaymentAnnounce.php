@@ -37,7 +37,7 @@ class PaymentAnnounce extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'payment.announcement',
+            markdown: 'mail.payment.announcement',
             with: [
                 'urlEditAutoPayment' => url('mollie/editAutoPayment', ['pay_key' => $this->user->pay_key]),
             ],

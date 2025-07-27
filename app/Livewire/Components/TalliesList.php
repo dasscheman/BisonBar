@@ -8,10 +8,11 @@ use Livewire\Component;
 class TalliesList extends Component
 {
     public $tallies;
+    public $user;
 
-    public function mount()
+    public function mount($tallies)
     {
-        $this->tallies = Tally::orderBy('created_at', 'DESC')->take(7)->get();
+        $this->tallies = $tallies;
     }
 
     public function render()

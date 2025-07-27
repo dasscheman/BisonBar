@@ -7,7 +7,7 @@
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Tally totals</p>
                             <h5 class="font-weight-bolder mb-0">
-                                @currency($totals['tally-total'])
+                                {{ currency($totals['tally-total']) }}
                                 <span class="text-success text-sm font-weight-bolder">+55%</span>
                             </h5>
                         </div>
@@ -29,7 +29,7 @@
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Payments</p>
                             <h5 class="font-weight-bolder mb-0">
-                                @currency($totals['payment-total'])
+                                {{ currency($totals['payment-total']) }}
                                 <span class="text-success text-sm font-weight-bolder">+3%</span>
                             </h5>
                         </div>
@@ -51,7 +51,7 @@
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Expenses</p>
                             <h5 class="font-weight-bolder mb-0">
-                                @currency($totals['expenses-total'])
+                                {{ currency($totals['expenses-total']) }}
                                 <span class="text-danger text-sm font-weight-bolder">-2%</span>
                             </h5>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="numbers">
                             <p class="text-sm mb-0 text-capitalize font-weight-bold">Nett</p>
                             <h5 class="font-weight-bolder mb-0">
-                                @currency($totals['nett'])
+                                {{ currency($totals['nett']) }}
                                 <span class="text-success text-sm font-weight-bolder">+5%</span>
                             </h5>
                         </div>

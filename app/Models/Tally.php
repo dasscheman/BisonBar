@@ -32,6 +32,7 @@ class Tally extends Model
         'status_id',
         'invoice_id',
         'payment_id',
+        'deleted_at',
         'created_at',
         'updated_at',
     ];

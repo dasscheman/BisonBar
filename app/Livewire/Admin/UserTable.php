@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -18,6 +19,8 @@ class UserTable extends Component
 
     //DataTable props
     public ?string $query = null;
+
+    public bool $showAll = false;
 
     public ?string $resultCount;
 
@@ -54,8 +57,6 @@ class UserTable extends Component
             'name' => 'string',
             'role_id' => 'int',
             'email' => 'email',
-            'email_verified_at' => 'datetime',
-            'solis_id' => 'string',
         ];
 
     protected array $messages = [
@@ -64,9 +65,22 @@ class UserTable extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    public function mount()
+    {
+        $this->user = new User();
+    }
+
     public function render()
     {
-        $paginatedUsers = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc)->paginate($this->perPage);
+        $users = $this->search($this->query)->orderBy($this->orderBy, $this->orderAsc);
+
+        if (Auth::user()->can('admin') && $this->showAll) {
+            $users = $this->search($this->query)
+                ->orderBy($this->orderBy, $this->orderAsc)
+                ->withTrashed();
+        }
+        $paginatedUsers = $users->paginate($this->perPage);
+
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
             $paginatedUsers->count().' '.Str::plural('user', $paginatedUsers->count()).' found';
@@ -77,7 +91,7 @@ class UserTable extends Component
     public function store()
     {
         $validatedData = $this->validate();
-        \DB::transaction(function () use ($validatedData) {
+        DB::transaction(function () use ($validatedData) {
             User::create($validatedData);
         });
         $this->refresh('User successfully created!');
@@ -123,8 +137,6 @@ class UserTable extends Component
         //Close the active modal
         $this->dispatch('hideModal');
     }
-
-    public function mount() {}
 
     public function hydrate()
     {

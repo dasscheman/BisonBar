@@ -49,9 +49,9 @@ class UserTab extends Component
     {
 
         $expenses = $this->user->expenses()->orderBy('created_at', 'DESC')->simplePaginate(6, pageName: 'expenses-list');
-        $payments = $this->user->payments   ()->orderBy('created_at', 'DESC')->simplePaginate(4, pageName: 'payments-list');
-        $tallies = $this->user->tallies()->orderBy('created_at', 'DESC')->simplePaginate(7, pageName: 'tallies-list');
-        $invoices = $this->user->invoices()->orderBy('created_at', 'DESC')->simplePaginate(6, pageName: 'invoices-list');
+        $payments = $this->user->payments   ()->orderBy('created_at', 'DESC')->take(4)->get();
+        $tallies = $this->user->tallies()->orderBy('created_at', 'DESC')->take(7)->get();
+        $invoices = $this->user->invoices()->orderBy('created_at', 'DESC')->take(7)->get();
 
         return view('livewire.users.user-tab', compact('expenses', 'payments', 'tallies', 'invoices'));
     }

@@ -5,7 +5,7 @@
                 <h6 class="mb-0">Turven overzicht</h6>
             </div>
             <div class="col-md-6 text-right">
-                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('tallies')}}">View All</a>
+                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('tallies', ['user' => $user])}}">View All</a>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
                     <div class="d-flex flex-column">
                         <div
                             class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
-                            @currency($tally->price)
+                            {{currency($tally->price)}}
                         </div>
                         <span class="mb-2 text-xs">{{$tally->status()}}<span
                                 class="text-dark font-weight-bold ms-2">{{$tally->invoice?$tally->invoice->name:''}}</span></span>

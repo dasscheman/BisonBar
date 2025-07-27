@@ -15,7 +15,7 @@
                     <span class="text-start small text-sm">
                         {{$user->updated_at}}
                     </span>
-                    <span class="text-success text-sm font-weight-bolder text-end">@currency($user->total()) €</span>
+                    <span class="text-success text-sm font-weight-bolder text-end">{{currency($user->total())}}</span>
                 </div>
             </div>
         </a>

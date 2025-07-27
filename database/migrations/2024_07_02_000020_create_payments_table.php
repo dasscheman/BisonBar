@@ -33,8 +33,11 @@ class CreatePaymentsTable extends Migration
             $table->timestamps();
         });
 
-        $transacties = DB::table('transacties')->whereIn('type_id', [1, 2, 3, 8, 9, 17])->get();
+        $transacties = DB::table('transacties')->whereIn('type_id', [1, 2, 3, 4, 8, 9, 10, 17])->get();
         foreach ($transacties as $transactie) {
+            if($transactie->transacties_user_id == null) {
+                continue;
+            }
             $type = DB::table('betaling_type')->where('type_id', $transactie->type_id)->first();
             $data = [
                 'id' => $transactie->transacties_id,
@@ -51,6 +54,7 @@ class CreatePaymentsTable extends Migration
                 'mollie_id' => $transactie->mollie_id,
                 'transaction_key' => $transactie->transactie_key,
                 'transaction_cost' => $transactie->transactie_kosten,
+                'deleted_at' => $transactie->deleted_at,
                 'created_at' => $transactie->created_at,
                 'updated_at' => $transactie->updated_at,
             ];

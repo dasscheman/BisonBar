@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Payments;
 
 use App\Models\Payment;
 use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,6 +33,8 @@ class PaymentTable extends Component
     public int $perPage = 15;
 
     //Create, Edit, Delete, View User props
+    public ?string $user = null;
+
     public ?string $name = null;
 
     public ?int $user_id = null;
@@ -66,6 +69,10 @@ class PaymentTable extends Component
 
     public ?Payment $payment = null;
 
+    public $payments = null;
+
+    public $users = [];
+
     //Update & Store Rules
     protected array $rules =
         [
@@ -90,15 +97,28 @@ class PaymentTable extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    public function mount(Request $request)
+    {
+        $this->payment = new Payment();
+        if ($request->get('user')) {
+            $this->user = $request->get('user');
+        }
+        $this->users = User::select('name', 'id')->get();
+    }
+
     public function render()
     {
-        $payment = $this->search($this->query)
-            ->where('user_id', Auth::user()->id)
+        $payment = $this->search()
             ->orderBy($this->orderBy, $this->orderAsc);
 
-        if (Auth::user()->can('admin') && $this->showAll) {
-            $payment = $this->search($this->query)
+        if (!Auth::user()->can('admin')) {
+            $payment = $this->search()
+                ->where('user_id', Auth::user()->id)
                 ->orderBy($this->orderBy, $this->orderAsc);
+        }
+
+       if ($this->showAll) {
+           $payment = $payment->withTrashed();
         }
 
         $paginatedPayment = $payment->paginate($this->perPage);
@@ -165,8 +185,6 @@ class PaymentTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount() {}
-
     public function hydrate()
     {
         $this->resetErrorBag();
@@ -197,13 +215,18 @@ class PaymentTable extends Component
     /**
      * This method make more sense the model file.
      **/
-    public function search($query)
+    public function search()
     {
         $payment = new Payment;
 
-        return empty($query) ? $payment :
-            $payment->where(function ($q) use ($query) {
-                $q->where('name', 'like', '%'.$query.'%');
+        $payment = empty($this->query) ? $payment :
+            $payment->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->query.'%');
+            });
+
+        return empty($this->user) ? $payment :
+            $payment->where(function ($q) {
+                $q->where('user_id', $this->user);
             });
     }
 

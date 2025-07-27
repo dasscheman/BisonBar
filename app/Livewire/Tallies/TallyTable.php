@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Tallies;
 
 use App\Models\Tally;
+use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -31,6 +33,7 @@ class TallyTable extends Component
     public int $perPage = 15;
 
     //Create, Edit, Delete, View Tally props
+    public ?string $user = null;
 
     public ?int $tally_list_id = null;
 
@@ -58,6 +61,10 @@ class TallyTable extends Component
 
     public ?Tally $tally = null;
 
+    public $tallies = null;
+
+    public $users = [];
+
     //Update & Store Rules
     protected array $rules =
         [
@@ -78,24 +85,36 @@ class TallyTable extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    public function mount(Request $request)
+    {
+        $this->tally = new Tally();
+        if ($request->get('user')) {
+            $this->user = $request->get('user');
+        }
+        $this->users = User::select('name', 'id')->get();
+    }
+
     public function render()
     {
-        $tallies = $this->search($this->query)
-            ->where('user_id', Auth::user()->id)
+        $tallies = $this->search()
             ->orderBy($this->orderBy, $this->orderAsc);
 
-        if (Auth::user()->can('admin') && $this->showAll) {
-            $tallies = $this->search($this->query)
+        if (!Auth::user()->can('admin')) {
+            $tallies = $this->search()
+                ->where('user_id', Auth::user()->id)
                 ->orderBy($this->orderBy, $this->orderAsc);
         }
 
-        $paginatedTallys = $tallies->paginate($this->perPage);
+        if ($this->showAll) {
+            $tallies = $tallies->withTrashed();
+        }
+        $paginatedTallies = $tallies->paginate($this->perPage);
 
         //results count available with search only
         $this->resultCount = empty($this->query) ? null :
-            $paginatedTallys->count().' '.Str::plural('tally', $paginatedTallys->count()).' found';
+            $paginatedTallies->count().' '.Str::plural('tally', $paginatedTallies->count()).' found';
 
-        return view('livewire.admin.tallies.table', compact('paginatedTallys'));
+        return view('livewire.admin.tallies.table', compact('paginatedTallies'));
     }
 
     public function store()
@@ -154,8 +173,6 @@ class TallyTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount() {}
-
     public function hydrate()
     {
         $this->resetErrorBag();
@@ -182,13 +199,18 @@ class TallyTable extends Component
     /**
      * This method make more sense the model file.
      **/
-    public function search($query)
+    public function search()
     {
         $tally = new Tally;
 
-        return empty($query) ? $tally :
-            $tally->where(function ($q) use ($query) {
-                $q->where('name', 'like', '%'.$query.'%');
+        $tally = empty($this->query) ? $tally :
+            $tally->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->query.'%');
+            });
+
+        return empty($this->user) ? $tally :
+            $tally->where(function ($q) {
+                $q->where('user_id', $this->user);
             });
     }
 

@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use app\models\BetalingType;
 use App\Models\Calculations;
-use app\models\Mollie;
-use app\models\User;
+use App\Models\Mollie;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,8 +29,7 @@ class StartRecuring extends Command
      */
     public function handle()
     {
-        $users = User::find()
-            ->whereIsNull('blocked_at')
+        $users = User::whereNull('blocked_at')
             ->where('automatic_payment', TRUE)
             ->whereNotNull('mollie_customer_id')
             ->whereDate('auto_payment_notice_at', '<', now()->subDays(5))
@@ -63,10 +61,12 @@ class StartRecuring extends Command
             $mollie->amount = $user->mollie_amount;
             $mollie->customerId = $user->mollie_customer_id;
             $mollie->sequenceType = 'recurring';
-            $mollie->description = 'Automatisch ophogen BisonBar.';
-            $payment = $mollie->startPayment();
-            if($payment) {
-                Mail::send(new \App\Mail\StartRecuring($payment, $user));
+            $mollie->description = 'Ideal';
+            $mollie->name = 'Automatisch ophogen BisonBar.';
+            $paymentModel = $mollie->startPayment();
+            if($paymentModel) {
+                $mollie->payment($paymentModel);
+                Mail::send(new \App\Mail\StartRecuring($paymentModel, $user));
                 $user->auto_payment_notice_at = NULL;
                 $user->save();
                 $count++;

@@ -90,7 +90,7 @@
                         <td align="center">{{ $newTally->id }}</td>
                         <td align="center">{{ $newTally->count }}</td>
                         <td class="cost">-{{ number_format($newTally->assortment->price, 2, ',', ' ') }} &euro;</td>
-                        <td align="center">{{ !empty($newTally->tally_list_id)? $newTally->tallyList->serial_number .': ' . $new_turf->datum:'' }}</td>
+                        <td align="center">{{ !empty($newTally->tally_list_id)? $newTally->tallyList->serial_number:$newTally->created_at}}</td>
                         <td align="left">{{ $newTally->assortment->name . ($newTally->status_id === \App\Models\Status::STATUS_herberekend?' (herberkening)':'') }}</td>
                         <td class="cost">-{{number_format($newTally->price, 2, ',', ' ') }} &euro;</td>
                         <td class="cost"></td>

@@ -18,7 +18,7 @@
                                     </h6>
 
                                     <div class="text-primary font-weight-bold text-xs mt-1 mb-0">
-                                        @currency($expense->price)
+                                        {{currency($expense->price)}}
                                     </div>
 
                                 </div>

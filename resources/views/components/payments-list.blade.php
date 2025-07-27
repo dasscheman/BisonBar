@@ -5,7 +5,7 @@
                 <h6 class="mb-0">Betalingen</h6>
             </div>
             <div class="col-md-6 text-right">
-                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('payments')}}">View All</a>
+                <a class="btn btn-outline-primary btn-sm mb-0" href="{{route('payments', ['user' => $user])}}">View All</a>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
                         <span class="mb-2 text-xs">User Name: <span
                                 class="text-dark font-weight-bold ms-2">{{$payment->user->name}}</span></span>
                         <span class="mb-2 text-xs">Bedrag: <span
-                                class="text-dark ms-2 font-weight-bold">@currency($payment->price)</span></span>
+                                class="text-dark ms-2 font-weight-bold">{{ currency($payment->price) }}</span></span>
                     </div>
                     <div class="d-flex flex-column ">
                         <div class="text-xs">

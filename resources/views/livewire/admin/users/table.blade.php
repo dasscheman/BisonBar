@@ -23,15 +23,13 @@
             <div class="col-md-3">
                 <label for="orderBy">Order By: </label>
                 <select wire:model.live="orderBy" id="orderBy" class="form-select">
-                    <option value="user_id">User_id</option>
+                    <option value="id">User_id</option>
                     <option value="name">Name</option>
                     <option value="role_id">Role_id</option>
                     <option value="email">Email</option>
                     <option value="email_verified_at">Email_verified_at</option>
                     <option value="created_at">Created_at</option>
                     <option value="updated_at">Updated_at</option>
-                    <option value="solis_id">Solis_id</option>
-                    <option value="allowed_attributes">Allowed_attributes</option>
                 </select>
             </div>
 
@@ -43,7 +41,7 @@
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="perPage">Items Per Page: </label>
                 <select wire:model.live="perPage" id="perPage" class="form-select">
                     <option value="5">5</option>
@@ -52,6 +50,14 @@
                     <option value="20">20</option>
                 </select>
             </div>
+            @can('admin')
+                <div class="col-md-1">
+                    <label for="showAll">Show deleted</label>
+                    <div class="custom-control">
+                        <input wire:model.live="showAll"  id="showAll" type="checkbox" class="custom-control-input">
+                    </div>
+                </div>
+            @endcan
         </div>
 
 
@@ -66,7 +72,8 @@
                             <th>name</th>
                             <th>Role</th>
                             <th>email</th>
-                            <th>Openstaan</th>
+                            <th>Openstaand</th>
+                            <th>Blocked</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -74,9 +81,10 @@
                     @forelse($paginatedUsers as $model)
                         <tr>
                             <td>{{$model->name}}</td>
-                            <td>{{$model->role_id}}</td>
+                            <td>{{$model->role()}}</td>
                             <td>{{$model->email}}</td>
-                            <td>@currency($model->total())</td>
+                            <td>{{ currency($model->total()) }}</td>
+                            <td>{{$model->deleted_at}}</td>
                             <td>
                                 <a class="btn btn-outline-info btn-sm"
                                    href="#"

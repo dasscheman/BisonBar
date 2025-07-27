@@ -32,6 +32,9 @@ class Mollie extends Model
         $payment->user_id = $this->user->id;
         $payment->add_subtract = Payment::ADDSUBTRACT_ADD;
         $payment->price = number_format((float)$this->amount, 2);
+        $payment->description = $this->description;
+        $payment->name = $this->name;
+
         if($payment->save() ){
             return $payment;
         }
@@ -66,7 +69,8 @@ class Mollie extends Model
 
     public function checkUserMandates()
     {
-        $mandates = \Mollie\Laravel\Facades\Mollie::api()->mandates->listFor($this->user->mollie_user_id);
+        $customer = \Mollie\Laravel\Facades\Mollie::api()->customers->get($this->user->mollie_customer_id);
+        $mandates = \Mollie\Laravel\Facades\Mollie::api()->mandates->listFor($customer);
 
         foreach ($mandates as $key => $mandate) {
             if ($mandate->status === 'valid') {

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Invoices;
 
 use App\Models\Invoices;
+use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +34,8 @@ class InvoiceTable extends Component
     public int $perPage = 15;
 
     //Create, Edit, Delete, View User props
+    public ?string $user = null;
+
     public ?string $name = null;
 
     public ?string $file_name = null;
@@ -47,6 +51,10 @@ class InvoiceTable extends Component
     public ?int $invoice_id = null;
 
     public ?Invoices $invoice = null;
+
+    public $invoices = null;
+
+    public $users = [];
 
     //Update & Store Rules
     protected array $rules =
@@ -64,15 +72,27 @@ class InvoiceTable extends Component
 
     protected string $paginationTheme = 'bootstrap';
 
+    public function mount(Request $request)
+    {
+        $this->invoice = new Invoices;
+        if ($request->get('user')) {
+            $this->user = $request->get('user');
+        }
+        $this->users = User::select('name', 'id')->get();
+    }
+
     public function render()
     {
-        $invoice = $this->search($this->query)
-            ->where('user_id', Auth::user()->id)
+        $invoice = $this->search()
             ->orderBy($this->orderBy, $this->orderAsc);
 
-        if (Auth::user()->can('admin') && $this->showAll) {
-            $invoice = $this->search($this->query)
+        if (!Auth::user()->can('admin')) {
+            $invoice = $this->search()
+                ->where('user_id', Auth::user()->id)
                 ->orderBy($this->orderBy, $this->orderAsc);
+        }
+        if ($this->showAll) {
+            $invoice = $invoice->withTrashed();
         }
 
         $paginatedInvoice = $invoice->paginate($this->perPage);
@@ -131,11 +151,6 @@ class InvoiceTable extends Component
         $this->dispatch('hideModal');
     }
 
-    public function mount()
-    {
-        $this->invoice = new Invoices;
-    }
-
     public function hydrate()
     {
         $this->resetErrorBag();
@@ -157,13 +172,17 @@ class InvoiceTable extends Component
     /**
      * This method make more sense the model file.
      **/
-    public function search($query)
+    public function search()
     {
         $invoice = new Invoices;
+        $invoice =  empty($this->query) ? $invoice :
+            $invoice->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->query.'%');
+            });
 
-        return empty($query) ? $invoice :
-            $invoice->where(function ($q) use ($query) {
-                $q->where('name', 'like', '%'.$query.'%');
+        return empty($this->user) ? $invoice :
+            $invoice->where(function ($q) {
+                $q->where('user_id', $this->user);
             });
     }
 
@@ -177,9 +196,6 @@ class InvoiceTable extends Component
         if (! Storage::disk('local')->exists('/invoices/'.$invoice->file_name)) {
             session()->flash('message', 'Could not find file!');
             return;
-
-//            session()->flash('message', 'Could not find file!');
-//            return redirect()->to('/admin-dashboard');
         }
         $filePath = storage_path('/app/invoices/'.$invoice->file_name);
 

@@ -64,6 +64,7 @@ class CreateTallyTable extends Migration
                 'status_id' => $turf->status,
                 'invoice_id' => $turf->factuur_id,
                 'payment_id' => $turf->transacties_id,
+                'deleted_at' => $turf->deleted_at,
                 'created_at' => $turf->created_at,
                 'updated_at' => $turf->updated_at,
             ];

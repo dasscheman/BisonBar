@@ -33,7 +33,7 @@ Een nieuw barsysteem!!
 </x-mail::table>
 @endif
 
-## Openstaand: @currency($invoice->user->total()) €
+## Openstaand: {{ currency($invoice->user->total()) }}
 
 Met vriendelijke groet,<br>
 {{ config('app.name') }}

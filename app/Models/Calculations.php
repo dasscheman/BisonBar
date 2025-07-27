@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 class Calculations
 {
     private $user;
@@ -25,7 +22,7 @@ class Calculations
         $expenses = new Expenses();
 
         if($this->date) {
-            $expenses = $expenses->whereDate('created_at', '<', $this->date);
+            $expenses = $expenses->where('created_at', '<=', $this->date);
         }
 
         if($this->user !== null) {
@@ -43,7 +40,7 @@ class Calculations
     {
         $tallies = new Tally();
         if($this->date) {
-            $tallies = $tallies->whereDate('created_at', '<', $this->date);
+            $tallies = $tallies->where('created_at', '<=', $this->date);
         }
 
         if($this->user !== null) {
@@ -58,16 +55,18 @@ class Calculations
             ->whereNull('invoice_id');
     }
 
+    /**
+     * Retrieve payments based on add/subtract type,*/
     public function payments($addSubstract = Payment::ADDSUBTRACT_ADD,
                              Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment],
                              Array $status =[Status::STATUS_factuur_verzonden, Status::STATUS_factuur_gegenereerd])
     {
-        $payments = Payment::whereIn('type_id', $types)
-                ->where('add_subtract', $addSubstract)
+        $payments = Payment::where('add_subtract', $addSubstract)
+                ->whereIn('type_id', $types)
                 ->whereIn('status_id', $status);
 
         if($this->date) {
-            $payments = $payments->whereDate('created_at', '<', $this->date);
+            $payments = $payments->where('created_at', '<=', $this->date);
         }
         if($this->user !== null) {
             $payments = $payments->where('user_id', $this->user->id);
@@ -93,7 +92,7 @@ class Calculations
 
 
         if($this->date) {
-            $payments = $payments->whereDate('created_at', '<', $this->date);
+            $payments = $payments->where('created_at', '<=', $this->date);
         }
 
         if($this->user !== null) {
@@ -115,33 +114,37 @@ class Calculations
 
     public function total()
     {
-        return $this->expenses()->sum('price')
+         $total = $this->expenses()->sum('price')
             + $this->payments(
                 Payment::ADDSUBTRACT_ADD,
                 [
                     PaymentType::TYPE_previous_credit,
                     PaymentType::TYPE_ideal,
                     PaymentType::TYPE_bank_add,
-                    PaymentType::TYPE_direct_payment])->sum('price')
+                    PaymentType::TYPE_direct_payment,
+                    PaymentType::TYPE_izettle_pin])->sum('price')
             - $this->payments(Payment::ADDSUBTRACT_SUBTRACT, [
-                PaymentType::TYPE_previous_debt])->sum('price')
-            + $this->payments(Payment::ADDSUBTRACT_ADD, [
-                PaymentType::TYPE_previous_credit])->sum('price')
+                PaymentType::TYPE_previous_debt,
+                PaymentType::TYPE_bank_subtract])->sum('price')
             - $this->tallies()->sum('price');
+
+        return $total;
     }
 
     public function totalNotInvoiced()
     {
-        return $this->expensesNotInvoiced()->sum('price')
+        return $this->expensesNotInvoiced()
             + $this->paymentsNotInvoiced(
                 Payment::ADDSUBTRACT_ADD,
                 [
                     PaymentType::TYPE_previous_credit,
                     PaymentType::TYPE_ideal,
                     PaymentType::TYPE_bank_add,
-                    PaymentType::TYPE_direct_payment])->sum('price')
+                    PaymentType::TYPE_direct_payment,
+                    PaymentType::TYPE_izettle_pin])->sum('price')
             - $this->paymentsNotInvoiced(Payment::ADDSUBTRACT_SUBTRACT, [
-                PaymentType::TYPE_previous_debt])->sum('price')
+                PaymentType::TYPE_previous_debt,
+                PaymentType::TYPE_bank_subtract])->sum('price')
             - $this->talliesNotInvoiced()->sum('price');
     }
 
@@ -150,7 +153,7 @@ class Calculations
         $invoices = new Invoices();
 
         if($this->date) {
-            $invoices = $invoices->whereDate('created_at', '<', $this->date);
+            $invoices = $invoices->where('created_at', '<=', $this->date);
         }
 
         if($this->user !== null) {

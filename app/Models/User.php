@@ -67,6 +67,12 @@ class User extends Authenticatable
             self::ROLE_super_admin => __('super_admin_aka_daan'),
         ];
     }
+
+    public function role()
+    {
+        return $this->getRoleOptions()[$this->role_id];
+    }
+
     /**
      * Retrieve the model for a bound value.
      *
@@ -129,12 +135,14 @@ class User extends Authenticatable
 
     public function generateNewInvoice()
     {
+        $last_invoice_id = Invoices::orderBy('id', 'desc')->withTrashed()->first()->id;
+        $last_invoice_id++;
         $invoice = new Invoices;
         $invoice->user_id = $this->id;
-        $invoice->name = $this->name.'_'.$invoice->id;
+        $invoice->name = $this->name.'_'.$last_invoice_id;
         $invoice->file_name = $this->name.'_TEMP.pdf';
         $invoice->save();
-        $invoice->file_name = $this->name.'_'.$invoice->id.'.pdf';
+        $invoice->file_name = $this->name.'_'.$last_invoice_id.'.pdf';
 
         $calculations = new Calculations($this);
         $pdf = Pdf::loadView('pdf.invoice-template', ['user' => $this, 'calculations' => $calculations]);

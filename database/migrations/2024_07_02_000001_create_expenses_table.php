@@ -26,7 +26,7 @@ class CreateExpensesTable extends Migration
             $table->timestamps();
         });
 
-        $transacties = DB::table('transacties')->where('type_id', 5)->get();
+        $transacties = DB::table('transacties')->whereIn('type_id', [5, 6])->get();
         foreach ($transacties as $transactie) {
             $relatedjoin = DB::table('related_transacties')->where('child_transacties_id', $transactie->transacties_id)->first();
             if ($relatedjoin) {
@@ -41,8 +41,9 @@ class CreateExpensesTable extends Migration
                 'receipt_id' => $transactie->bon_id,
                 'invoice_id' => $transactie->factuur_id,
                 'description' => $transactie->omschrijving,
-                'price' => $transactie->bedrag,
+                'price' => ($transactie->type_id==6?-$transactie->bedrag:$transactie->bedrag),
                 'status_id' => $transactie->status,
+                'deleted_at' => $transactie->deleted_at,
                 'created_at' => $transactie->created_at,
                 'updated_at' => $transactie->updated_at,
             ];

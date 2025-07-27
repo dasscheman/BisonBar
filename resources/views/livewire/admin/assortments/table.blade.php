@@ -71,8 +71,8 @@
                             <td>{{$model->name}}</td>
                             <td>{{$model->category()}}</td>
                             <td>{{$model->status()}}</td>
-                            <td>@currency($model->price)</td>
-                            <td>@currency($model->totalSold())</td>
+                            <td>{{ currency($model->price) }}</td>
+                            <td>{{ currency($model->totalSold()) }}</td>
                             <td>
                                 <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                         wire:click="initData({{ $model }})"
