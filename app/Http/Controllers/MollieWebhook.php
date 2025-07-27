@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Status;
 use app\models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Mollie\Api\Exceptions\ApiException;
@@ -20,7 +21,7 @@ class MollieWebhook extends Controller
         sleep(3);
         $payment = Payment::find($request->get('payment_id'));
         if (isset($payment->mollie_status)) {
-            session()->flash('message', $payment);
+            session()->flash('message', $payment->name . ' ' . $payment->description . ' is ' . $payment->mollieStatus());
         } else {
             session()->flash('message', 'Ongeldige transactie, neem contact op met de beheerder.');
         }
@@ -33,6 +34,7 @@ class MollieWebhook extends Controller
      */
     public function webhook(Request $request)
     {
+        Log::info('recieved webhook: ' . $request->post('payment_id'));
         if ($request->post('payment_id') === null) {
             throw ValidationException::withMessages(['Geen geldig betaal token gevonden.']);
         }
@@ -45,6 +47,7 @@ class MollieWebhook extends Controller
 
         $model = Payment::find($payment_id);
         if ($payment->id !== $model->mollie_id) {
+            Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);
             throw ValidationException::withMessages(['The requested id does not correspond the database.']);
         }
         try {
@@ -52,7 +55,9 @@ class MollieWebhook extends Controller
              * Update the payments in the database.
              */
             Status::saveStatussen($model, $payment->status);
+            Log::info('Status saved ' . $payment->id );
             if ($payment->isPaid() === true) {
+
                 $user = User::find($model->user_id);
                 Mail::to($user->email)->send(new PaymentReceived($model));
             } elseif ($payment->isOpen() === false) {
@@ -60,6 +65,7 @@ class MollieWebhook extends Controller
                 Mail::to($user->email)->send(new PaymentFailed($model));
             }
         } catch (ApiException $e) {
+            Log::error('Could not save  ' . $e);
             throw ValidationException::withMessages([$e->getMessage()]);
         }
     }

@@ -10,6 +10,7 @@ use App\Livewire\Payments\PaymentTable;
 use App\Livewire\Tallies\TallyTable;
 use App\Livewire\Users\UserSelect;
 use App\Livewire\Users\UserTab;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -46,4 +47,4 @@ Route::post('mollie/cancelAutoPayment', [MolliePayment::class, 'cancelAutoPaymen
 Route::post('mollie/prepareAutoPayment', [MolliePayment::class, 'prepareAutoPayment'])->name('mollie.prepareAutoPayment');
 
 Route::get('mollie/returnPayment', [MollieWebhook::class, 'returnPayment'])->name('return.payment');
-Route::post('mollie/webhook', [MollieWebhook::class, 'webhook'])->name('webhook.mollie');
+Route::post('mollie/webhook', [MollieWebhook::class, 'webhook'])->name('webhook.mollie')->middleware(VerifyCsrfToken::class);
