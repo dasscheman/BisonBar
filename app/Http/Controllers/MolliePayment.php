@@ -85,6 +85,8 @@ class MolliePayment extends Controller
         $mollie->name = 'Ideal betaling van: ' . $user->name;;
         $paymentModel = $mollie->startPayment();
         $payment = $mollie->payment($paymentModel);
+        $paymentModel->mollie_id = $payment->id;
+        $paymentModel->save();
 
         // redirect customer to Mollie checkout page
         return redirect($payment->getCheckoutUrl(), 303);
@@ -110,6 +112,8 @@ class MolliePayment extends Controller
         $mollie->description = 'Eerste betaling om automatisch ophogen in te stellen.';
         $paymentModel = $mollie->startPayment();
         $payment = $mollie->payment($paymentModel);
+        $paymentModel->mollie_id = $payment->id;
+        $paymentModel->save();
 
         Mail::to($user->email)->send(new FirstRecuring($mollie));
         // redirect customer to Mollie checkout page

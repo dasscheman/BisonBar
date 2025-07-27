@@ -46,7 +46,7 @@ class MollieWebhook extends Controller
         $payment = Mollie::api()->payments->get($request->post('id'));
         $payment_id = $payment->metadata->payment_id;
 
-        Log::info( $payment);
+        Log::info( $payment->id);
         $model = Payment::find($payment_id);
         if ($payment->id !== $model->mollie_id) {
             Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);

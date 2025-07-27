@@ -36,6 +36,15 @@ class Mollie extends Model
         $payment->description = $this->description;
         $payment->name = $this->name;
 
+
+        $UniqueQrCode = 99;
+        while ($UniqueQrCode == 99) {
+            $newqrcode = $this::randomString(22);
+            if(!Payment::where('transactie_key', $newqrcode)->exists()){
+                $UniqueQrCode = $newqrcode;
+            }
+        }
+        $payment->transactie_key = $UniqueQrCode;
         if($payment->save() ){
             return $payment;
         }
@@ -78,5 +87,11 @@ class Mollie extends Model
             }
         }
         return false;
+    }
+
+    public static function randomString($length)
+    {
+        $chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+        return substr(str_shuffle($chars), 0, $length);
     }
 }
