@@ -72,31 +72,31 @@ class Status extends Model
         switch ($paymentStatus) {
             case 'open':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_open;
-                $model->status = Status::STATUS_ingevoerd;
+                $model->status_id = Status::STATUS_ingevoerd;
                 break;
             case 'canceled':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_cancelled;
-                $model->status = Status::STATUS_geannuleerd;
+                $model->status_id = Status::STATUS_geannuleerd;
                 break;
             case 'expired':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_expired;
-                $model->status = Status::STATUS_ongeldig;
+                $model->status_id = Status::STATUS_ongeldig;
                 break;
             case 'failed':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_failed;
-                $model->status = Status::STATUS_ongeldig;
+                $model->status_id = Status::STATUS_ongeldig;
                 break;
             case 'pending':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_pending;
-                $model->status = Status::STATUS_ingevoerd;
+                $model->status_id = Status::STATUS_ingevoerd;
                 break;
             case 'paid':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_paid;
-                $model->status = Status::STATUS_gecontroleerd;
+                $model->status_id = Status::STATUS_gecontroleerd;
                 break;
             case 'refunded':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_refunded;
-                $model->status = Status::STATUS_teruggestord;
+                $model->status_id = Status::STATUS_teruggestord;
                 break;
         }
         if (! $model->save()) {
