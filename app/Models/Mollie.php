@@ -40,11 +40,11 @@ class Mollie extends Model
         $UniqueQrCode = 99;
         while ($UniqueQrCode == 99) {
             $newqrcode = $this::randomString(22);
-            if(!Payment::where('transactie_key', $newqrcode)->exists()){
+            if(!Payment::where('transaction_key', $newqrcode)->exists()){
                 $UniqueQrCode = $newqrcode;
             }
         }
-        $payment->transactie_key = $UniqueQrCode;
+        $payment->transaction_key = $UniqueQrCode;
         if($payment->save() ){
             return $payment;
         }
