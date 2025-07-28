@@ -54,7 +54,7 @@ class MollieWebhook extends Controller
         }
 
         if ($payment->id !== $model->mollie_id && $payment_id !== $model->id) {
-            Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);
+            Log::warning('No payment found ' . $payment->id . ' ' . $model->mollie_id);
             throw ValidationException::withMessages(['The requested id does not correspond the database.']);
         }
         try {
@@ -64,7 +64,8 @@ class MollieWebhook extends Controller
             Log::info('Set status ' . $payment->status . ' ' . $model->mollie_id);
             Status::saveStatussen($model, $payment->status);
             $user = User::find($model->user_id);
-            if ($user) {
+            if (!$user) {
+                Log::warning('No user found ' . $payment->id . ' ' . $model->user_id);
                 throw ValidationException::withMessages(['Geen geldig user gevonden.']);
             }
             if ($payment->isPaid() === true) {
