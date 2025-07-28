@@ -60,6 +60,7 @@ class MollieWebhook extends Controller
             /*
              * Update the payments in the database.
              */
+            Log::info('Set status ' . $payment->status . ' ' . $model->mollie_id);
             Status::saveStatussen($model, $payment->status);
             $user = User::find($model->user_id);
             if ($user) {

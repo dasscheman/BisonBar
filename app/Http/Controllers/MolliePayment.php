@@ -109,6 +109,7 @@ class MolliePayment extends Controller
         $mollie->customerId = $user->mollie_customer_id;
         $mollie->sequenceType = 'first';
         $mollie->description = 'Eerste betaling om automatisch ophogen in te stellen.';
+        $mollie->name = 'betaling van: ' . $user->name;;
         $paymentModel = $mollie->startPayment();
         $payment = $mollie->payment($paymentModel);
         $paymentModel->mollie_id = $payment->id;
