@@ -9,6 +9,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    Om een automatiche betaling in te stellen moet je 1 keer handmatig betalen met het
+                                    bedrag waarmee de automatische betaling wordt uitgevoerd.
+                                    <br>
+                                    Een aantal dagen voordat de automatische betaling wordt uitgevoerd krijg je een mail.
+                                    In die mail staat een link waarmee je de betaling kan aanpassen of stoppen.
+                                    <br>
+                                    De automatische kan altijd gestorneerd worden, maar dat brengt extra kosten met zich mee voor de bar.
+                                    Dus als er iets niet goed gaat met de automatische betaling graag even contact opnemen.
                                     <select  name="amount" class="form-select" aria-label="Default select example">
                                         <option  selected disabled>Open this select menu</option>
                                         @foreach($paymentAmountOptions as $key => $option)

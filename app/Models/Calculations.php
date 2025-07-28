@@ -133,7 +133,7 @@ class Calculations
 
     public function totalNotInvoiced()
     {
-        return $this->expensesNotInvoiced()
+        return $this->expensesNotInvoiced()->sum('price')
             + $this->paymentsNotInvoiced(
                 Payment::ADDSUBTRACT_ADD,
                 [
