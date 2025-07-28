@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
@@ -45,6 +46,19 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
+        Gate::define('writetally', function () {
+            if(!Auth::check()){
+                return false;
+            }
+            $user = Auth::user();
+            if($user->role_id == User::ROLE_bar_user ||
+                $user->role_id == User::ROLE_admin ||
+                $user->role_id == User::ROLE_super_admin) {
+                return true;
+            }
+            return false;
+        });
+
         $newToken = cache()->remember('dropbox_token', 13000, function () {
             $apiCall = Http::asForm()
                 ->post('https://api.dropbox.com/oauth2/token', [
@@ -69,5 +83,9 @@ class AppServiceProvider extends ServiceProvider
                 $config
             );
         });
+
+        if (!$this->app->environment('production')) {
+            Mail::alwaysTo('test@biologenkantoor.nl');
+        }
     }
 }

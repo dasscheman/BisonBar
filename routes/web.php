@@ -18,10 +18,12 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
     Route::impersonate();
 
-    Route::get('/', Dashboard::class)->name('dashboard');
-
     Route::get('/user-tab/{user?}', UserTab::class)->name('user-tab');
     Route::get('/user-select/{user}', UserSelect::class)->name('user-select');
+
+    Route::middleware('can:writetally')->group(function () {
+        Route::get('/', Dashboard::class)->name('dashboard');
+    });
 
     Route::middleware('can:admin')->group(function () {
         Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');

@@ -48,6 +48,10 @@ class MollieWebhook extends Controller
 
         Log::info( $payment->id);
         $model = Payment::where('mollie_id', $request->post('id'))->first();
+        if ($model) {
+            throw ValidationException::withMessages(['Geen geldig betaling gevonden.']);
+        }
+
         if ($payment->id !== $model->mollie_id && $payment_id !== $model->id) {
             Log::info('No payment found ' . $payment->id . ' ' . $model->mollie_id);
             throw ValidationException::withMessages(['The requested id does not correspond the database.']);
@@ -57,11 +61,13 @@ class MollieWebhook extends Controller
              * Update the payments in the database.
              */
             Status::saveStatussen($model, $payment->status);
+            $user = User::find($model->user_id);
+            if ($user) {
+                throw ValidationException::withMessages(['Geen geldig user gevonden.']);
+            }
             if ($payment->isPaid() === true) {
-                $user = User::find($model->user_id);
                 Mail::to($user->email)->send(new PaymentReceived($model));
             } elseif ($payment->isOpen() === false) {
-                $user = User::find($model->user_id);
                 Mail::to($user->email)->send(new PaymentFailed($model));
             }
         } catch (ApiException $e) {
