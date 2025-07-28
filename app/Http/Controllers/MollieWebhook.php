@@ -48,7 +48,8 @@ class MollieWebhook extends Controller
 
         Log::info( $payment->id);
         $model = Payment::where('mollie_id', $request->post('id'))->first();
-        if ($model) {
+        if (!$model) {
+            Log::info('Geen geldig betaling gevonden '  . $request->post('id'));
             throw ValidationException::withMessages(['Geen geldig betaling gevonden.']);
         }
 
