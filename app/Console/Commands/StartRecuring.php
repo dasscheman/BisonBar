@@ -39,6 +39,7 @@ class StartRecuring extends Command
 
         echo 'volgende automatisch ophogen controleren:';
         foreach ($users as $user) {
+            echo $user->name . ' controleren';
             $mollie = new Mollie($user);
             $calculations = new Calculations($user);
 
@@ -57,6 +58,7 @@ class StartRecuring extends Command
                 continue;
             }
 
+            echo 'Start payment';
             $mollie = new \App\Models\Mollie($user);
             $mollie->amount = $user->mollie_amount;
             $mollie->customerId = $user->mollie_customer_id;
@@ -71,7 +73,6 @@ class StartRecuring extends Command
                 $user->save();
                 $count++;
             }
-
         }
         return $count;
     }

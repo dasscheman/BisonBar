@@ -38,6 +38,7 @@ class CheckRecuring extends Command
         $count = 0;
         echo 'volgende automatisch ophogen controleren:';
         foreach ($users as $user) {
+            echo $user->name . ' controleren';
             $mollie = new Mollie($user);
             $calculations = new Calculations($user);
 
@@ -56,13 +57,13 @@ class CheckRecuring extends Command
                 continue;
             }
 
-            // Wanneer een user een pending transactie heeft, dan gaan we niet
+            // Wanneer een user een notice heeft gehad dan gaan we niet
             // een nieuwe transactie opstarten.
             if($user->auto_payment_notice_at != NULL) {
                 ## "-Notice is al verstuurd"
                 continue;
             }
-
+            echo 'Send payment notice to';
             Mail::to($user->email)->send(new PaymentAnnounce($user));
             $user->auto_payment_notice_at = now();
             $user->save();

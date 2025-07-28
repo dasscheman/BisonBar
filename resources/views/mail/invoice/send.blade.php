@@ -8,9 +8,9 @@ Je maakt gebruik van automatisch ophogen, je tegoed wordt automatisch opgehoogd 
 
 Dus je hoeft niets te doen.
 
-Hier kun je automatisch ophogen stop zetten of de hoogte van het bedrag wijzigen:
+Hier kun je automatisch ophogen stoppen of de hoogte van het bedrag wijzigen:
 <x-mail::button :url="$urlEditAutoPayment">
-Automatisch ophogen instellen
+Automatisch ophogen aanpassen
 </x-mail::button>
 @endif
 

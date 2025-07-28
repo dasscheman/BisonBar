@@ -115,7 +115,6 @@ class MolliePayment extends Controller
         $paymentModel->mollie_id = $payment->id;
         $paymentModel->save();
 
-        Mail::to($user->email)->send(new FirstRecuring($mollie));
         // redirect customer to Mollie checkout page
         return redirect($payment->getCheckoutUrl(), 303);
     }

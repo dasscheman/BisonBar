@@ -10,7 +10,7 @@ Als je dit wilt wijzigen of stoppen, klik dan op onderstaande knop.
 
 Als je deze incasso wilt laten uitvoeren, dan hoef je verder niets te doen.
 <x-mail::button :url="$urlEditAutoPayment" color="success">
-Automatisch incasso wijzigen.
+Automatisch incasso aanpassen.
 </x-mail::button>
 
 

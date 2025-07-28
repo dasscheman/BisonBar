@@ -53,6 +53,14 @@ class User extends Authenticatable
         'blocked_at' => 'datetime',
         'auto_payment_notice_at' => 'datetime',
     ];
+
+    protected $fillable = [
+        'mollie_customer_id',
+        'mollie_amount',
+        'automatic_payment',
+        'auto_payment_notice_at'
+    ];
+
     /**
      * Retrieves a list of roles
      *
