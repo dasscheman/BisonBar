@@ -2,10 +2,13 @@
 # Hallo {{$payment->user->name}}
 
 We hebben een betaling ontvangen en deze is correct verwerkt.
-    Gegevens betaling:
-    ID: {{$payment->id}}
-    Omschrijving: {{$payment->description}}
-    Bedrag:  @curency($payment->price)
+Gegevens betaling:
+
+ID: {{$payment->id}}
+
+Omschrijving: {{$payment->description}}
+
+Bedrag: {{ currency($payment->price) }}
 
 
 Thanks,<br>
