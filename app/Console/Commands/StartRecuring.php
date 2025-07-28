@@ -67,7 +67,9 @@ class StartRecuring extends Command
             $mollie->name = 'Automatisch ophogen BisonBar.';
             $paymentModel = $mollie->startPayment();
             if($paymentModel) {
-                $mollie->payment($paymentModel);
+                $payment = $mollie->payment($paymentModel);
+                $paymentModel->mollie_id = $payment->id;
+                $paymentModel->save();
                 Mail::send(new \App\Mail\StartRecuring($paymentModel, $user));
                 $user->auto_payment_notice_at = NULL;
                 $user->save();
