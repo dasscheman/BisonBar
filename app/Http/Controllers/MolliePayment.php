@@ -77,8 +77,7 @@ class MolliePayment extends Controller
 
     public function preparePayment(Request $request)
     {
-        $user = User::findByPayKey($request->get('pay_key'));
-
+        $user = User::findByPayKey($request->get('payment_key'));
         $mollie = new \App\Models\Mollie($user);
         $mollie->amount = $request->get('amount');
         $mollie->description = 'Ideal betaling';
@@ -94,7 +93,7 @@ class MolliePayment extends Controller
 
     public function prepareAutoPayment(Request $request)
     {
-        $user = User::findByPayKey($request->get('pay_key'));
+        $user = User::findByPayKey($request->get('payment_key'));
         $customer = Mollie::api()->customers->create([
             'name'  => $user->name,
             'email' => $user->email,
