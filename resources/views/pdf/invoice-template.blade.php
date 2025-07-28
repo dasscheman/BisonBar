@@ -6,22 +6,13 @@
                     <td style="width: 75%;">
                     </td>
                     <td style="width: 25%; color: #444444;">
-                        <img style="width: 10%;" src="/assets/img/bison-logo.jpg" alt="Logo"><br>
+                        <img style="width: 50%;" src="{{ public_path('assets/img/bison-logo.jpg') }}" alt="De Bison"><br>
                         Bison bar
                     </td>
                 </tr>
             </table>
         </htmlpageheader>
 
-        <htmlpagefooter name="myfooter">
-            <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
-            Page {PAGENO} of {nb}
-            </div>
-        </htmlpagefooter>
-
-
-        <sethtmlpageheader name="myheader" value="on" show-this-page="1"></sethtmlpageheader>
-        <sethtmlpagefooter name="myfooter" value="on"></sethtmlpagefooter>
         <table style="width: 100%; text-align: left; font-size: 11pt;">
             <tr>
                 <td style="width:50%;"></td>
@@ -47,7 +38,7 @@
         <br>
         <i>
             <b>&laquo; Drankrekening &raquo;</b><br>
-            Naam: {{$user->name}}><br>
+            Naam: {{$user->name}}<br>
             Email: {{$user->email}}<br>
             Zeist {{ date('d/m/Y')}}
         </i>
@@ -71,6 +62,9 @@
         @if($calculations->talliesNotInvoiced()->exists())
             <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
                 <thead>
+                    <tr style="border: 1px solid black">
+                        <td colspan="7" align="left"><b><i>Nieuwe turven:</i></b></td>
+                    </tr>
                     <tr>
                         <td width="9%">ref.id</td>
                         <td width="9%">aantal</td>
@@ -82,17 +76,14 @@
                     </tr>
                 </thead>
 
-                <tr style="border: 1px solid black">
-                    <td colspan="7" align="left"><b><i>Nieuwe turven:</i></b></td>
-                </tr>
                 @foreach ($calculations->talliesNotInvoiced()->get() as $newTally)
                     <tr>
                         <td align="center">{{ $newTally->id }}</td>
                         <td align="center">{{ $newTally->count }}</td>
-                        <td class="cost">-{{ number_format($newTally->assortment->price, 2, ',', ' ') }} &euro;</td>
+                        <td class="cost">-{{ currency($newTally->assortment->price) }} </td>
                         <td align="center">{{ !empty($newTally->tally_list_id)? $newTally->tallyList->serial_number:$newTally->created_at}}</td>
                         <td align="left">{{ $newTally->assortment->name . ($newTally->status_id === \App\Models\Status::STATUS_herberekend?' (herberkening)':'') }}</td>
-                        <td class="cost">-{{number_format($newTally->price, 2, ',', ' ') }} &euro;</td>
+                        <td class="cost">-{{ currency($newTally->price) }} </td>
                         <td class="cost"></td>
                     </tr>
                 @endforeach
@@ -103,38 +94,35 @@
                     <td align="center"></td>
                     <td class="blanktotal cost" align="right">Subtotaal turven:</td>
                     <td class="blanktotal cost"></td>
-                    <td class="blanktotal cost">-{{ number_format($calculations->talliesNotInvoiced()->sum('price'), 2, ',', ' ') }} &euro;</td>
+                    <td class="blanktotal cost">-{{ currency($calculations->talliesNotInvoiced()->sum('price')) }}</td>
                 </tr>
             </table>
         @endif
         <br>
         <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
-
-            @if($calculations->expensesNotInvoiced()->exists() || $calculations->paymentsNotInvoiced()->exists() || $calculations->paymentsInvalid()->exists())
+            @if($calculations->expensesNotInvoiced()->exists())
                 <thead>
+                    <tr style="border: 1px solid black">
+                        <td colspan="7" align="left"><b><i>Nieuwe declaraties:</i></b></td>
+                    </tr>
                     <tr>
                         <td width="9%">ref. id</td>
-                        <td width="10%">status</td>
-                        <td width="9%">type</td>
-                        <td width="12%">turflijst/ datum</td>
-                        <td width="36%">omschrijving</td>
+                        <td width="9%">Bon#</td>
+                        <td width="9%">status</td>
+                        <td width="12%">datum</td>
+                        <td width="37%">omschrijving</td>
                         <td width="12%">bedrag</td>
                         <td width="12%">totalen</td>
                     </tr>
                 </thead>
-            @endif
-            @if($calculations->expensesNotInvoiced()->exists())
-                <tr style="border: 1px solid black">
-                    <td colspan="7" align="left"><b><i>Nieuwe declaraties:</i></b></td>
-                </tr>
                 @foreach ($calculations->expensesNotInvoiced()->get() as $expense)
                     <tr>
                         <td align="center"> {{ $expense->id}}</td>
+                        <td align="center"> {{ $expense->receipt_id }}</td>
                         <td align="center"> {{ $expense->status() }}</td>
-                        <td align="center"> {{ $expense->omschrijving }}</td>
-                        <td align="center"> {{ date($expense->datum, 'php:d-M-Y') }}</td>
-                        <td align="left"> {{ $expense->omschrijving }}</td>
-                        <td class="cost">-{{ number_format($expense->price, 2, ',', ' ') }} &euro;</td>
+                        <td align="center"> {{ $expense->created_at }}</td>
+                        <td align="left"> {{ $expense->description }}</td>
+                        <td class="cost"> {{ currency($expense->price) }}</td>
                         <td class="cost"></td>
                     </tr>
                 @endforeach
@@ -145,14 +133,25 @@
                     <td align="center"></td>
                     <td class="blanktotal cost" align="right">Subtotaal declaraties:</td>
                     <td class="blanktotal cost"></td>
-                    <td class="blanktotal cost">-{{number_format($calculations->expensesNotInvoiced()->sum('price'), 2, ',', ' ') }} &euro;</td>
+                    <td class="blanktotal cost"> {{currency($calculations->expensesNotInvoiced()->sum('price')) }}</td>
                 </tr>
             @endif
 
             @if($calculations->paymentsNotInvoiced()->exists())
-                <tr style="border: 1px solid black">
-                    <td colspan="7" align="left"><b><i>Nieuwe IDEAL betalingen</i></b></td>
-                </tr>
+                <thead>
+                    <tr style="border: 1px solid black">
+                        <td colspan="7" align="left"><b><i>Nieuwe IDEAL betalingen</i></b></td>
+                    </tr>
+                    <tr>
+                        <td width="9%">ref. id</td>
+                        <td width="10%">status</td>
+                        <td width="9%">type</td>
+                        <td width="12%">turflijst/ datum</td>
+                        <td width="36%">omschrijving</td>
+                        <td width="12%">bedrag</td>
+                        <td width="12%">totalen</td>
+                    </tr>
+                </thead>
                 @foreach ($calculations->paymentsNotInvoiced()->get() as $newPayment)
                     <tr>
                         <td align="center">{{ $newPayment->id }}</td>
@@ -160,7 +159,7 @@
                         <td align="center">{{ $newPayment->type() }}</td>
                         <td align="center">{{ $newPayment->created_at }}</td>
                         <td align="left">{{ $newPayment->description }}</td>
-                        <td class="cost">{{ number_format($newPayment->price, 2, ',', ' ') }} &euro;</td>
+                        <td class="cost">{{ currency($newPayment->price) }} </td>
                         <td class="cost"></td>
                     </tr>
                 @endforeach
@@ -171,14 +170,26 @@
                     <td align="center"></td>
                     <td class="blanktotal cost" align="right">Subtotaal transacties bij:</td>
                     <td class="blanktotal cost"></td>
-                    <td class="blanktotal cost">{{ number_format($calculations->paymentsNotInvoiced()->sum('price'), 2, ',', ' ') }} &euro;</td>
+                    <td class="blanktotal cost">{{ currency($calculations->paymentsNotInvoiced()->sum('price')) }} </td>
                 </tr>
             @endif
             @if($calculations->paymentsInvalid()->exists())
-                <tr style="border: 1px solid black">
-                    <td colspan="7" align="left"><b><i>Dit zijn transacties worden niet mee berekend:</i></b></td>
-                </tr>
+                <thead>
+                    <tr style="border: 1px solid black">
+                        <td colspan="7" align="left"><b><i>Deze transacties worden niet mee berekend:</i></b>
+                        </td>
 
+                    </tr>
+                    <tr>
+                        <td width="9%">ref. id</td>
+                        <td width="10%">status</td>
+                        <td width="8%">type</td>
+                        <td width="13%">turflijst/datum</td>
+                        <td width="36%">omschrijving</td>
+                        <td width="12%">bedrag</td>
+                        <td width="12%">totalen</td>
+                    </tr>
+                </thead>
                 @foreach ($calculations->paymentsInvalid()->get() as $invalidPayment)
                     <tr>
                         <td align="center">{{ $invalidPayment->id }}</td>
@@ -190,7 +201,8 @@
                         <td align="center">{{ $invalidPayment->type() }}</td>
                         <td align="center">{{ $invalidPayment->created_at }}</td>
                         <td align="left">{{ $invalidPayment->description }}</td>
-                        <td class="cost">{{ number_format($invalidPayment->price, 2, ',', ' ') }} &euro;</td>
+                        <td class="cost">{{ currency($invalidPayment->price) }} </td>
+                        <td class="cost"></td>
                     </tr>
                 @endforeach
            @endif
@@ -200,13 +212,13 @@
                 <td class="blanktotal" colspan="4" rowspan="2"></td>
                 <td class="totals">Saldo vorige nota:</td>
                 <td class="totals"></td>
-                <td class="totals cost">{{ number_format($user->total() - $calculations->totalNotInvoiced(), 2, ',', ' ') }} &euro;</td>
+                <td  align="right" width="15%" class="totals cost">{{ currency($user->total() - $calculations->totalNotInvoiced()) }} </td>
             </tr>
 
             <tr>
                 <td class="totals"><b>Nieuw saldo:</b></td>
                 <td class="totals"></td>
-                <td class="totals cost"><b>{{ number_format($user->total(), 2, ',', ' ') }} &euro;</b></td>
+                <td align="right" width="15%" class="totals cost"><b>{{ currency($user->total()) }} </b></td>
             </tr>
         </table>
     </body>
