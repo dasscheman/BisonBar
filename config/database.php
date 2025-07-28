@@ -41,6 +41,9 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
+            'dump' => [
+                'add_extra_option' => '-u ' . env('DB_USERNAME', 'forge') . ' --password=' . env('DB_PASSWORD', ''),
+            ],
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
