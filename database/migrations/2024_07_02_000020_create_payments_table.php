@@ -29,6 +29,7 @@ class CreatePaymentsTable extends Migration
             $table->string('mollie_id')->nullable();
             $table->string('transaction_key')->nullable();
             $table->string('transaction_cost')->nullable();
+            $table->timestamp('date', 0)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -54,6 +55,7 @@ class CreatePaymentsTable extends Migration
                 'mollie_id' => $transactie->mollie_id,
                 'transaction_key' => $transactie->transactie_key,
                 'transaction_cost' => $transactie->transactie_kosten,
+                'date' => $transactie->datum,
                 'deleted_at' => $transactie->deleted_at,
                 'created_at' => $transactie->created_at,
                 'updated_at' => $transactie->updated_at,

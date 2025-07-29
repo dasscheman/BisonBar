@@ -55,6 +55,15 @@ class User extends Authenticatable
     ];
 
     protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'pay_key',
+        'hard_limit',
+        'rise_limit',
+        'email_verified_at',
+        'blocked_at',
+        'last_login_at',
         'mollie_customer_id',
         'mollie_amount',
         'automatic_payment',
@@ -123,6 +132,14 @@ class User extends Authenticatable
 
         return $calculation->total();
     }
+
+    public function totalAtDate($date)
+    {
+        $calculation = new Calculations($this);
+        $calculation->setDate($date);
+        return $calculation->total();
+    }
+
 
     public static function findByPayKey($payKey)
     {

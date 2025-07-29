@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -38,6 +39,9 @@ class LoginForm extends Form
             ]);
         }
 
+        auth()->user()->update([
+            'last_login_at' => Carbon::now()->toDateTimeString()
+        ]);
         RateLimiter::clear($this->throttleKey());
     }
 

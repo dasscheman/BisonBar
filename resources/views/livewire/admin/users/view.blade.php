@@ -23,6 +23,9 @@
                     <p class="text-muted">{{$email}}</p>
                 <hr>
 
+                <h6 class="text-decoration-underline">Last inlog</h6>
+                    <p class="text-muted">{{$last_login_at}}</p>
+                <hr>
                 <h6 class="text-decoration-underline">Email_verified_at</h6>
                     <p class="text-muted">{{$email_verified_at}}</p>
                 <hr>

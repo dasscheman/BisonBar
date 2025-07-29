@@ -22,7 +22,7 @@ class Calculations
         $expenses = new Expenses();
 
         if($this->date) {
-            $expenses = $expenses->where('created_at', '<=', $this->date);
+            $expenses = $expenses->where('date', '<=', $this->date);
         }
 
         if($this->user !== null) {
@@ -66,7 +66,7 @@ class Calculations
                 ->whereIn('status_id', $status);
 
         if($this->date) {
-            $payments = $payments->where('created_at', '<=', $this->date);
+            $payments = $payments->where('date', '<=', $this->date);
         }
         if($this->user !== null) {
             $payments = $payments->where('user_id', $this->user->id);
@@ -92,7 +92,7 @@ class Calculations
 
 
         if($this->date) {
-            $payments = $payments->where('created_at', '<=', $this->date);
+            $payments = $payments->where('date', '<=', $this->date);
         }
 
         if($this->user !== null) {
@@ -172,14 +172,14 @@ class Calculations
     public function checkNewPaymentsForNewInvoice(Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment])
     {
          return $this->paymentsNotInvoiced($types)
-            ->whereDate('created_at', '<=', now()->subWeeks(4))
+            ->whereDate('date', '<=', now()->subWeeks(4))
             ->exists();
     }
 
     public function checkNewExpensesForNewInvoice()
     {
         return $this->expensesNotInvoiced()
-            ->whereDate('created_at', '<=', now()->subWeeks(4))
+            ->whereDate('date', '<=', now()->subWeeks(4))
             ->exists();
     }
 

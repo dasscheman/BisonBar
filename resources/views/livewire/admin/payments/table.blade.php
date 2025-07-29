@@ -38,13 +38,8 @@
                     <select wire:model.live="orderBy" id="orderBy" class="form-select">
                         <option value="user_id">User_id</option>
                         <option value="name">Name</option>
-                        <option value="role_id">Role_id</option>
-                        <option value="email">Email</option>
-                        <option value="email_verified_at">Email_verified_at</option>
                         <option value="created_at">Created_at</option>
                         <option value="updated_at">Updated_at</option>
-                        <option value="solis_id">Solis_id</option>
-                        <option value="allowed_attributes">Allowed_attributes</option>
                     </select>
                 </div>
 
@@ -89,6 +84,7 @@
                             <th>User</th>
                             <th>receipt_id</th>
                         @endcan
+                        <th>date</th>
                         <th>invoice_id</th>
                         <th>type_id</th>
                         <th>status_id</th>
@@ -105,9 +101,10 @@
                             <td>{{$model->name}}</td>
                             <td>{{$model->description}}</td>
                             @can('admin')
-                                <td>{{$model->user->name}}</td>
+                                <td>{{($model->user?$model->user->name:'n.v.t')}}</td>
                                 <td>{{$model->receipt_id}}</td>
                             @endcan
+                            <td>{{$model->date}}</td>
                             <td>{{$model->invoice_id}}</td>
                             <td>{{$model->type_id}}</td>
                             <td>{{$model->status_id}}</td>

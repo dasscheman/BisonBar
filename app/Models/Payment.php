@@ -31,6 +31,7 @@ class Payment extends Model
         'mollie_id',
         'transaction_key',
         'transaction_cost',
+        'date',
         'deleted_at',
         'created_at',
         'updated_at',

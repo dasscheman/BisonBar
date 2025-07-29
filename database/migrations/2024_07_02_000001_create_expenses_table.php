@@ -22,6 +22,7 @@ class CreateExpensesTable extends Migration
             $table->string('description')->nullable();
             $table->decimal('price', 5, 2)->default(0);
             $table->integer('status_id')->default(1);
+            $table->timestamp('date', 0)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -43,6 +44,7 @@ class CreateExpensesTable extends Migration
                 'description' => $transactie->omschrijving,
                 'price' => ($transactie->type_id==6?-$transactie->bedrag:$transactie->bedrag),
                 'status_id' => $transactie->status,
+                'date' => $transactie->datum,
                 'deleted_at' => $transactie->deleted_at,
                 'created_at' => $transactie->created_at,
                 'updated_at' => $transactie->updated_at,

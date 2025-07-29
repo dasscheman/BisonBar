@@ -221,7 +221,8 @@ class PaymentTable extends Component
 
         $payment = empty($this->query) ? $payment :
             $payment->where(function ($q) {
-                $q->where('name', 'like', '%'.$this->query.'%');
+                $q->where('name', 'like', '%'.$this->query.'%')
+                    ->orWhere('date', 'like', '%'.$this->query.'%');
             });
 
         return empty($this->user) ? $payment :

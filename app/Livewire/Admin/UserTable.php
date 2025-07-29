@@ -39,6 +39,8 @@ class UserTable extends Component
 
     public ?DateTime $email_verified_at = null;
 
+    public ?DateTime $last_login_at = null;
+
     public ?DateTime $created_at = null;
 
     public ?DateTime $updated_at = null;
@@ -106,6 +108,7 @@ class UserTable extends Component
         $this->name = $user->name;
         $this->role_id = $user->role_id;
         $this->email = $user->email;
+        $this->last_login_at = $user->last_login_at;
         $this->email_verified_at = $user->email_verified_at;
         $this->created_at = $user->created_at;
         $this->updated_at = $user->updated_at;
@@ -151,6 +154,7 @@ class UserTable extends Component
             'role_id',
             'email',
             'email_verified_at',
+            'last_login_at',
             'created_at',
             'updated_at',
         ]);

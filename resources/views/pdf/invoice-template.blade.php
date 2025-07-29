@@ -56,9 +56,7 @@
         Scoutinggroep De Bison</b>. Vermeld duidelijk je naam!
         <br>
         <br>
-
         <!-- ITEMS HERE -->
-
         @if($calculations->talliesNotInvoiced()->exists())
             <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
                 <thead>

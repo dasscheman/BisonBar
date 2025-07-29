@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/assortments', \App\Livewire\Admin\AssortmentTable::class)->name('assortments');
         Route::get('/expenses', \App\Livewire\Admin\ExpenseTable::class)->name('expenses');
+        Route::get('/years', \App\Livewire\Admin\YearsTable::class)->name('years');
         Route::get('/tally-lists', \App\Livewire\Admin\TallyListTable::class)->name('tally-lists');
     });
     Route::get('/invoices', InvoiceTable::class)->name('invoices');

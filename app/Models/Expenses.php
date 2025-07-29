@@ -20,6 +20,7 @@ class Expenses extends Model
         'description',
         'price',
         'status_id',
+        'date',
         'created_at',
         'updated_at',
     ];
