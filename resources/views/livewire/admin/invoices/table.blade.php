@@ -81,7 +81,11 @@
                     @forelse($paginatedInvoice as $model)
                         <tr>
                             <td>{{$model->id}}</td>
-                            <td><a href="{{route('user-tab', $model->user->id)}}">{{$model->user->name}}</a></td>
+                            <td>
+                                @if($model->user)
+                                    <a href="{{route('user-tab', $model->user->id)}}">{{$model->user->name}}</a>
+                                @endif
+                            </td>
                             <td>{{$model->file_name}}</td>
                             <td>{{ currency($model->totalOnDate()) }}</td>
                             <td>{{$model->send_at}}</td>

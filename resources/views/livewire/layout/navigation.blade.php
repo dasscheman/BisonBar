@@ -43,6 +43,9 @@
                                     <x-dropdown-link :href="route('admin-dashboard')" wire:navigate>
                                         {{ __('Admin Dashboard') }}
                                     </x-dropdown-link>
+                                    <x-dropdown-link :href="route('years')" wire:navigate>
+                                        {{ __('Years') }}
+                                    </x-dropdown-link>
                                     <x-dropdown-link :href="route('users')" wire:navigate>
                                         {{ __('Users') }}
                                     </x-dropdown-link>
