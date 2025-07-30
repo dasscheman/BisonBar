@@ -11,7 +11,7 @@
     <div class="card card-header shadow-blur mx-6 mt-custom opacity-9">
         @can('admin')
             <div class="row">
-                <button data-bs-toggle="modal" data-bs-target="#createModal"
+                <button data-bs-toggle="modal" data-bs-target="#createExpensesModal"
                         class="btn btn-outline-success btn-outline-md mb-2 col-md-3 mx-5">Add payment
                 </button>
             </div>
@@ -112,6 +112,16 @@
                             @can('admin')
                                 <td>{{$model->deleted_at}}</td>
                                 <td>
+                                    @if($model->status_id == \App\Models\Status::STATUS_ingevoerd)
+                                        <button wire:click="check({{ $model }})"
+                                                class="btn btn-outline-info btn-sm">check
+                                        </button>
+                                    @endif
+
+                                    <button data-bs-toggle="modal" data-bs-target="#viewModal"
+                                            wire:click="initData({{ $model }})"
+                                            class="btn btn-outline-info btn-sm">View
+                                    </button>
                                     <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                             wire:click="initData({{ $model }})"
                                             class="btn btn-outline-info btn-sm">View

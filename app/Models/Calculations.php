@@ -75,9 +75,10 @@ class Calculations
     }
 
     public function paymentsNotInvoiced($addSubstract = Payment::ADDSUBTRACT_ADD,
-                                        Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment])
+                                        Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment],
+                                        Array $status =[Status::STATUS_herberekend, Status::STATUS_ingevoerd, Status::STATUS_gecontroleerd])
     {
-        return $this->payments($addSubstract, $types)->whereNull('invoice_id');
+        return $this->payments($addSubstract, $types, $status)->whereNull('invoice_id');
     }
 
     public function paymentsInvalid()
@@ -169,9 +170,15 @@ class Calculations
             ->exists();
     }
 
-    public function checkNewPaymentsForNewInvoice(Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment])
+    public function checkNewPaymentsForNewInvoice()
     {
-         return $this->paymentsNotInvoiced($types)
+        $addExists = $this->paymentsNotInvoiced(Payment::ADDSUBTRACT_ADD, array_keys(PaymentType::getTypeOptions()))
+            ->whereDate('date', '<=', now()->subWeeks(4))
+            ->exists();
+         if($addExists) {
+            return true;
+         }
+         return $this->paymentsNotInvoiced(Payment::ADDSUBTRACT_SUBTRACT, array_keys(PaymentType::getTypeOptions()))
             ->whereDate('date', '<=', now()->subWeeks(4))
             ->exists();
     }
@@ -189,15 +196,7 @@ class Calculations
             return true;
         }
 
-        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_ideal])) {
-            return true;
-        }
-
-        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_bank_add])) {
-            return true;
-        }
-
-        if ($this->checkNewPaymentsForNewInvoice([PaymentType::TYPE_direct_payment])) {
+        if ($this->checkNewPaymentsForNewInvoice()) {
             return true;
         }
 

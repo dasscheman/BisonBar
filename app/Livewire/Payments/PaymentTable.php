@@ -3,6 +3,7 @@
 namespace App\Livewire\Payments;
 
 use App\Models\Payment;
+use App\Models\Status;
 use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -45,9 +46,10 @@ class PaymentTable extends Component
 
     public ?string $description = null;
 
-    public ?float $price = null;
+    public ?float $price = 0.00;
 
-    public ?bool $add_subtract = null;
+    public ?DateTime $date = null;
+    public ?int $add_subtract = null;
 
     public ?int $type_id = null;
 
@@ -72,23 +74,20 @@ class PaymentTable extends Component
     public $payments = null;
 
     public $users = [];
-
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
     //Update & Store Rules
     protected array $rules =
         [
             'name' => 'string',
             'user_id' => 'int',
-            'receipt_id' => 'int',
-            'invoice_id' => 'int',
+            'receipt_id' => 'nullable|int',
             'description' => 'string',
-            'price' => 'decimal',
-            'add_subtract' => 'boolean',
+            'price' => 'decimal:1,2',
+            'add_subtract' => 'int',
             'type_id' => 'int',
-            'status_id' => 'int',
-            'mollie_status' => 'int',
-            'mollie_id' => 'string',
-            'transaction_key' => 'string',
-            'transaction_cost' => 'decimal',
+            'date' => 'date',
         ];
 
     protected array $messages = [
@@ -150,6 +149,7 @@ class PaymentTable extends Component
         $this->invoice_id = $payment->invoice_id;
         $this->description = $payment->description;
         $this->price = $payment->price;
+        $this->date = $payment->date;
         $this->add_subtract = $payment->add_subtract;
         $this->type_id = $payment->type_id;
         $this->status_id = $payment->status_id;
@@ -193,7 +193,6 @@ class PaymentTable extends Component
     public function clearFields()
     {
         $this->reset([
-            'id',
             'user_id',
             'receipt_id',
             'invoice_id',
@@ -203,15 +202,13 @@ class PaymentTable extends Component
             'add_subtract',
             'type_id',
             'status_id',
-            'mollie_status',
-            'mollie_id',
-            'transaction_key',
-            'transaction_cost',
-            'created_at',
-            'updated_at',
         ]);
     }
-
+    public function check($payment)
+    {
+        $model = Payment::find($payment['id']);
+        $model->update(['status_id' => Status::STATUS_gecontroleerd]);
+    }
     /**
      * This method make more sense the model file.
      **/

@@ -53,44 +53,40 @@ class YearTotals extends Component
             $calculations = new Calculations($user);
         }
 
-        $total['tally-total'] = - $calculations->tallies()->sum('price');
+        $total['tally-total'] = $calculations->tallies()->sum('price');
         $total['payment-ideal'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-            PaymentType::TYPE_ideal, PaymentType::TYPE_direct_payment],
+            PaymentType::TYPE_ideal,
+            PaymentType::TYPE_direct_payment],
             [Status::STATUS_factuur_verzonden])->sum('price');
         $total['payment-bank'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-            PaymentType::TYPE_bank_add],
+            PaymentType::TYPE_bank_add,
+            PaymentType::TYPE_izettle_pin],
             [Status::STATUS_factuur_verzonden])->sum('price');
         $total['payment-total'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
                 PaymentType::TYPE_bank_add,
                 PaymentType::TYPE_ideal,
-                PaymentType::TYPE_direct_payment],
-                [Status::STATUS_factuur_verzonden])->sum('price')
-            - $calculations->payments(Payment::ADDSUBTRACT_SUBTRACT, [
-                PaymentType::TYPE_previous_debt])->sum('price')
-            + $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-                PaymentType::TYPE_previous_credit])->sum('price');
+                PaymentType::TYPE_direct_payment,
+                PaymentType::TYPE_izettle_pin],
+                [Status::STATUS_factuur_verzonden])->sum('price');
 
         $total['expenses-total'] = $calculations->expenses()->sum('price');
-        $total['nett'] = $total['tally-total'] + $total['payment-total'];
-        $years = [];
+        $total['nett'] = $total['payment-total'] + $total['expenses-total'] - $total['tally-total'];
+            $years = [];
 
         foreach ($this->years as $year) {
-            $years[$year]['tally-total'] = - $calculations->tallies()->whereYear('created_at', $year)->sum('price');
+            $years[$year]['tally-total'] = $calculations->tallies()->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-ideal'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
                 PaymentType::TYPE_ideal, PaymentType::TYPE_direct_payment])->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-bank'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-                PaymentType::TYPE_bank_add])->whereYear('created_at', $year)->sum('price');
+                PaymentType::TYPE_bank_add, PaymentType::TYPE_izettle_pin])->whereYear('created_at', $year)->sum('price');
             $years[$year]['payment-total'] = $calculations->payments(Payment::ADDSUBTRACT_ADD, [
                     PaymentType::TYPE_bank_add,
                     PaymentType::TYPE_ideal,
-                    PaymentType::TYPE_direct_payment])->whereYear('created_at', $year)->sum('price')
-                - $calculations->payments(Payment::ADDSUBTRACT_SUBTRACT, [
-                    PaymentType::TYPE_previous_debt])->whereYear('created_at', $year)->sum('price')
-                + $calculations->payments(Payment::ADDSUBTRACT_ADD, [
-                    PaymentType::TYPE_previous_credit])->whereYear('created_at', $year)->sum('price');
+                    PaymentType::TYPE_direct_payment,
+                    PaymentType::TYPE_izettle_pin])->whereYear('created_at', $year)->sum('price');
 
             $years[$year]['expenses-total'] = $calculations->expenses()->whereYear('created_at', $year)->sum('price');
-            $years[$year]['nett'] = $years[$year]['tally-total'] + $years[$year]['payment-total'] - $years[$year]['expenses-total'];
+            $years[$year]['nett'] = $years[$year]['payment-total'] + $years[$year]['expenses-total'] - $years[$year]['tally-total'];
         }
         $this->years = $years;
         $this->years['total'] = $total;

@@ -16,6 +16,10 @@ class Payment extends Model
 
     const ADDSUBTRACT_ADD = 2;
 
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     protected $fillable = [
         'id',
         'user_id',

@@ -8,47 +8,87 @@
             </div>
             <div class="modal-body">
                 <form wire:submit="update">
+                    <div class="form-group">
+                        <label for="user_id">User:</label>
+                        <select  class="form-select" aria-label="Default select example" wire:model.live="user_id" id="user_id">
+                            <option value="">-- Select --</option>
+                            @foreach( App\Models\User::all()->pluck("name", "id") as $key=>$option)
+                                <option value="{{$key}}" >{{$option}}</option>
+                            @endforeach
+                        </select>
+                        @error("user_id")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="receipt_id">Bonnummer</label>
+                        <input wire:model="receipt_id" type="int" class="form-control" name="receipt_id"
+                               id="receipt_id"
+                               title="receipt_id" placeholder="Enter receipt_id..." autofocus>
+                        @error("receipt_id")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Naam:</label>
+                        <input wire:model="name" type="text" class="form-control" name="name"
+                               id="name"
+                               title="name" placeholder="Enter name..." autofocus>
+                        @error("name")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Omschrijving:</label>
+                        <input wire:model="description" type="text" class="form-control" name="description"
+                               id="description"
+                               title="description" placeholder="Enter omschrijving..." autofocus>
+                        @error("description")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
 
-            <div class="form-group">
-                <label for="name">User name:</label>
-                <input wire:model="name" type="text" class="form-control" name="name"
-                       id="name"
-                       title="User name" placeholder="Enter user name..." autofocus>
-                @error("name")
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="role_id">Role role_id:</label>
-                <select  class="form-select" aria-label="Default select example" wire:model.live="role_id" id="role_id">
-                    <option value="">-- Select --</option>
-{{--                    @foreach( App\Models\Role::all()->pluck("name", "id") as $key=>$option)--}}
-{{--                        <option value="{{$key}}" >{{$option}}</option>--}}
-{{--                    @endforeach--}}
-                </select>
-                @error("role_id")
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="email">User email:</label>
-                <input wire:model="email" type="text" class="form-control" name="email"
-                       id="email"
-                       title="User email" placeholder="Enter user email..." autofocus>
-                @error("email")
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="solis_id">User solis_id:</label>
-                <input wire:model="solis_id" type="text" class="form-control" name="solis_id"
-                       id="solis_id"
-                       title="User solis_id" placeholder="Enter user solis_id..." autofocus>
-                @error("solis_id")
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
-            </div>
-                    <input wire:model.live="user_id" type="hidden" name="id">
+                    <div class="form-group">
+                        <label for="price">Bedrag</label>
+                        <input wire:model="price" type="number" class="form-control" name="price"
+                               id="price"
+                               title="price" placeholder="Enter amount..." autofocus>
+                        @error("price")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="add_subtract">Bij/Af:</label>
+                        <select  class="form-select" aria-label="Default select example" wire:model.live="add_subtract" id="add_subtract">
+                            <option value="">-- Select --</option>
+                            <option value="{{\App\Models\Payment::ADDSUBTRACT_ADD}}" >Bij</option>
+                            <option value="{{\App\Models\Payment::ADDSUBTRACT_SUBTRACT}}" >Af</option>
+                        </select>
+                        @error("add_subtract")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="type_id">Type:</label>
+                        <select  class="form-select" aria-label="Default select example" wire:model.live="type_id" id="type_id">
+                            <option value="">-- Select --</option>
+                            @foreach( App\Models\PaymentType::getTypeOptions() as $key=>$option)
+                                <option value="{{$key}}" >{{$option}}</option>
+                            @endforeach
+                        </select>
+                        @error("type_id")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input wire:model="date" type="date" class="form-control" name="date"
+                               id="date"
+                               title="date" placeholder="Enter date..." autofocus>
+                        @error("date")
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

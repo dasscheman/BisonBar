@@ -66,14 +66,14 @@ class PaymentType extends Model
     {
         return [
             self::TYPE_previous_debt => __('previous_debt'),
-            self::TYPE_previous_credit => __('TYPE_previous_credit'),
-            self::TYPE_bank_add => __('TYPE_bank_add'),
-            self::TYPE_bank_subtract => __('TYPE_bank_subtract'),
-            self::TYPE_expenses => __('TYPE_expenses'),
-            self::TYPE_card_payment => __('TYPE_card_payment'),
-            self::TYPE_ideal => __('TYPE_ideal'),
-            self::TYPE_ideal_refund => __('TYPE_ideal_refund'),
-            self::TYPE_direct_payment => __('TYPE_direct_payment'),
+            self::TYPE_previous_credit => __('previous_credit'),
+            self::TYPE_bank_add => __('bank_add'),
+            self::TYPE_bank_subtract => __('bank_subtract'),
+            self::TYPE_expenses => __('expenses'),
+            self::TYPE_card_payment => __('card_payment'),
+            self::TYPE_ideal => __('ideal'),
+            self::TYPE_ideal_refund => __('ideal_refund'),
+            self::TYPE_direct_payment => __('direct_payment'),
         ];
     }
 }
