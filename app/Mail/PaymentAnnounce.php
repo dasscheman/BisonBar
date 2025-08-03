@@ -27,7 +27,9 @@ class PaymentAnnounce extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Aankondiging automatisch ophogen',
+            from: config('mail.from.adress'),
+            bcc: config('mail.bcc'),
+            subject: 'Aankondiging automatisch ophogen'
         );
     }
 

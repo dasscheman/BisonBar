@@ -30,6 +30,8 @@ class InvoiceSend extends Mailable
     {
         return new Envelope(
             subject: 'Invoice Send',
+            from: config('mail.from.adress'),
+            bcc: config('mail.bcc')
         );
     }
 

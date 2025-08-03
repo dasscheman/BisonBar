@@ -31,8 +31,9 @@ class StartRecuring extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            to: config('mail.admin_email'),
             subject: 'Start Recuring',
+            from: config('mail.from.adress'),
+            bcc: config('mail.bcc')
         );
     }
 

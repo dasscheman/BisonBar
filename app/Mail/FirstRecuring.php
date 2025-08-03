@@ -37,7 +37,7 @@ class FirstRecuring extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'payment.firstrecuring',
+            markdown: 'mail.payment.firstrecuring',
         );
     }
 

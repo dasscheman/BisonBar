@@ -70,7 +70,7 @@ class StartRecuring extends Command
                 $payment = $mollie->payment($paymentModel);
                 $paymentModel->mollie_id = $payment->id;
                 $paymentModel->save();
-                Mail::send(new \App\Mail\StartRecuring($paymentModel, $user));
+                Mail::to($user->email)->send(new \App\Mail\StartRecuring($paymentModel, $user));
                 $user->auto_payment_notice_at = NULL;
                 $user->save();
                 $count++;
