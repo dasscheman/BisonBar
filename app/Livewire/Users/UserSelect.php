@@ -23,7 +23,7 @@ class UserSelect extends Component
     public function mount($user)
     {
         $this->user = $user;
-        $this->assortments = Assortment::all();
+        $this->assortments = Assortment::where('status_id', Assortment::STATUS_available)->get();
     }
 
     public function render()
