@@ -34,6 +34,7 @@ class AssortmentTable extends Component
     public ?int $category_id = null;
 
     public ?int $status_id = null;
+    public ?int $status = null;
 
     public ?string $description = null;
 
@@ -151,6 +152,14 @@ class AssortmentTable extends Component
             $assortment->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%'.$query.'%');
             });
+    }
+
+    public function changeStatus($assortment_id, $status_id)
+    {
+        $assortment = Assortment::find($assortment_id);
+        $assortment->status_id = $status_id;
+        $assortment->save();
+        $this->refresh('Assortment successfully updated!');
     }
 
     public function redirectToDetail(string $name, $id)

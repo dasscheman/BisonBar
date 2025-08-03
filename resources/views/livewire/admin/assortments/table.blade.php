@@ -70,7 +70,17 @@
                         <tr>
                             <td>{{$model->name}}</td>
                             <td>{{$model->category()}}</td>
-                            <td>{{$model->status()}}</td>
+                            <td>{{$model->status()}}
+                                <select
+                                    wire:change="changeStatus({{$model->id}}, $event.target.value)"
+                                    id="status_id-{{$model->id}}"
+                                    class="form-select">
+                                    <option value="" selected>-- Select status om aantepassen--</option>
+                                    @foreach($model->getStatusOptions() as $key => $option)
+                                        <option value="{{$key}}">{{$option}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>{{ currency($model->price) }}</td>
                             <td>{{ currency($model->totalSold()) }}</td>
                             <td>

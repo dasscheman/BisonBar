@@ -7,7 +7,6 @@ WORKDIR /var/www
 # upgrades!
 RUN apt-get update
 RUN apt-get -y dist-upgrade
-RUN apt-get install -y zip
 
 RUN apt-get install -y sudo nano
 RUN apt-get update
@@ -21,9 +20,10 @@ RUN apt-get install -y wget
 RUN apt-get install -y iputils-ping
 RUN apt-get install -y locales locales-all
 RUN apt-get install -y libpng-dev
+RUN apt-get install -y mariadb-client
 
 # install additional PHP extensions
-RUN docker-php-ext-install pdo_mysql mysqli soap gd
+RUN docker-php-ext-install pdo_mysql mysqli soap gd zip
 
 RUN apt-get clean -y
 
