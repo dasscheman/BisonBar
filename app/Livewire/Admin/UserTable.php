@@ -7,6 +7,7 @@ use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -94,6 +95,7 @@ class UserTable extends Component
     {
         $validatedData = $this->validate();
         DB::transaction(function () use ($validatedData) {
+            $validatedData['password'] = Hash::make(Str::random(10));
             User::create($validatedData);
         });
         $this->refresh('User successfully created!');
