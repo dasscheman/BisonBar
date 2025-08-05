@@ -84,7 +84,7 @@ class PaymentTable extends Component
             'user_id' => 'int',
             'receipt_id' => 'nullable|int',
             'description' => 'string',
-            'price' => 'decimal:1,2',
+            'price' => 'decimal:0,2',
             'add_subtract' => 'int',
             'type_id' => 'int',
             'date' => 'date',
@@ -95,6 +95,8 @@ class PaymentTable extends Component
     ];
 
     protected string $paginationTheme = 'bootstrap';
+
+    public $showSuccesNotification = true;
 
     public function mount(Request $request)
     {

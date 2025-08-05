@@ -97,6 +97,8 @@
                                 <button type="button" wire:click="download({{$model}})"
                                         class="btn btn-outline-secondary btn-sm">Download</button>
                                 @can('admin')
+                                    <button type="button" wire:click="sendInvoice({{$model}})"
+                                            class="btn btn-outline-secondary btn-sm">(re)send</button>
                                     <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                             wire:click="initData({{ $model }})"
                                             class="btn btn-outline-info btn-sm">View
