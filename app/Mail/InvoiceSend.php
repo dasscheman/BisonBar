@@ -29,9 +29,9 @@ class InvoiceSend extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice Send',
             from: config('mail.from.adress'),
-            bcc: config('mail.bcc')
+            bcc: config('mail.bcc'),
+            subject: 'Invoice Send'
         );
     }
 

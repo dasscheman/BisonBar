@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Invoices;
 
+use App\Mail\InvoiceSend;
 use App\Models\Invoices;
 use App\Models\User;
 use DateTime;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -56,6 +58,7 @@ class InvoiceTable extends Component
 
     public $users = [];
 
+    public $showSuccesNotification = true;
     //Update & Store Rules
     protected array $rules =
         [
@@ -200,5 +203,21 @@ class InvoiceTable extends Component
         $filePath = storage_path('/app/invoices/'.$invoice->file_name);
 
         return response()->download($filePath);
+    }
+
+    public function sendInvoice(Invoices $invoice)
+    {
+        if(!Mail::to($invoice->user->email)->send(new InvoiceSend($invoice))) {
+            session()->flash('message', 'Lukt niet om een invoice te verzenden voor: ' . $invoice->user->name);
+        }
+
+        DB::transaction(function () use($invoice) {
+            $invoice->send_at = now();
+            if (!$invoice->save()) {
+                session()->flash('message', 'Lukt niet om invoice status op te slaan voor voor: ' . $invoice->user->name);
+            }
+            $invoice->sendInvoice();
+            session()->flash('message', 'Invoice verzonden.');
+        });
     }
 }

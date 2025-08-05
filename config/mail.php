@@ -112,6 +112,6 @@ return [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
-
+    'bcc' => env('MAIL_BCC', 'hello@example.com'),
     'admin_email' => env('MAIL_ADMIN_ADDRESS', 'hello@example.com'),
 ];
