@@ -43,14 +43,14 @@ class UserSelect extends Component
                 'type_id' => Tally::TYPE_tally,
                 'status_id' => Status::STATUS_ingevoerd,
             ];
-
+            $message[$assortment->name] = $count;
             Tally::create($data);
-            $this->selection = null;
-
-            session()->flash('status', 'Turven toegevoegd.');
-
-            $this->redirect('/');
         }
+        $this->selection = null;
+
+        session()->flash('saved_tallie', $message);
+
+        $this->redirect('/');
     }
 
     public function select($assortment)
