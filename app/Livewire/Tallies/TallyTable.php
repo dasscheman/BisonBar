@@ -204,7 +204,7 @@ class TallyTable extends Component
         $tally = new Tally;
 
         $tally = empty($this->query) ? $tally :
-            $tally->where(function ($q) {
+            $tally->whereHas('user', function ($q) {
                 $q->where('name', 'like', '%'.$this->query.'%');
             });
 
