@@ -57,6 +57,7 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'name',
+        'role_id',
         'email',
         'password',
         'pay_key',
@@ -115,6 +116,11 @@ class User extends Authenticatable
     public function tallies(): HasMany
     {
         return $this->hasMany(Tally::class, 'user_id');
+    }
+
+    public function lastTally()
+    {
+        return $this->hasOne(Tally::class)->latest();
     }
 
     public function payments(): HasMany

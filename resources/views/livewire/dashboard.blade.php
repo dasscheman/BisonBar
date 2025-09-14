@@ -6,13 +6,13 @@
                 <a
                     class="btn btn-success active mb-0 text-white" role="button" aria-pressed="true"
                     wire:click="toggleShowAll()">
-                    Toon selectie
+                    Toon selectie recent actief
                 </a>
             @else
                 <a
                     class="btn btn-primary active mb-0 text-white" role="button" aria-pressed="true"
                     wire:click="toggleShowAll()">
-                    Toon alle
+                    Toon alle (alfabetisch)
                 </a>
             @endif
         </div>

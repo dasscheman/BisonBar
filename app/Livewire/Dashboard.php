@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Tally;
 use App\Models\User;
 use Livewire\Component;
 
@@ -19,19 +20,27 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->users = User::orderBy('updated_at', 'DESC')->take($this->showNumber)->get();
+
     }
 
     public function render()
     {
-        $showNumber = $this->showNumber;
+        $this->users = User::query()
+            ->orderByDesc(
+                Tally::select('created_at')
+                    ->whereColumn('user_id', 'la_users.id')
+                    ->orderByDesc('created_at')
+                    ->limit(1)
+            )
+            ->whereNot('role_id', User::ROLE_bar_user)
+            ->take($this->showNumber)
+            ->get();
+        $this->users = $this->users->sortBy('name');
         if ($this->showAll) {
-            $showNumber = null;
+            $this->users = User::orderBy('name', 'ASC')
+                ->whereNot('role_id', User::ROLE_bar_user)
+                ->get();
         }
-
-        $this->users = User::with(['tallies' => function ($q) {
-            $q->orderBy('la_tally.created_at', 'DESC');
-        }])->take($showNumber)->get();
 
         return view('livewire.dashboard');
     }
