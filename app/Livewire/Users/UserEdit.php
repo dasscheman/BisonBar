@@ -16,6 +16,7 @@ class UserEdit extends Component
     //
     protected $rules = [
         'user.name' => 'max:40|min:3',
+        'user.role_id' => 'int',
         'user.email' => 'email:rfc,dns',
     ];
 
@@ -25,9 +26,6 @@ class UserEdit extends Component
         $this->name = $user->name;
         $this->email = $user->email;
     }
-    //    public function mount(User $user) {
-    //        $this->user = $user;
-    //    }
 
     public function save()
     {
