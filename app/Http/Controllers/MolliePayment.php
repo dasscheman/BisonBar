@@ -29,8 +29,8 @@ class MolliePayment extends Controller
     {
         $user = User::findByPayKey($payKey);
 
-        if($user->total() < 0 ) {
-            $this->paymentAmountOptions[$user->total()] = $user->total() . 'euro';
+        if($user->total() < -5 ) {
+            $this->paymentAmountOptions[(string) - $user->total()] = - $user->total() . ' euro';
         }
         $paymentAmountOptions = $this->paymentAmountOptions;
 
