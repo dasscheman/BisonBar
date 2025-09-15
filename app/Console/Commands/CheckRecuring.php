@@ -36,7 +36,7 @@ class CheckRecuring extends Command
             ->get();
 
         $count = 0;
-        echo 'volgende automatisch ophogen controleren:';
+        $this->info('volgende automatisch ophogen controleren:');
         foreach ($users as $user) {
             echo $user->name . ' controleren';
             $mollie = new Mollie($user);
@@ -63,7 +63,7 @@ class CheckRecuring extends Command
                 ## "-Notice is al verstuurd"
                 continue;
             }
-            echo 'Send payment notice to';
+            $this->info('Send payment notice to');
             Mail::to($user->email)->send(new PaymentAnnounce($user));
             $user->auto_payment_notice_at = now();
             $user->save();

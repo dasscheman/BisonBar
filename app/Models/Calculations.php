@@ -59,7 +59,7 @@ class Calculations
      * Retrieve payments based on add/subtract type,*/
     public function payments($addSubstract = Payment::ADDSUBTRACT_ADD,
                              Array $types = [PaymentType::TYPE_ideal, PaymentType::TYPE_bank_add, PaymentType::TYPE_direct_payment],
-                             Array $status =[Status::STATUS_factuur_verzonden, Status::STATUS_factuur_gegenereerd])
+                             Array $status =[Status::STATUS_gecontroleerd, Status::STATUS_factuur_verzonden, Status::STATUS_factuur_gegenereerd])
     {
         $payments = Payment::where('add_subtract', $addSubstract)
                 ->whereIn('type_id', $types)

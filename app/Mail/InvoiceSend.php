@@ -31,7 +31,7 @@ class InvoiceSend extends Mailable
         return new Envelope(
             from: config('mail.from.adress'),
             bcc: config('mail.bcc'),
-            subject: 'Invoice Send'
+            subject: 'Bisonbar factuur'
         );
     }
 
