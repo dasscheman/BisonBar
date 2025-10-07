@@ -1,35 +1,31 @@
 <x-body-layout :title="$title">
-    <div class="card card-body shadow-blur mx-6 mt-custom opacity-9">
+    <div class="card card-body shadow-blur mx-4 mt-custom opacity-9">
         <div class="d-grid gap-4">
-            <button class="btn btn-primary fs-5" type="button"
+            <button class="btn btn-primary fs-5 text-sm" type="button"
                 @empty($selection) disabled @endempty
                 @isset($selection)wire:click="save()"@endisset>
-                Turven
+                Turven opslaan
             </button>
         </div>
-        <div class="row my-1" >
+        <div class="row" >
             @foreach($assortments as $assortment)
-                <div class="col-xl-3 col-sm-3 mb-xl-2 mb-4 py-2">
-                    <div class="card btn btn-primary">
+                <div class="col-sm-3">
+                    <div class="card">
                         @isset($selection[$assortment->id])
-                            <div class="position-absolute top-100 start-50 translate-middle badge rounded-pill bg-info"
+                            <div class="position-absolute top-85 start-10 translate-middle badge rounded-pill bg-info"
                                 wire:click="deSelect({{$assortment->id}})">
-                                <div class="text-4xl fs-2 font-weight-bolder mx-2">
-                                    -
-                                </div>
+                                -
                             </div>
                         @endisset
                         @isset($selection[$assortment->id])
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <div class="text-4xl font-weight-bolder mx-1">
-                                    {{$selection[$assortment->id]}}
-                                </div>
+                            <span class="position-absolute top-15 start-90 translate-middle badge rounded-pill bg-danger">
+                                {{$selection[$assortment->id]}}
                             </span>
                         @endisset
                         <div class="card-body p-4"
                             wire:click="select({{$assortment->id}})">
                             <div class="row">
-                                <h5 class="font-weight-bolder mb-4 text-start">
+                                <h5 class="text-start font-weight-bolder">
                                     {{$assortment->name}}
                                 </h5>
                             </div>

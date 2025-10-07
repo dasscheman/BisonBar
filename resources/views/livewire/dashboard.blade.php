@@ -1,7 +1,7 @@
 <x-body-layout :title="$title">
-    <div class="card card-body shadow-blur mx-6 mt-custom opacity-9">
+    <div class="card card-body shadow-blur mx-4 mt-custom opacity-9">
         @include('components.alert')
-        <div class="d-md-flex justify-content-md-end my-4">
+        <div class="d-md-flex justify-content-md-end">
             @if($showAll)
                 <a
                     class="btn btn-success active mb-0 text-white" role="button" aria-pressed="true"
