@@ -27,9 +27,9 @@ class InvoiceCheck extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice Check',
-            from: config('mail.from.adress'),
-            bcc: config('mail.bcc')
+            from: config('mail.from.address'),
+            bcc: config('mail.bcc'),
+            subject: 'Invoice Check'
         );
     }
 

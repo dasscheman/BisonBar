@@ -27,9 +27,9 @@ class PaymentReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Received',
-            from: config('mail.from.adress'),
-            bcc: config('mail.bcc')
+            from: config('mail.from.address'),
+            bcc: config('mail.bcc'),
+            subject: 'Payment Received'
         );
     }
 

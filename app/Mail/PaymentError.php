@@ -28,9 +28,9 @@ class PaymentError extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Error',
-            from: config('mail.from.adress'),
-            bcc: config('mail.bcc')
+            from: config('mail.from.address'),
+            bcc: config('mail.bcc'),
+            subject: 'Payment Error'
         );
     }
 
