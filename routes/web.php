@@ -26,6 +26,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('can:admin')->group(function () {
+        Route::get('/google', [GoogleAuth::class, 'index'])->name('google');
+        Route::get('/google/callback', [GoogleAuth::class, 'index'])->name('google-callback');
+
         Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');
         Route::get('/users', UserTable::class)->name('users');
 
