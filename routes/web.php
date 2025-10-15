@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleAuth;
 use App\Http\Controllers\MolliePayment;
 use App\Http\Controllers\MollieWebhook;
 use App\Http\Controllers\UserController;
