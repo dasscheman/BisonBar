@@ -36,7 +36,9 @@ return [
     */
 
     'mailers' => [
-
+        'custom-gmail' => [
+            'transport' => 'custom-gmail',
+        ],
         'smtp' => [
             'transport' => 'smtp',
             'url' => env('MAIL_URL'),

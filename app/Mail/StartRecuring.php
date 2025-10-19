@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Mollie;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -31,7 +30,6 @@ class StartRecuring extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: config('mail.from.address'),
             bcc: config('mail.bcc'),
             subject: 'Start Recuring'
         );

@@ -2,17 +2,18 @@
 
 namespace App\Mail;
 
+use App\Models\Invoices;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class EmailTest extends Mailable
 {
     use Queueable, SerializesModels;
-
     /**
      * Create a new message instance.
      */
@@ -27,7 +28,6 @@ class EmailTest extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(config('mail.from.address'), config('mail.from.name')),
             subject: 'Test mail'
         );
     }
@@ -49,6 +49,16 @@ class EmailTest extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        $invoice = Invoices::find(2);
+        if(Storage::disk('local')->exists('/invoices/' . $invoice->file_name )) {
+            $filePath = storage_path('/app/invoices/' . $invoice->file_name);
+            $attachments[] = Attachment::fromPath($filePath)
+                ->as($filePath)
+                ->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

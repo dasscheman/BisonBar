@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Mail\InvoiceSend;
 use App\Models\Invoices;
+use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +32,10 @@ class InvoiceSendCommand extends Command
      */
     public function handle()
     {
+        $serviceUser = User::where('email', config('mail.from.address'))->first();
+        $this->info('Login user ' . $serviceUser->id);
+        Auth::loginUsingId($serviceUser->id, true);
+
         $invoices = Invoices::whereNull('send_at')->get();
         foreach ($invoices as $invoice) {
 
@@ -47,5 +53,6 @@ class InvoiceSendCommand extends Command
                 return true;
             });
         }
+        Auth::logout();
     }
 }

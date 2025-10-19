@@ -33,12 +33,13 @@ class GoogleAuth extends Controller
             storage_path('app/public/invoice.pdf'),
         ];
         **/
+        $mailable = new EmailTest();
         $gmail = GoogleApi::gmail();
-        //$gmail->from(config('mail.from.address'), config('mail.from.name'));
+        $gmail->from($mailable->envelope()->from->address, $mailable->envelope()->from->name);
         $gmail->to(config('mail.admin_email'), config('mail.admin_email'));
         //$gmail->cc('sales@example.com');
         //$gmail->bcc('manager@example.com');
-        //$gmail->subject('Testtest.');
+        $gmail->subject($mailable->envelope()->subject);
         //$gmail->attachments($attachments);
         $gmail->mailable(new EmailTest());
         $gmail->send();

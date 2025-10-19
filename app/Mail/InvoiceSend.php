@@ -29,7 +29,6 @@ class InvoiceSend extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: config('mail.from.address'),
             bcc: config('mail.bcc'),
             subject: 'Bisonbar factuur'
         );
@@ -62,7 +61,7 @@ class InvoiceSend extends Mailable
         if(Storage::disk('local')->exists('/invoices/' . $this->invoice->file_name )) {
             $filePath = storage_path('/app/invoices/' . $this->invoice->file_name);
             $attachments[] = Attachment::fromPath($filePath)
-                ->as($this->invoice->filename)
+                ->as($filePath)
                 ->withMime('application/pdf');
         }
         return $attachments;

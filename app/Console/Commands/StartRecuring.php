@@ -6,6 +6,7 @@ use App\Models\Calculations;
 use App\Models\Mollie;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class StartRecuring extends Command
@@ -29,6 +30,10 @@ class StartRecuring extends Command
      */
     public function handle()
     {
+        $serviceUser = User::where('email', config('mail.from.address'))->first();
+        $this->info('Login user ' . $serviceUser->id);
+        Auth::loginUsingId($serviceUser->id, true);
+
         $users = User::whereNull('blocked_at')
             ->where('automatic_payment', TRUE)
             ->whereNotNull('mollie_customer_id')
@@ -76,6 +81,7 @@ class StartRecuring extends Command
                 $count++;
             }
         }
+        Auth::logout();
         return $count;
     }
 }

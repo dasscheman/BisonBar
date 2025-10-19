@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Mail\Transport\CustomGmailTransport;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemAdapter;
@@ -84,8 +85,8 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        if (!$this->app->environment('production')) {
-            Mail::alwaysTo('test@biologenkantoor.nl');
-        }
+        Mail::extend('custom-gmail', function (array $config = [], $mailable = null) {
+            return new CustomGmailTransport();
+        });
     }
 }
