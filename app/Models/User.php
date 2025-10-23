@@ -155,6 +155,7 @@ class User extends Authenticatable
 
     public function generateNewInvoice()
     {
+        $lastInvoice = $this->invoices()->orderBy('id', 'desc')->first();
         $last_invoice_id = Invoices::orderBy('id', 'desc')->withTrashed()->first()->id;
         $last_invoice_id++;
         $invoice = new Invoices;
@@ -165,7 +166,7 @@ class User extends Authenticatable
         $invoice->file_name = $this->name.'_'.$last_invoice_id.'.pdf';
 
         $calculations = new Calculations($this);
-        $pdf = Pdf::loadView('pdf.invoice-template', ['user' => $this, 'calculations' => $calculations]);
+        $pdf = Pdf::loadView('pdf.invoice-template', ['user' => $this, 'lastInvoice' => $lastInvoice, 'calculations' => $calculations]);
 
         if (! $pdf->save($invoice->invoicePath.$invoice->file_name)) {
             return false;

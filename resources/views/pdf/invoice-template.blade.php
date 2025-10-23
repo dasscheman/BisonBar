@@ -210,13 +210,13 @@
                 <td class="blanktotal" colspan="4" rowspan="2"></td>
                 <td class="totals">Saldo vorige nota:</td>
                 <td class="totals"></td>
-                <td  align="right" width="15%" class="totals cost">{{ currency($user->total()) }} </td>
+                <td  align="right" width="15%" class="totals cost">{{ currency($user->totalAtDate($lastInvoice->created_at)) }} </td>
             </tr>
 
             <tr>
                 <td class="totals"><b>Nieuw saldo:</b></td>
                 <td class="totals"></td>
-                <td align="right" width="15%" class="totals cost"><b>{{ currency($user->total() + $calculations->totalNotInvoiced()) }} </b></td>
+                <td align="right" width="15%" class="totals cost"><b>{{ currency($user->totalAtDate($lastInvoice->created_at) + $calculations->totalNotInvoiced()) }} </b></td>
             </tr>
         </table>
     </body>
