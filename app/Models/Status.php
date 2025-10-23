@@ -93,6 +93,7 @@ class Status extends Model
             case 'paid':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_paid;
                 $model->status_id = Status::STATUS_gecontroleerd;
+                $model->date =  now();
                 break;
             case 'refunded':
                 $model->mollie_status = PaymentType::MOLLIE_STATUS_refunded;
