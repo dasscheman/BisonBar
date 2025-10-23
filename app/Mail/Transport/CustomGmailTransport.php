@@ -65,7 +65,7 @@ class CustomGmailTransport extends AbstractTransport
 
         $result = $gmail->send();
         if($result->current() !== 'SENT' ) {
-            throw new InvalidArgumentException('Error sending email');
+            throw new InvalidArgumentException('Error sending email: ' . $result->current());
         }
     }
 
