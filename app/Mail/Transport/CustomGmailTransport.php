@@ -52,8 +52,12 @@ class CustomGmailTransport extends AbstractTransport
 
         $gmail->subject($message->getOriginalMessage()->getSubject());
         $gmail->message($message->getOriginalMessage()->getHtmlBody() );
-        $gmail->cc($message->getOriginalMessage()->getCC());
-        $gmail->bcc($message->getOriginalMessage()->getBcc());
+        foreach($message->getOriginalMessage()->getCC() as $cc) {
+            $gmail->cc($cc->getAddress());
+        }
+        foreach($message->getOriginalMessage()->getBcc() as $bcc) {
+            $gmail->bcc($bcc->getAddress());
+        }
 
         foreach($message->getOriginalMessage()->getAttachments() as $attachment) {
             $gmail->attachment($attachment->getName());
