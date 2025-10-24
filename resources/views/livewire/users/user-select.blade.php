@@ -4,7 +4,7 @@
             <button class="btn btn-primary fs-5 text-sm" type="button"
                 @empty($selection) disabled @endempty
                 @isset($selection)wire:click="save()"@endisset>
-                Turven opslaan
+                Turven voor <u>{{$user->name}}</u> opslaan
             </button>
         </div>
         <div class="row" >
