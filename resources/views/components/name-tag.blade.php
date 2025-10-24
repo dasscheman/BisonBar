@@ -22,7 +22,6 @@
     </div>
 </div>
 <script>
-    console.log("test")
     var element = document.getElementById('name-tag-{{$user->id}}')
     element.addEventListener("click", function(e) {
         var temp = document.getElementById('name-tag-{{$user->id}}')

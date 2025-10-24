@@ -20,11 +20,6 @@ class Dashboard extends Component
 
     public function mount()
     {
-
-    }
-
-    public function render()
-    {
         $this->users = User::query()
             ->orderByDesc(
                 Tally::select('created_at')
@@ -36,6 +31,15 @@ class Dashboard extends Component
             ->take($this->showNumber)
             ->get();
         $this->users = $this->users->sortBy('name');
+        if ($this->showAll) {
+            $this->users = User::orderBy('name', 'ASC')
+                ->whereNot('role_id', User::ROLE_bar_user)
+                ->get();
+        }
+    }
+
+    public function render()
+    {
         if ($this->showAll) {
             $this->users = User::orderBy('name', 'ASC')
                 ->whereNot('role_id', User::ROLE_bar_user)
