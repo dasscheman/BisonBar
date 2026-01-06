@@ -26,7 +26,11 @@ h5,
 .highlight {
     animation: highlight-fade 3s;
 }
-
+.card {
+    .disabled-name-tag {
+        background: lightcoral;
+    }
+}
 /* width */
 ::-webkit-scrollbar {
     width: 50px;

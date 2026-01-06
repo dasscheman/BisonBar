@@ -1,5 +1,5 @@
 <div class="col-xl-2 col-sm-3 mb-xl-0 mb-3 py-2">
-    <div class="card" id="name-tag-{{$user->id}}" >
+    <div class="card {{$user->total() < $user->hard_limit?'disabled-name-tag':''}} " id="name-tag-{{$user->id}}" >
         <a class="nav-link" href="{{ route('user-select', $user) }}">
             <div class="card-body p-1">
                 <div class="row">

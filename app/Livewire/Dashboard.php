@@ -18,7 +18,7 @@ class Dashboard extends Component
 
     public $showSuccesNotification = false;
 
-    public function mount()
+    public function render()
     {
         $this->users = User::query()
             ->orderByDesc(
@@ -36,10 +36,7 @@ class Dashboard extends Component
                 ->whereNot('role_id', User::ROLE_bar_user)
                 ->get();
         }
-    }
 
-    public function render()
-    {
         if ($this->showAll) {
             $this->users = User::orderBy('name', 'ASC')
                 ->whereNot('role_id', User::ROLE_bar_user)

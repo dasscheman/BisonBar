@@ -28,6 +28,7 @@ class EmailTest extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            bcc: config('mail.bcc'),
             subject: 'Test mail'
         );
     }
