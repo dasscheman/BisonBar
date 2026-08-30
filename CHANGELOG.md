@@ -1,5 +1,8 @@
 # Release Notes
 
+## [v1.0.3] - 2026-08-30
+- Bug, breaking changes issue mollie package.
+
 ## [v1.0.1] - 2026-08-30
 - update composer en npm
 

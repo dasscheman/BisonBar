@@ -79,7 +79,7 @@ class Mollie extends Model
     public function checkUserMandates()
     {
         $customer = \Mollie\Laravel\Facades\Mollie::api()->customers->get($this->user->mollie_customer_id);
-        $mandates = \Mollie\Laravel\Facades\Mollie::api()->mandates->listFor($customer);
+        $mandates = \Mollie\Laravel\Facades\Mollie::api()->mandates->pageFor($customer);
 
         foreach ($mandates as $key => $mandate) {
             if ($mandate->status === 'valid') {
