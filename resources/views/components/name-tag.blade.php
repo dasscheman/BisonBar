@@ -20,12 +20,12 @@
             </div>
         </a>
     </div>
+    <script>
+        var element = document.getElementById('name-tag-{{$user->id}}')
+        element.addEventListener("click", function(e) {
+            var temp = document.getElementById('name-tag-{{$user->id}}')
+            temp.classList.add('highlight');
+            setTimeout(() => temp.classList.remove('highlight'), 2000);
+        });
+    </script>
 </div>
-<script>
-    var element = document.getElementById('name-tag-{{$user->id}}')
-    element.addEventListener("click", function(e) {
-        var temp = document.getElementById('name-tag-{{$user->id}}')
-        temp.classList.add('highlight');
-        setTimeout(() => temp.classList.remove('highlight'), 2000);
-    });
-</script>

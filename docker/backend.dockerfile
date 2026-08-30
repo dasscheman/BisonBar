@@ -1,31 +1,30 @@
-FROM php:8.2-apache AS apache
+FROM php:8.4-apache AS apache
 
 COPY composer.json /var/www/
 # set workdir
 WORKDIR /var/www
 
-# upgrades!
-RUN apt-get update
-RUN apt-get -y dist-upgrade
-
-RUN apt-get install -y sudo nano
-RUN apt-get update
-RUN apt-get -y dist-upgrade
-RUN apt-get install -y dos2unix
-
-RUN apt-get install -y git
-RUN apt-get install -y zip unzip libzip-dev
-RUN apt-get install -y libxml2-dev
-RUN apt-get install -y wget
-RUN apt-get install -y iputils-ping
-RUN apt-get install -y locales locales-all
-RUN apt-get install -y libpng-dev
-RUN apt-get install -y mariadb-client
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        sudo \
+        nano \
+        dos2unix \
+        git \
+        zip \
+        unzip \
+        libzip-dev \
+        libxml2-dev \
+        wget \
+        iputils-ping \
+        locales \
+        libpng-dev \
+        mariadb-client \
+    && sed -i '/en_US.UTF-8/s/^# //g; /nl_NL.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # install additional PHP extensions
 RUN docker-php-ext-install pdo_mysql mysqli soap gd zip
-
-RUN apt-get clean -y
 
 # install additional webserver packages
 RUN a2enmod ssl

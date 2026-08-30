@@ -23,6 +23,10 @@
 
                 {{ $slot }}
             </main>
+
+            <x-loading-overlay />
         </div>
+
+        @livewireScripts
     </body>
 </html>

@@ -20,4 +20,9 @@ class TallyList extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
 }

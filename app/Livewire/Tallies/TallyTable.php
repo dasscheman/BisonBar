@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Tallies;
 
+use App\Models\Assortment;
+use App\Models\Status;
 use App\Models\Tally;
+use App\Models\TallyList;
 use App\Models\User;
 use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -65,18 +68,22 @@ class TallyTable extends Component
 
     public $users = [];
 
+    public $tallyLists = [];
+
+    public $assortments = [];
+
     //Update & Store Rules
     protected array $rules =
         [
-            'tally_list_id' => 'int',
-            'assortment_id' => 'int',
-            'user_id' => 'int',
-            'count' => 'int',
-            'price' => 'decimal',
-            'type_id' => 'int',
-            'status_id' => 'int',
-            'invoice_id' => 'int',
-            'payment_id' => 'int',
+            'tally_list_id' => 'required|int',
+            'assortment_id' => 'required|int',
+            'user_id' => 'required|int',
+            'count' => 'required|int',
+            'price' => 'required|decimal:0,2',
+            'type_id' => 'required|int',
+            'status_id' => 'required|int',
+            'invoice_id' => 'nullable|int',
+            'payment_id' => 'nullable|int',
         ];
 
     protected array $messages = [
@@ -92,6 +99,29 @@ class TallyTable extends Component
             $this->user = $request->get('user');
         }
         $this->users = User::select('name', 'id')->get();
+        $this->tallyLists = TallyList::select('serial_number', 'id')->orderBy('id', 'desc')->get();
+        $this->assortments = Assortment::select('name', 'price', 'id')->orderBy('name')->get();
+        $this->type_id = Tally::TYPE_tally;
+        $this->status_id = Status::STATUS_ingevoerd;
+        $this->count = 1;
+    }
+
+    public function updatedAssortmentId()
+    {
+        $this->recalculatePrice();
+    }
+
+    public function updatedCount()
+    {
+        $this->recalculatePrice();
+    }
+
+    public function recalculatePrice()
+    {
+        $assortment = $this->assortment_id ? Assortment::find($this->assortment_id) : null;
+        if ($assortment) {
+            $this->price = $assortment->price * ($this->count ?: 1);
+        }
     }
 
     public function render()
@@ -120,6 +150,9 @@ class TallyTable extends Component
     public function store()
     {
         $validatedData = $this->validate();
+        if (!Auth::user()->can('admin')) {
+            $validatedData['user_id'] = Auth::user()->id;
+        }
         \DB::transaction(function () use ($validatedData) {
             Tally::create($validatedData);
         });
@@ -150,6 +183,9 @@ class TallyTable extends Component
     public function update()
     {
         $validatedData = $this->validate();
+        if (!Auth::user()->can('admin')) {
+            $validatedData['user_id'] = Auth::user()->id;
+        }
         $this->tally->update($validatedData);
         $this->refresh('Tally successfully updated!');
     }
@@ -194,6 +230,9 @@ class TallyTable extends Component
             'created_at',
             'updated_at',
         ]);
+        $this->count = 1;
+        $this->type_id = Tally::TYPE_tally;
+        $this->status_id = Status::STATUS_ingevoerd;
     }
 
     /**
@@ -203,10 +242,19 @@ class TallyTable extends Component
     {
         $tally = new Tally;
 
-        $tally = empty($this->query) ? $tally :
-            $tally->whereHas('user', function ($q) {
-                $q->where('name', 'like', '%'.$this->query.'%');
+        // When a search query is present, search by user name and tally list serial number
+        if (! empty($this->query)) {
+            $query = $this->query;
+
+            $tally = $tally->where(function ($q) use ($query) {
+                $q->whereHas('user', function ($userQuery) use ($query) {
+                    $userQuery->where('name', 'like', '%'.$query.'%');
+                })
+                    ->orWhereHas('tallyList', function ($tallyListQuery) use ($query) {
+                        $tallyListQuery->where('serial_number', 'like', '%'.$query.'%');
+                    });
             });
+        }
 
         return empty($this->user) ? $tally :
             $tally->where(function ($q) {

@@ -18,7 +18,7 @@ php artisan key:generate
 php artisan optimize
 
 echo "⭐️ Run artisan migrate";
-php artisan migrate --seed
+php artisan migrate
 
 # run apache in foreground
 apache2-foreground

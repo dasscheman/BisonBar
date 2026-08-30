@@ -5,7 +5,16 @@
         <!-- View Modal -->
         @include('livewire.admin.tallies.view')
     @endcan
+    <!-- Edit Modal -->
+    @include('livewire.admin.tallies.edit')
+    <!-- Create Modal -->
+    @include('livewire.admin.tallies.create')
     <div class="card card-header shadow-blur mx-6 mt-custom opacity-9">
+        <div class="row">
+            <button data-bs-toggle="modal" data-bs-target="#createModal"
+                    class="btn btn-outline-success btn-outline-md mb-2 col-md-3 mx-5">Create New Tally
+            </button>
+        </div>
         <div class="row">
             <div class="col-md-3">
                 <label for="search">Search: </label>
@@ -26,6 +35,7 @@
                 <div class="col-md-2">
                     <label for="orderBy">Order By: </label>
                     <select wire:model.live="orderBy" id="orderBy" class="form-select">
+                        <option value="tally_list_id">tally_list_id</option>
                         <option value="user_id">User_id</option>
                         <option value="assortment_id">assortment_id</option>
                         <option value="type_id">type_id</option>
@@ -72,6 +82,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>tally_list_id</th>
                         <th>assortment_id</th>
                         <th>user_id</th>
                         <th>count</th>
@@ -83,13 +94,14 @@
                         @can('admin')
                             <th>payment_id</th>
                             <th>Deleted at</th>
-                            <th>Actions</th>
                         @endcan
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse($paginatedTallies as $model)
                         <tr>
+                            <td>{{$model->tallyList?$model->tallyList->serial_number:$model->tally_list_id}}</td>
                             <td>{{$model->assortment->name}}</td>
                             @if($model->user)
                                 <td><a href="{{route('user-tab', $model->user->id)}}">{{$model->user->name}}</a></td>
@@ -105,7 +117,9 @@
                             @can('admin')
                                 <td>{{$model->payment?$model->payment->name:''}}</td>
                                 <td>{{$model->deleted_at}}</td>
-                                <td>
+                            @endcan
+                            <td>
+                                @can('admin')
                                     <button data-bs-toggle="modal" data-bs-target="#viewModal"
                                             wire:click="initData({{ $model }})"
                                             class="btn btn-outline-info btn-sm">View
@@ -114,12 +128,16 @@
                                             wire:click="initData({{ $model }})"
                                             class="btn btn-outline-danger btn-sm">Delete
                                     </button>
-                                </td>
-                            @endcan
+                                @endcan
+                                <button data-bs-toggle="modal" data-bs-target="#editModal"
+                                        wire:click="initData({{ $model }})"
+                                        class="btn btn-outline-primary btn-sm">Edit
+                                </button>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No user found...</td>
+                            <td colspan="5" class="text-center">No tally found...</td>
                         </tr>
                     @endforelse
                     </tbody>

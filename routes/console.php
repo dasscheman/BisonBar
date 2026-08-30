@@ -12,3 +12,10 @@ if($serviceUser) {
     Schedule::command('backup:monitor')->dailyAt('03:00');
     Auth::logout();
 }
+
+Schedule::command('google:gmail-token-refresh')->everyThirtyMinutes()->withoutOverlapping();
+
+Schedule::command('app:check-recuring')->dailyAt('04:00')->withoutOverlapping();
+Schedule::command('app:start-recuring')->dailyAt('04:15')->withoutOverlapping();
+Schedule::command('invoice:generate')->dailyAt('04:30')->withoutOverlapping();
+Schedule::command('invoice:send')->dailyAt('04:45')->withoutOverlapping();
