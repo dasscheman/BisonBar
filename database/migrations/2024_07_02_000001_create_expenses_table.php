@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+class CreateExpensesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('la_expenses', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('receipt_id')->nullable();
+            $table->integer('invoice_id')->nullable();
+            $table->string('description')->nullable();
+            $table->decimal('price', 5, 2)->default(0);
+            $table->integer('status_id')->default(1);
+            $table->timestamp('date', 0)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        $transacties = DB::table('transacties')->whereIn('type_id', [5, 6])->get();
+        foreach ($transacties as $transactie) {
+            $relatedjoin = DB::table('related_transacties')->where('child_transacties_id', $transactie->transacties_id)->first();
+            if ($relatedjoin) {
+                $related = DB::table('transacties')->where('transacties_id', $relatedjoin->parent_transacties_id)->first();
+                if ($related->bedrag == $transactie->bedrag) {
+                    dump('skip transactie: '.$transactie->transacties_id);
+                }
+            }
+            $data = [
+                'id' => $transactie->transacties_id,
+                'user_id' => $transactie->transacties_user_id,
+                'receipt_id' => $transactie->bon_id,
+                'invoice_id' => $transactie->factuur_id,
+                'description' => $transactie->omschrijving,
+                'price' => ($transactie->type_id==6?-$transactie->bedrag:$transactie->bedrag),
+                'status_id' => $transactie->status,
+                'date' => $transactie->datum,
+                'deleted_at' => $transactie->deleted_at,
+                'created_at' => $transactie->created_at,
+                'updated_at' => $transactie->updated_at,
+            ];
+
+            \App\Models\Expenses::create($data);
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('la_expenses');
+    }
+}

@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Payment extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'la_payments';
+
+    const ADDSUBTRACT_SUBTRACT = 1;
+
+    const ADDSUBTRACT_ADD = 2;
+
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
+    protected $fillable = [
+        'id',
+        'user_id',
+        'receipt_id',
+        'invoice_id',
+        'name',
+        'description',
+        'price',
+        'add_subtract',
+        'type_id',
+        'status_id',
+        'mollie_status',
+        'mollie_id',
+        'transaction_key',
+        'transaction_cost',
+        'date',
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoices::class);
+    }
+
+    public function status()
+    {
+        return Status::getStatusOptions()[$this->status_id];
+    }
+
+    public function mollieStatus()
+    {
+        return PaymentType::getMollieStatusOptions()[$this->mollie_status];
+    }
+
+    public function type()
+    {
+        return PaymentType::getTypeOptions()[$this->type_id];
+    }
+}
