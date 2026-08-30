@@ -1,5 +1,8 @@
 # Release Notes
 
+## [v1.0.1] - 2026-08-30
+- update composer en npm
+
 ## [v1.0.0] - 2026-08-30
 
 - Backend dependencies bijgewerkt (Laravel Tinker 3.x, Livewire 4.x, Mollie 4.x, Spatie Backup 10.x).
