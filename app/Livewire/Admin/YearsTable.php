@@ -66,7 +66,7 @@ class YearsTable extends Component
     public function render()
     {
         $users = User::withTrashed()->get();
-        $years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        $years = range(2017, (int)date('Y'));
         foreach ($years as $year) {
             $credit = 0;
             $debit = 0;
