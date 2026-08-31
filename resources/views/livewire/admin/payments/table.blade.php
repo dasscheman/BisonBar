@@ -86,8 +86,8 @@
                         @endcan
                         <th>date</th>
                         <th>invoice_id</th>
-                        <th>type_id</th>
-                        <th>status_id</th>
+                        <th>Type</th>
+                        <th>Status</th>
                         <th>Price</th>
                         @can('admin')
                             <th>Deleted at</th>
@@ -106,8 +106,8 @@
                             @endcan
                             <td>{{$model->date}}</td>
                             <td>{{$model->invoice_id}}</td>
-                            <td>{{$model->type_id}}</td>
-                            <td>{{$model->status_id}}</td>
+                            <td>{{ $model->type() }}</td>
+                            <td>{{ $model->status() }}</td>
                             <td>{{ currency($model->price) }}</td>
                             @can('admin')
                                 <td>{{$model->deleted_at}}</td>
