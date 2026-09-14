@@ -7,6 +7,7 @@ use App\Models\Mollie;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class StartRecuring extends Command
@@ -71,14 +72,31 @@ class StartRecuring extends Command
             $mollie->description = 'Ideal';
             $mollie->name = 'Automatisch ophogen BisonBar.';
             $paymentModel = $mollie->startPayment();
-            if($paymentModel) {
+
+            if (!$paymentModel) {
+                Log::error('Recurring payment could not be created for user ' . $user->id, [
+                    'user' => $user->email,
+                ]);
+                $this->error('-Geen lokale betaling aan te maken');
+                continue;
+            }
+
+            try {
                 $payment = $mollie->payment($paymentModel);
                 $paymentModel->mollie_id = $payment->id;
                 $paymentModel->save();
-                Mail::to($user->email)->send(new \App\Mail\StartRecuring($paymentModel, $user));
                 $user->auto_payment_notice_at = NULL;
                 $user->save();
+
+                Mail::to($user->email)->queue(new \App\Mail\StartRecuring($paymentModel, $user));
                 $count++;
+            } catch (\Throwable $e) {
+                Log::error('Recurring payment failed for user ' . $user->id, [
+                    'user' => $user->email,
+                    'payment_id' => $paymentModel->id,
+                    'exception' => $e->getMessage(),
+                ]);
+                $this->error('-Mollie betaling mislukt: ' . $e->getMessage());
             }
         }
         Auth::logout();
