@@ -1,5 +1,8 @@
 # Release Notes
 
+## [v1.0.7] - 2026-09-16
+- Set correct transport mailer for backup.
+
 ## [v1.0.6] - 2026-09-16
 - Issue with test mail.
 
