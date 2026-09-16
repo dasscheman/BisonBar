@@ -26,11 +26,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/', Dashboard::class)->name('dashboard');
     });
 
-    Route::middleware('can:admin')->group(function () {
+    Route::middleware('can:sendmail')->group(function () {
         Route::get('/google', [GoogleAuth::class, 'index'])->name('google');
         Route::get('/google/callback', [GoogleAuth::class, 'callback'])->name('google-callback');
         Route::get('/google/testmail', [GoogleAuth::class, 'testMail'])->name('google-testmail');
-
+    });
+    Route::middleware('can:admin')->group(function () {
         Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');
         Route::get('/users', UserTable::class)->name('users');
 
