@@ -1,5 +1,8 @@
 # Release Notes
 
+## [v1.0.6] - 2026-09-16
+- Issue with test mail.
+
 ## [v1.0.5] - 2026-09-16
 - Issue with gmail. notification date was not set at null due to email issues.
 

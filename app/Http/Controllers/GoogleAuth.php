@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\EmailTest;
+use App\Mail\PaymentAnnounce;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use TomShaw\GoogleApi\GoogleApi;
 use TomShaw\GoogleApi\GoogleClient;
 use Illuminate\Http\Request;
@@ -27,21 +33,14 @@ class GoogleAuth extends Controller
 
     public function testMail()
     {
-        /**
-        $attachments = [
-            storage_path('app/public/discount.jpg'),
-            storage_path('app/public/invoice.pdf'),
-        ];
-        **/
-        $mailable = new EmailTest();
-        $gmail = GoogleApi::gmail();
-        $gmail->from($mailable->envelope()->from->address, $mailable->envelope()->from->name);
-        $gmail->to(config('mail.admin_email'), config('mail.admin_email'));
-        //$gmail->cc('sales@example.com');
-        //$gmail->bcc('manager@example.com');
-        $gmail->subject($mailable->envelope()->subject);
-        //$gmail->attachments($attachments);
-        $gmail->mailable(new EmailTest());
-        $gmail->send();
+        $serviceUser = User::where('email', config('mail.from.address'))->first();
+        if (!$serviceUser) {
+            Log::warning('molliewebhook: No service user found ');
+            throw ValidationException::withMessages(['Geen geldig service user gevonden.']);
+        }
+        Auth::loginUsingId($serviceUser->id, true);
+            Mail::to(config('mail.admin_email'))->send(new EmailTest());
+
+        Auth::logout();
     }
 }
