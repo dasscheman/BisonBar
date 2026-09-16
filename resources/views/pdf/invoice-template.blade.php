@@ -155,7 +155,7 @@
                         <td align="center">{{ $newPayment->id }}</td>
                         <td align="center">{{ $newPayment->status() }}</td>
                         <td align="center">{{ $newPayment->type() }}</td>
-                        <td align="center">{{ $newPayment->created_at }}</td>
+                        <td align="center">{{ $newPayment->date ?: $newPayment->created_at }}</td>
                         <td align="left">{{ $newPayment->description }}</td>
                         <td class="cost">{{ currency($newPayment->price) }} </td>
                         <td class="cost"></td>

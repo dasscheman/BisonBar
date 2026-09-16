@@ -76,14 +76,41 @@ class GoogleGmailTokenRefreshCommand extends Command
                 }
             } catch (Throwable $exception) {
                 $failed = true;
-                Log::error('Unable to refresh Google token for '.$user->email.': '.$exception->getMessage());
-                $this->error('Unable to refresh Google token for '.$user->email.'.');
+                $message = $exception->getMessage();
+
+                if ($this->isPermanentError($message)) {
+                    $token->delete();
+                    Log::warning('Google token for '.$user->email.' is no longer valid ('.$message.'). Token deleted, re-authorization required.');
+                    $this->warn('Google token for '.$user->email.' is no longer valid. Token deleted, re-authorize via the Google link.');
+                } else {
+                    Log::error('Unable to refresh Google token for '.$user->email.': '.$message);
+                    $this->error('Unable to refresh Google token for '.$user->email.'.');
+                }
             } finally {
                 Auth::logout();
             }
         }
 
         return $failed ? self::FAILURE : self::SUCCESS;
+    }
+
+    private function isPermanentError(string $message): bool
+    {
+        $patterns = [
+            '/invalid_grant/',
+            '/invalid_client/',
+            '/access_denied/',
+            '/unauthorized_client/',
+            '/User has not google token/',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $message)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function expiresSoon(GoogleToken $token): bool

@@ -1,5 +1,8 @@
 # Release Notes
 
+## [v1.0.5] - 2026-09-16
+- Issue with gmail. notification date was not set at null due to email issues.
+
 ## [v1.0.3] - 2026-08-30
 - Bug, breaking changes issue mollie package.
 

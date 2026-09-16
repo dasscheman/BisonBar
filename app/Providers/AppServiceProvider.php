@@ -47,6 +47,20 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
+        Gate::define('sendmail', function () {
+            if(!Auth::check()){
+                return false;
+            }
+            $user = Auth::user();
+            if($user->role_id == User::ROLE_admin || $user->role_id == User::ROLE_super_admin) {
+                return true;
+            }
+            if($user->email === config('mail.from.address')) {
+                return true;
+            }
+            return false;
+        });
+
         Gate::define('writetally', function () {
             if(!Auth::check()){
                 return false;
