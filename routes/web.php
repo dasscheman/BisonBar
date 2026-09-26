@@ -3,6 +3,7 @@
 use App\Http\Controllers\GoogleAuth;
 use App\Http\Controllers\MolliePayment;
 use App\Http\Controllers\MollieWebhook;
+use App\Http\Controllers\PublicPagesController;
 use App\Http\Controllers\UserController;
 use App\Livewire\Admin\UserTable;
 use App\Livewire\Dashboard;
@@ -15,6 +16,15 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
+
+/*
+| Public pages. These must stay reachable without a session: Google verifies
+| the OAuth consent screen by crawling the home page and the privacy policy,
+| and rejects a home page that sits behind a login.
+*/
+Route::get('/info', [PublicPagesController::class, 'info'])->name('info');
+Route::get('/privacy', [PublicPagesController::class, 'privacy'])->name('privacy');
+Route::get('/privacy-policy', [PublicPagesController::class, 'privacy'])->name('privacy-policy');
 
 Route::middleware('auth')->group(function () {
     Route::impersonate();
