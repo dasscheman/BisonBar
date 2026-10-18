@@ -3,7 +3,7 @@
 {{--</svg>--}}
 
 
-<img width="55" height="65" src="{{url('../assets/img/bison-logo.jpg')}}" class="logo" alt="Bisonbar">
+<img {{ $attributes->merge(['class' => 'logo']) }} width="55" height="65" src="{{ url('assets/img/bison-logo.jpg') }}" alt="{{ config('app.name') }}">
 
 
 
