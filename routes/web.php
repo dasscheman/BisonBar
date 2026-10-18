@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\GoogleAuth;
 use App\Http\Controllers\MolliePayment;
 use App\Http\Controllers\MollieWebhook;
 use App\Http\Controllers\PublicPagesController;
@@ -18,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 /*
-| Public pages. These must stay reachable without a session: Google verifies
-| the OAuth consent screen by crawling the home page and the privacy policy,
-| and rejects a home page that sits behind a login.
+| Public pages. These must stay reachable without a session.
 */
 Route::get('/info', [PublicPagesController::class, 'info'])->name('info');
 Route::get('/privacy', [PublicPagesController::class, 'privacy'])->name('privacy');
@@ -36,11 +33,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/', Dashboard::class)->name('dashboard');
     });
 
-    Route::middleware('can:sendmail')->group(function () {
-        Route::get('/google', [GoogleAuth::class, 'index'])->name('google');
-        Route::get('/google/callback', [GoogleAuth::class, 'callback'])->name('google-callback');
-        Route::get('/google/testmail', [GoogleAuth::class, 'testMail'])->name('google-testmail');
-    });
     Route::middleware('can:admin')->group(function () {
         Route::get('/admin-dashboard', App\Livewire\Admin\Dashboard::class)->name('admin-dashboard');
         Route::get('/users', UserTable::class)->name('users');

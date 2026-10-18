@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Mail\Transport\CustomGmailTransport;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemAdapter;
@@ -10,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
@@ -42,20 +40,6 @@ class AppServiceProvider extends ServiceProvider
             }
             $user = Auth::user();
             if($user->role_id == User::ROLE_admin || $user->role_id == User::ROLE_super_admin) {
-                return true;
-            }
-            return false;
-        });
-
-        Gate::define('sendmail', function () {
-            if(!Auth::check()){
-                return false;
-            }
-            $user = Auth::user();
-            if($user->role_id == User::ROLE_admin || $user->role_id == User::ROLE_super_admin) {
-                return true;
-            }
-            if($user->email === config('mail.from.address')) {
                 return true;
             }
             return false;
@@ -97,10 +81,6 @@ class AppServiceProvider extends ServiceProvider
                 $adapter,
                 $config
             );
-        });
-
-        Mail::extend('custom-gmail', function (array $config = [], $mailable = null) {
-            return new CustomGmailTransport();
         });
     }
 }
