@@ -108,32 +108,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">5. {{ __('Google- en Gmail-toestemming') }}</h2>
-
-            <p class="text-gray-700 dark:text-gray-300">
-                {{ __('Bij sommige rollen binnen de vereniging is het nodig om namens') }} {{ $organisation }}
-                {{ __('e-mail te kunnen versturen, bijvoorbeeld om facturen te verzenden. Daarom kan') }} {{ config('app.name') }}
-                {{ __('via Google OAuth toestemming vragen voor één beperkte bevoegdheid:') }}
-            </p>
-
-            <ul class="text-gray-700 dark:text-gray-300">
-                @foreach($scopes as $scope)
-                    <li><code class="text-sm">{{ $scope }}</code></li>
-                @endforeach
-            </ul>
-
-            <p class="text-gray-700 dark:text-gray-300">
-                {{ __('Met deze toestemming mag') }} {{ config('app.name') }}
-                {{ __('uitsluitend e-mail versturen. De applicatie kan geen e-mail lezen, doorzoeken, wijzigen of verwijderen. Van deze bevoegdheid wordt alleen gebruikgemaakt voor het verzenden van facturen en betalingsmeldingen.') }}
-            </p>
-
-            <p class="text-gray-700 dark:text-gray-300 mb-0">
-                {{ __('Het toestemmingskenmerk en de geldigheidsduur worden opgeslagen in het account van de betreffende gebruiker. Je kunt de toestemming op ieder moment intrekken in je Google-account. Daarna kan de applicatie geen e-mail meer versturen totdat opnieuw toestemming wordt gegeven.') }}
-            </p>
-        </div>
-
-        <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">6. {{ __('Met wie delen wij gegevens?') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">5. {{ __('Met wie delen wij gegevens?') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300">
                 {{ config('app.name') }} {{ __('verwerkt persoonsgegevens zelf en geeft ze uitsluitend door aan de volgende partijen, uitsluitend voor de hierboven genoemde doelen:') }}
@@ -156,8 +131,8 @@
                         </tr>
                         <tr>
                             <td>Google Ireland Limited</td>
-                            <td>{{ __('e-mailadres, factuurgegevens en het toestemmingskenmerk') }}</td>
-                            <td>{{ __('het versturen van facturen en betalingsmeldingen via Gmail') }}</td>
+                            <td>{{ __('e-mailadres en factuurgegevens') }}</td>
+                            <td>{{ __('het versturen van facturen en betalingsmeldingen per e-mail') }}</td>
                         </tr>
                         <tr>
                             <td>{{ __('Hosting- en back-upprovider') }}</td>
@@ -179,7 +154,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">7. {{ __('Bewaartermijnen') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">6. {{ __('Bewaartermijnen') }}</h2>
 
             <ul class="text-gray-700 dark:text-gray-300">
                 <li>
@@ -210,7 +185,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">8. {{ __('Cookies en vergelijkbare technieken') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">7. {{ __('Cookies en vergelijkbare technieken') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300">
                 {{ config('app.name') }} {{ __('plaatst zelf geen tracking- of advertentiecookies. Er worden uitsluitend technisch noodzakelijke cookies geplaatst:') }}
@@ -237,7 +212,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">9. {{ __('Beveiliging') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">8. {{ __('Beveiliging') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300 mb-0">
                 {{ config('app.name') }} {{ __('is alleen bereikbaar via een beveiligde verbinding. Wachtwoorden worden met een moderne eenwaardige hash versleuteld opgeslagen en zijn dus niet terug te lezen. Toegang tot de applicatie is beperkt tot toegevoegde leden; er is geen open registratie. Nieuwe accounts kunnen een e-mailadres moeten bevestigen. Daarnaast gelden voor beheerders extra rechten, en worden handelingen van beheerders vastgelegd zodat wij kunnen terugvinden wie wat heeft gedaan.') }}
@@ -245,7 +220,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">10. {{ __('Jouw rechten') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">9. {{ __('Jouw rechten') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300">{{ __('Je hebt het recht om:') }}</p>
 
@@ -256,7 +231,6 @@
                 <li>{{ __('de verwerking te beperken (recht van beperking);') }}</li>
                 <li>{{ __('je gegevens te ontvangen in een overdraagbaar formaat (recht op dataportabiliteit);') }}</li>
                 <li>{{ __('bezwaar te maken tegen de verwerking op grond van gerechtigd belang;') }}</li>
-                <li>{{ __('je toestemming in te trekken, bijvoorbeeld die voor Google.') }}</li>
             </ul>
 
             <p class="text-gray-700 dark:text-gray-300">
@@ -271,7 +245,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">11. {{ __('Wijzigingen in dit beleid') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">10. {{ __('Wijzigingen in dit beleid') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300 mb-0">
                 {{ __('Wij passen dit privacybeleid aan wanneer de applicatie of de wetgeving daar aanleiding toe geeft. De datum bovenaan deze pagina wordt dan aangepast.') }}
@@ -279,7 +253,7 @@
         </div>
 
         <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">12. {{ __('Contact') }}</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">11. {{ __('Contact') }}</h2>
 
             <p class="text-gray-700 dark:text-gray-300 mb-0">
                 {{ $organisation }}<br>

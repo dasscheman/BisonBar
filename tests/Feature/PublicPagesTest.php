@@ -5,11 +5,10 @@
 | Public pages
 |--------------------------------------------------------------------------
 |
-| Google verifies the OAuth consent screen by crawling the home page and the
-| privacy policy. These tests lock in the properties that verification needs:
-| both pages are reachable without a session, they are distinct URLs, the home
-| page names the app and links to the privacy policy, and the privacy policy
-| carries enough content.
+| These pages are reachable without a session. The tests lock in their
+| properties: both pages are reachable without a session, they are distinct
+| URLs, the home page names the app and links to the privacy policy, and the
+| privacy policy carries enough content.
 |
 */
 
@@ -63,11 +62,6 @@ it('details data collection and usage in the privacy policy', function () {
     $text = trim(preg_replace('/\s+/', ' ', strip_tags($response->getContent())));
 
     expect(str_word_count($text))->toBeGreaterThan(400);
-});
-
-it('documents the requested google scope on both public pages', function () {
-    $this->get('/info')->assertOk()->assertSee('gmail.send', false);
-    $this->get('/privacy')->assertOk()->assertSee('gmail.send', false);
 });
 
 it('renders the site verification tag when one is configured', function () {

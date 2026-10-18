@@ -211,7 +211,7 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'mailer' => env('MAIL_MAILER', 'custom-gmail'),
+            'mailer' => env('MAIL_MAILER', 'smtp'),
             'to' => env('MAIL_BACKUP', 'Example@example.com'),
 
             'from' => [

@@ -68,7 +68,7 @@
                             {{ __('4. E-mailverzending') }}
                         </h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-0">
-                            {{ __('Facturen en betalingsmeldingen worden verstuurd via het Gmail-account van de organisatie. Daarvoor vragen wij eenmalig toestemming voor één beperkt Gmail-berichtenrecht.') }}
+                            {{ __('Facturen en betalingsmeldingen worden namens de organisatie per e-mail verstuurd.') }}
                         </p>
                     </div>
                 </div>
@@ -87,30 +87,6 @@
 
             <p class="text-gray-700 dark:text-gray-300 mb-0">
                 {{ __('Inloggen gebeurt met een e-mailadres en een wachtwoord dat je zelf hebt ingesteld. Wachtwoorden worden in versleutelde vorm opgeslagen en zijn door niemand in leesbare vorm in te zien.') }}
-            </p>
-        </div>
-
-        <div class="card card-body shadow-blur mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                {{ __('Waarom vraagt BisonBar toestemming voor Google?') }}
-            </h2>
-
-            <p class="text-gray-700 dark:text-gray-300">
-                {{ __('Sommige rollen binnen') }} {{ $organisation }}
-                {{ __('moeten namens de organisatie e-mail kunnen versturen, bijvoorbeeld om facturen te verzenden. BisonBar vraagt daarvoor via Google OAuth toestemming voor precies één beperkte bevoegdheid:') }}
-            </p>
-
-            <ul class="text-gray-700 dark:text-gray-300">
-                @foreach($scopes as $scope)
-                    <li>
-                        <code class="text-sm">{{ $scope }}</code>
-                        &mdash; {{ config('bisonbar.oauth.purpose') }}
-                    </li>
-                @endforeach
-            </ul>
-
-            <p class="text-gray-700 dark:text-gray-300 mb-0">
-                {{ __('Met deze toestemming kan de applicatie geen e-mail lezen of wijzigen, en alleen e-mail versturen als dat nodig is voor facturen en betalingsmeldingen. Je kunt de toestemming op elk moment intrekken via je Google-accountinstellingen.') }}
             </p>
         </div>
 

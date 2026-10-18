@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Lab404\Impersonate\Models\Impersonate;
 
 class User extends Authenticatable
@@ -71,6 +72,27 @@ class User extends Authenticatable
         'automatic_payment',
         'auto_payment_notice_at'
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (empty($user->pay_key)) {
+                $user->pay_key = self::generatePayKey();
+            }
+        });
+    }
+
+    /**
+     * Generate a unique pay_key for a user.
+     */
+    public static function generatePayKey(): string
+    {
+        do {
+            $payKey = Str::random(32);
+        } while (self::withTrashed()->where('pay_key', $payKey)->exists());
+
+        return $payKey;
+    }
 
     /**
      * Retrieves a list of roles
