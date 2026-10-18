@@ -8,7 +8,6 @@ use App\Models\Payment;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -70,19 +69,11 @@ class MollieWebhook extends Controller
                 throw ValidationException::withMessages(['Geen geldig user gevonden.']);
             }
 
-            $serviceUser = User::where('email', config('mail.from.address'))->first();
-            if (!$serviceUser) {
-                Log::warning('molliewebhook: No service user found ' . $payment->id);
-                throw ValidationException::withMessages(['Geen geldig service user gevonden.']);
-            }
-            Auth::loginUsingId($serviceUser->id, true);
-
             if ($payment->isPaid() === true) {
                 Mail::to($user->email)->queue(new PaymentReceived($model));
             } elseif ($payment->isOpen() === false) {
                 Mail::to($user->email)->queue(new PaymentFailed($model));
             }
-            Auth::logout();
         } catch (ApiException $e) {
             Log::error('Could not save  ' . $e);
             throw ValidationException::withMessages([$e->getMessage()]);

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,9 +36,6 @@ return [
     */
 
     'mailers' => [
-        'custom-gmail' => [
-            'transport' => 'custom-gmail',
-        ],
         'smtp' => [
             'transport' => 'smtp',
             'url' => env('MAIL_URL'),

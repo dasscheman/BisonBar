@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.8] - 2026-10-18
+- E-mail versturen omgezet naar Gmail SMTP met het Google App-wachtwoord van `bar@debison.nl`, gelijk aan OV-Montessori.
+- Alle login- en Google OAuth/token-logica verwijderd: `custom-gmail` transport, `GoogleAuth`-routes, `AdminTokenStorageAdapter`, `google:gmail-token-refresh`, `config/google-api.php` en de `tomshaw/google-api` dependency.
+- Service-user impersonatie (`Auth::loginUsingId`) uit de console-commands en de Mollie-webhook verwijderd; mail versturen werkt nu zonder ingelogde gebruiker of Google-token.
+- Achterhaalde Gmail OAuth-toestemming uit de publieke `/info`- en `/privacy`-pagina's en `config/bisonbar.php` verwijderd.
+
 ## [v1.0.7] - 2026-09-16
 - Set correct transport mailer for backup.
 
